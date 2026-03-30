@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)file:///C:/Users/kurik/Downloads/darts_countup_7.html -->
+<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DARTS">
+<meta name="theme-color" content="#0a0a0f">
+<title>DARTS COUNT UP</title>
+<link href="./index_files/css2" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f; --surface: #13131a; --surface2: #1c1c28;
+  --border: #2a2a3a; --accent: #e8ff47; --accent2: #ff6b35;
+  --text: #f0f0f8; --muted: #6b6b88; --green: #47ffb4; --red: #ff4757;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg); color: var(--text);
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  /* iOS タップハイライト無効化 */
+  -webkit-tap-highlight-color: transparent;
+  /* iOS テキスト選択無効化 */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  /* iOS バウンススクロール */
+  overscroll-behavior: none;
+}
+body::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image: linear-gradient(rgba(232,255,71,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(232,255,71,0.03) 1px,transparent 1px);
+  background-size: 40px 40px;
+}
+.app {
+  position: relative; z-index: 1;
+  max-width: 480px; margin: 0 auto;
+  padding: 16px;
+  /* iPhone safe area (ノッチ・ホームバー対応) */
+  padding-top: max(16px, env(safe-area-inset-top));
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+/* Tabs */
+.tab-bar { display: flex; gap: 4px; background: var(--surface); border-radius: 10px; padding: 4px; border: 1px solid var(--border); }
+.tab { flex: 1; padding: 8px; text-align: center; border-radius: 7px; cursor: pointer; font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--muted); transition: all 0.2s; user-select: none; }
+.tab.active { background: var(--accent); color: #000; }
+
+/* Views */
+.view { display: flex; flex-direction: column; gap: 12px; }
+.view.hidden { display: none; }
+
+/* Round bar */
+.round-bar { display: flex; align-items: center; justify-content: space-between; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; }
+.round-lbl { font-size: 11px; color: var(--muted); letter-spacing: 2px; }
+.round-num { font-family: 'Bebas Neue', cursive; font-size: 22px; color: var(--text); margin-top: 2px; }
+.round-num em { font-size: 14px; color: var(--muted); font-style: normal; }
+.dots { display: flex; gap: 6px; }
+.dot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--muted); transition: all 0.3s; }
+.dot.done { border-color: var(--accent); color: var(--accent); background: rgba(232,255,71,0.1); }
+.dot.now { border-color: var(--accent2); color: var(--accent2); background: rgba(255,107,53,0.15); animation: pdot 1.5s infinite; }
+@keyframes pdot { 0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,0.4)} 50%{box-shadow:0 0 0 6px transparent} }
+
+/* Score card */
+.score-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; text-align: center; }
+.total { font-family: 'Bebas Neue', cursive; font-size: 88px; line-height: 1; color: var(--accent); letter-spacing: 4px; text-shadow: 0 0 40px rgba(232,255,71,0.3); transition: transform 0.15s; }
+.total.bump { transform: scale(1.08); }
+.sub-stats { display: flex; justify-content: center; gap: 24px; margin-top: 8px; }
+.sub-stat .val { font-size: 18px; font-weight: 700; }
+.sub-stat .lbl { font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-top: 2px; }
+
+/* Input */
+.input-section { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+.sec-title { font-size: 10px; color: var(--muted); letter-spacing: 2px; text-align: center; text-transform: uppercase; }
+
+/* Shortcuts */
+.shortcuts { display: grid; grid-template-columns: repeat(6,1fr); gap: 5px; }
+.sc { background: var(--surface2); border: 1px solid rgba(232,255,71,0.25); border-radius: 8px; padding: 8px 2px; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 17px; color: var(--accent); line-height: 1.1; transition: all 0.12s; -webkit-tap-highlight-color: transparent; user-select: none; }
+.sc:active { background: var(--accent); color: #000; transform: scale(0.93); }
+.sc small { display: block; font-family: 'Noto Sans JP', sans-serif; font-size: 8px; color: var(--muted); font-weight: 400; }
+
+/* Tenkey */
+.tk-display { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; min-height: 52px; }
+.tk-val { font-family: 'Bebas Neue', cursive; font-size: 40px; color: var(--accent); letter-spacing: 3px; }
+.tk-val.empty { color: var(--muted); }
+.tk-hint { font-size: 10px; color: var(--muted); text-align: right; }
+.tk-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
+.tk { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 13px 8px; min-height: 52px; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 26px; color: var(--text); transition: all 0.12s; -webkit-tap-highlight-color: transparent; user-select: none; display: flex; align-items: center; justify-content: center; }
+.tk:active { background: var(--accent); color: #000; transform: scale(0.94); }
+.tk.wide { grid-column: span 2; }
+.tk.del { color: var(--muted); font-size: 20px; }
+.tk.del:active { background: var(--red); color: #fff; }
+.act-row { display: flex; gap: 8px; }
+.btn-miss { background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 10px; padding: 12px 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; cursor: pointer; }
+.btn-ok { flex: 1; background: var(--surface2); color: var(--muted); border: 1px solid var(--border); border-radius: 10px; padding: 14px; font-size: 14px; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: all 0.15s; }
+.btn-ok.ready { background: var(--accent2); color: #fff; border-color: var(--accent2); }
+.btn-ok:disabled { opacity: 0.3; cursor: not-allowed; }
+.btn-del { background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 10px; padding: 12px; font-size: 18px; cursor: pointer; width: 52px; }
+.btn-reset { width: 100%; background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 10px; padding: 12px; font-size: 13px; font-weight: 700; letter-spacing: 2px; cursor: pointer; }
+.btn-reset:hover { border-color: var(--red); color: var(--red); }
+
+/* Result overlay */
+.overlay { display: none; position: fixed; inset: 0; background: rgba(10,10,15,0.93); z-index: 100; align-items: center; justify-content: center; -webkit-overflow-scrolling: touch; }
+.overlay.show { display: flex; }
+.result-box { background: var(--surface); border: 1px solid var(--accent); border-radius: 20px; padding: 32px 40px; text-align: center; box-shadow: 0 0 60px rgba(232,255,71,0.15); max-width: 320px; width: 90%; }
+.r-title { font-family: 'Bebas Neue', cursive; font-size: 40px; color: var(--accent); letter-spacing: 6px; margin-bottom: 8px; }
+.r-score { font-family: 'Bebas Neue', cursive; font-size: 96px; line-height: 1; color: var(--text); letter-spacing: 4px; }
+.r-stats { display: flex; justify-content: center; gap: 24px; margin: 16px 0; padding: 16px; background: var(--surface2); border-radius: 12px; }
+.r-stat .rv { font-size: 22px; font-weight: 700; color: var(--accent2); }
+.r-stat .rl { font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-top: 2px; }
+.r-rounds { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; margin-bottom: 16px; }
+.r-cell { background: var(--surface2); border-radius: 8px; padding: 6px 4px; text-align: center; }
+.r-cell .rv { font-size: 16px; font-weight: 700; }
+.r-cell .rl { font-size: 9px; color: var(--muted); }
+.r-pb { font-size: 12px; color: var(--accent); font-weight: 700; letter-spacing: 2px; margin-bottom: 12px; display: none; }
+.r-btns { display: flex; gap: 8px; }
+.r-btns button { flex: 1; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 700; letter-spacing: 1px; cursor: pointer; }
+.r-btn-new { background: var(--accent); color: #000; border: none; }
+.r-btn-hist { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+
+/* Confirm dialog */
+.confirm-box { background: var(--surface); border: 1px solid var(--red); border-radius: 16px; padding: 28px 32px; text-align: center; max-width: 280px; width: 90%; box-shadow: 0 0 40px rgba(255,71,87,0.2); }
+.c-title { font-size: 14px; color: var(--text); font-weight: 700; margin-bottom: 6px; }
+.c-sub { font-size: 11px; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
+.c-btns { display: flex; gap: 8px; }
+.c-btns button { flex: 1; padding: 11px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; }
+.c-cancel { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+.c-ok { background: var(--red); color: #fff; border: none; }
+
+/* History */
+.h-header { display: flex; align-items: center; justify-content: space-between; }
+.sec-lbl { font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; padding: 4px 0; }
+.btn-clear { background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; padding: 8px 14px; font-size: 11px; cursor: pointer; letter-spacing: 1px; }
+.btn-clear:hover { border-color: var(--red); color: var(--red); }
+.stats3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 10px; text-align: center; }
+.stat-card .sv { font-family: 'Bebas Neue', cursive; font-size: 32px; color: var(--accent); letter-spacing: 2px; }
+.stat-card .sl { font-size: 9px; color: var(--muted); letter-spacing: 1px; margin-top: 2px; }
+.avg3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.avg-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 8px; text-align: center; }
+.avg-card .av { font-family: 'Bebas Neue', cursive; font-size: 28px; color: var(--green); letter-spacing: 2px; }
+.avg-card .al { font-size: 9px; color: var(--muted); line-height: 1.4; margin-top: 2px; }
+.period-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.p-tabs { display: flex; gap: 4px; padding: 10px 12px 0; }
+.p-tab { padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; letter-spacing: 1px; cursor: pointer; color: var(--muted); user-select: none; }
+.p-tab.active { background: var(--accent); color: #000; }
+.p-grid { display: grid; grid-template-columns: auto 1fr 1fr auto; margin-top: 8px; }
+.p-head { display: contents; }
+.p-head span { padding: 8px 12px; font-size: 9px; color: var(--muted); letter-spacing: 1px; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid var(--border); background: var(--surface2); }
+.p-row { display: contents; }
+.p-row > div { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 11px; }
+.p-row:last-child > div { border-bottom: none; }
+.p-label { color: var(--muted); display: flex; align-items: center; }
+.p-best { text-align: center; font-family: 'Bebas Neue', cursive; font-size: 22px; color: var(--accent); display: flex; align-items: center; justify-content: center; }
+.p-avg { text-align: center; font-family: 'Bebas Neue', cursive; font-size: 22px; color: var(--accent2); display: flex; align-items: center; justify-content: center; }
+.p-cnt { text-align: center; color: var(--muted); display: flex; align-items: center; justify-content: center; }
+.p-empty { padding: 16px 12px; font-size: 11px; color: var(--muted); grid-column: span 4; }
+.h-list { display: flex; flex-direction: column; gap: 8px; }
+.h-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; }
+.h-score { font-family: 'Bebas Neue', cursive; font-size: 36px; color: var(--text); letter-spacing: 2px; min-width: 68px; }
+.h-score.best { color: var(--accent); }
+.h-info { flex: 1; }
+.h-date { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+.h-pills { display: flex; gap: 4px; flex-wrap: wrap; }
+.h-pill { font-size: 10px; background: var(--surface2); border-radius: 4px; padding: 2px 6px; color: var(--muted); }
+.h-badge { background: var(--accent); color: #000; font-size: 9px; font-weight: 700; border-radius: 4px; padding: 2px 6px; letter-spacing: 1px; }
+.h-del { background: transparent; border: none; color: var(--muted); font-size: 16px; cursor: pointer; padding: 6px; border-radius: 6px; flex-shrink: 0; }
+.h-del:hover { color: var(--red); }
+.h-empty { text-align: center; padding: 48px 24px; color: var(--muted); font-size: 13px; line-height: 1.8; }
+.h-empty .ei { font-size: 40px; margin-bottom: 12px; }
+
+/* Next game prompt */
+.next-game-prompt {
+  display: none;
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: 14px;
+  padding: 18px 20px;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(232,255,71,0.1);
+}
+.next-game-prompt.show { display: block; }
+.ngp-title { font-family: 'Bebas Neue', cursive; font-size: 22px; color: var(--accent); letter-spacing: 3px; margin-bottom: 4px; }
+.ngp-sub { font-size: 11px; color: var(--muted); margin-bottom: 14px; }
+.ngp-btns { display: flex; gap: 8px; }
+.ngp-btns button { flex: 1; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 700; letter-spacing: 1px; cursor: pointer; transition: all 0.15s; }
+.ngp-yes { background: var(--accent); color: #000; border: none; }
+.ngp-yes:hover { background: #d4eb3e; }
+.ngp-no { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+.ngp-no:hover { border-color: var(--muted); color: var(--text); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="tab-bar">
+    <div class="tab active" id="tab-game" onclick="showTab(&#39;game&#39;)">🎯 ゲーム</div>
+    <div class="tab" id="tab-hist" onclick="showTab(&#39;hist&#39;)">📊 履歴</div>
+  </div>
+
+  <!-- PWA install hint (iOS only) -->
+  <div id="pwa-banner" style="display:none; background:var(--surface); border:1px solid var(--accent2); border-radius:12px; padding:12px 16px; gap:12px; align-items:center;">
+    <div style="font-size:24px;">📲</div>
+    <div style="flex:1;">
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">ホーム画面に追加できます</div>
+      <div style="font-size:10px;color:var(--muted);line-height:1.5;">Safariの <strong style="color:var(--text)">共有ボタン（↑）</strong> →「ホーム画面に追加」でアプリとして使えます</div>
+    </div>
+    <button onclick="document.getElementById(&#39;pwa-banner&#39;).style.display=&#39;none&#39;" style="background:transparent;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px;">✕</button>
+  </div>
+
+  <!-- Game view -->
+  <div class="view" id="view-game">
+    <div class="next-game-prompt" id="next-game-prompt">
+      <div class="ngp-title">ゲーム終了</div>
+      <div class="ngp-sub">次のゲームを始めますか？</div>
+      <div class="ngp-btns">
+        <button class="ngp-no" onclick="dismissPrompt()">そのまま</button>
+        <button class="ngp-yes" onclick="startNew()">次のゲームへ</button>
+      </div>
+    </div>
+    <div class="round-bar">
+      <div>
+        <div class="round-lbl">ROUND</div>
+        <div class="round-num" id="round-num">1 <em>/ 8</em></div>
+      </div>
+      <div class="dots" id="dots"><div class="dot now">1</div><div class="dot">2</div><div class="dot">3</div><div class="dot">4</div><div class="dot">5</div><div class="dot">6</div><div class="dot">7</div><div class="dot">8</div></div>
+    </div>
+
+    <div class="score-card">
+      <div class="total" id="total">0</div>
+      <div class="sub-stats">
+        <div class="sub-stat"><div class="val" id="s-avg">—</div><div class="lbl">ラウンド平均</div></div>
+        <div class="sub-stat"><div class="val" id="s-best">—</div><div class="lbl">最高ラウンド</div></div>
+        <div class="sub-stat"><div class="val" id="s-pace">—</div><div class="lbl">予測スコア</div></div>
+      </div>
+    </div>
+
+    <div class="input-section" id="input-section">
+      <div class="sec-title">3投の合計点を入力</div>
+      <div class="shortcuts" id="shortcuts"><div class="sc">100<small>合計pt</small></div><div class="sc">85<small>合計pt</small></div><div class="sc">81<small>合計pt</small></div><div class="sc">60<small>合計pt</small></div><div class="sc">45<small>合計pt</small></div><div class="sc">41<small>合計pt</small></div></div>
+      <div class="tk-display">
+        <div class="tk-val empty" id="tk-val">—</div>
+        <div class="tk-hint" id="tk-hint">合計点を入力してください</div>
+      </div>
+      <div class="tk-grid">
+        <div class="tk" onclick="kp(7)">7</div><div class="tk" onclick="kp(8)">8</div><div class="tk" onclick="kp(9)">9</div>
+        <div class="tk" onclick="kp(4)">4</div><div class="tk" onclick="kp(5)">5</div><div class="tk" onclick="kp(6)">6</div>
+        <div class="tk" onclick="kp(1)">1</div><div class="tk" onclick="kp(2)">2</div><div class="tk" onclick="kp(3)">3</div>
+        <div class="tk wide" onclick="kp(0)">0</div><div class="tk del" onclick="kd()">⌫</div>
+      </div>
+      <div class="act-row">
+        <button class="btn-miss" onclick="miss()">MISS</button>
+        <button class="btn-ok" id="btn-ok" onclick="doOk()" disabled="">ラウンド確定</button>
+        <button class="btn-del" onclick="kd()">↩</button>
+      </div>
+    </div>
+
+    <button class="btn-reset" onclick="resetGame()">↺ 新しいゲーム</button>
+  </div>
+
+  <!-- History view -->
+  <div class="view hidden" id="view-hist">
+    <div class="stats3" id="h-stats3"></div>
+    <div class="sec-lbl">直近の平均スコア</div>
+    <div class="avg3" id="h-avg3"></div>
+    <div class="sec-lbl">期間別成績</div>
+    <div id="h-period"></div>
+    <div class="h-header">
+      <div class="sec-lbl">ゲーム履歴</div>
+      <button class="btn-clear" onclick="openConfirm()">全件削除</button>
+    </div>
+    <div class="h-list" id="h-list"></div>
+  </div>
+
+</div>
+
+<!-- Result overlay -->
+<div class="overlay" id="overlay-result">
+  <div class="result-box">
+    <div class="r-title">FINISH!</div>
+    <div class="r-score" id="r-score"></div>
+    <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:8px;">TOTAL SCORE</div>
+    <div class="r-stats">
+      <div class="r-stat"><div class="rv" id="r-avg"></div><div class="rl">R平均</div></div>
+      <div class="r-stat"><div class="rv" id="r-best"></div><div class="rl">最高R</div></div>
+      <div class="r-stat"><div class="rv" id="r-rank"></div><div class="rl">ランク</div></div>
+    </div>
+    <div class="r-rounds" id="r-rounds"></div>
+    <div class="r-pb" id="r-pb">🏆 自己ベスト更新！</div>
+    <div class="r-btns">
+      <button class="r-btn-new" onclick="startNew()">もう一度</button>
+      <button class="r-btn-hist" onclick="goHist()">履歴を見る</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm delete-all overlay -->
+<div class="overlay" id="overlay-confirm">
+  <div class="confirm-box">
+    <div class="c-title">全件削除の確認</div>
+    <div class="c-sub">全ての履歴を削除します。<br>この操作は元に戻せません。</div>
+    <div class="c-btns">
+      <button class="c-cancel" onclick="closeConfirm()">キャンセル</button>
+      <button class="c-ok" onclick="deleteAll()">全件削除</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var ROUNDS = 8;
+var SHORTCUTS = [100, 85, 81, 60, 45, 41];
+var g = { round: 1, scores: [], total: 0 };
+var buf = '';
+
+/* ---- Shortcuts ---- */
+(function() {
+  var row = document.getElementById('shortcuts');
+  for (var i = 0; i < SHORTCUTS.length; i++) {
+    (function(v) {
+      var b = document.createElement('div');
+      b.className = 'sc';
+      b.innerHTML = v + '<small>合計pt</small>';
+      b.onclick = function() { commit(v); };
+      row.appendChild(b);
+    })(SHORTCUTS[i]);
+  }
+})();
+
+/* ---- Dots ---- */
+function drawDots() {
+  var el = document.getElementById('dots');
+  el.innerHTML = '';
+  for (var i = 1; i <= ROUNDS; i++) {
+    var d = document.createElement('div');
+    d.className = 'dot' + (i < g.round ? ' done' : i === g.round ? ' now' : '');
+    d.textContent = i;
+    el.appendChild(d);
+  }
+}
+
+/* ---- Commit round ---- */
+function commit(total) {
+  if (g.scores.length >= ROUNDS) return; // ゲーム終了後は無効
+  g.scores.push(total);
+  g.total += total;
+  buf = '';
+
+  var el = document.getElementById('total');
+  el.textContent = g.total;
+  el.classList.add('bump');
+  setTimeout(function() { el.classList.remove('bump'); }, 200);
+
+  var n = g.scores.length;
+  var avg = Math.round(g.total / n);
+  var best = Math.max.apply(null, g.scores);
+  document.getElementById('s-avg').textContent = avg;
+  document.getElementById('s-best').textContent = best;
+  document.getElementById('s-pace').textContent = Math.round(avg * ROUNDS);
+
+  document.getElementById('btn-ok').disabled = true;
+  document.getElementById('btn-ok').className = 'btn-ok';
+  updateDisp();
+
+  if (g.round >= ROUNDS) {
+    setTimeout(showResult, 400);
+    return;
+  }
+  g.round++;
+  document.getElementById('round-num').innerHTML = g.round + ' <em>/ 8</em>';
+  drawDots();
+}
+
+/* ---- Tenkey ---- */
+function kp(d) {
+  var next = buf + String(d);
+  if (next.length > 3) return;
+  if (parseInt(next, 10) > 180) return;
+  buf = next;
+  updateDisp();
+}
+function kd() {
+  buf = buf.slice(0, -1);
+  updateDisp();
+}
+function doOk() {
+  if (buf === '') return;
+  var v = parseInt(buf, 10);
+  if (isNaN(v) || v < 0 || v > 180) return;
+  commit(v);
+}
+function miss() {
+  buf = '';
+  commit(0);
+}
+function updateDisp() {
+  var valEl = document.getElementById('tk-val');
+  var hintEl = document.getElementById('tk-hint');
+  var okBtn = document.getElementById('btn-ok');
+  if (buf === '') {
+    valEl.textContent = '—';
+    valEl.className = 'tk-val empty';
+    hintEl.textContent = '合計点を入力してください';
+    okBtn.disabled = true;
+    okBtn.className = 'btn-ok';
+  } else {
+    var v = parseInt(buf, 10);
+    var valid = !isNaN(v) && v >= 0 && v <= 180;
+    valEl.textContent = buf;
+    valEl.className = 'tk-val';
+    hintEl.textContent = valid ? ('= ' + v + ' pt') : '⚠ 0〜180で入力';
+    okBtn.disabled = !valid;
+    okBtn.className = valid ? 'btn-ok ready' : 'btn-ok';
+  }
+}
+
+/* ---- Rank ---- */
+function rank(s) {
+  if (s >= 1000) return 'S+'; if (s >= 800) return 'S'; if (s >= 700) return 'A+';
+  if (s >= 600) return 'A'; if (s >= 500) return 'B+'; if (s >= 400) return 'B';
+  if (s >= 300) return 'C'; return 'D';
+}
+
+/* ---- Result ---- */
+function showResult() {
+  var hist = getHist();
+  var prevBest = 0;
+  for (var i = 0; i < hist.length; i++) if (hist[i].score > prevBest) prevBest = hist[i].score;
+  var isPB = g.total > prevBest;
+  saveHist({ score: g.total, rounds: g.scores.slice(), date: new Date().toISOString() });
+  document.getElementById('r-score').textContent = g.total;
+  document.getElementById('r-avg').textContent = Math.round(g.total / ROUNDS);
+  document.getElementById('r-best').textContent = Math.max.apply(null, g.scores);
+  document.getElementById('r-rank').textContent = rank(g.total);
+  var html = '';
+  for (var i = 0; i < g.scores.length; i++) {
+    html += '<div class="r-cell"><div class="rv">' + g.scores[i] + '</div><div class="rl">R' + (i+1) + '</div></div>';
+  }
+  document.getElementById('r-rounds').innerHTML = html;
+  document.getElementById('r-pb').style.display = isPB ? 'block' : 'none';
+  document.getElementById('overlay-result').classList.add('show');
+}
+function startNew() {
+  document.getElementById('overlay-result').classList.remove('show');
+  document.getElementById('next-game-prompt').className = 'next-game-prompt';
+  var inputSec = document.getElementById('input-section');
+  if (inputSec) { inputSec.style.opacity = ''; inputSec.style.pointerEvents = ''; }
+  resetState();
+}
+function goHist() {
+  document.getElementById('overlay-result').classList.remove('show');
+  showTab('hist');
+}
+function resetState() {
+  g = { round: 1, scores: [], total: 0 };
+  buf = '';
+  document.getElementById('total').textContent = '0';
+  document.getElementById('s-avg').textContent = '—';
+  document.getElementById('s-best').textContent = '—';
+  document.getElementById('s-pace').textContent = '—';
+  document.getElementById('round-num').innerHTML = '1 <em>/ 8</em>';
+  document.getElementById('btn-ok').disabled = true;
+  document.getElementById('btn-ok').className = 'btn-ok';
+  updateDisp();
+  drawDots();
+}
+function resetGame() {
+  if (g.scores.length > 0) {
+    if (!window.confirm('ゲームをリセットしますか？')) return;
+  }
+  resetState();
+}
+
+/* ---- Tabs ---- */
+function showTab(tab) {
+  document.getElementById('tab-game').className = 'tab' + (tab === 'game' ? ' active' : '');
+  document.getElementById('tab-hist').className = 'tab' + (tab === 'hist' ? ' active' : '');
+  document.getElementById('view-game').className = 'view' + (tab === 'game' ? '' : ' hidden');
+  document.getElementById('view-hist').className = 'view' + (tab === 'hist' ? '' : ' hidden');
+  if (tab === 'hist') renderHistory();
+  if (tab === 'game') {
+    var prompt = document.getElementById('next-game-prompt');
+    var inputSec = document.getElementById('input-section');
+    if (g.scores.length >= ROUNDS) {
+      prompt.className = 'next-game-prompt show';
+      if (inputSec) inputSec.style.opacity = '0.3';
+      if (inputSec) inputSec.style.pointerEvents = 'none';
+    } else {
+      prompt.className = 'next-game-prompt';
+      if (inputSec) inputSec.style.opacity = '';
+      if (inputSec) inputSec.style.pointerEvents = '';
+    }
+  }
+}
+function dismissPrompt() {
+  document.getElementById('next-game-prompt').className = 'next-game-prompt';
+  // 「そのまま」の場合は入力エリアは無効のまま維持
+}
+
+/* ---- Storage ---- */
+function getHist() {
+  try { return JSON.parse(localStorage.getItem('darts_h') || '[]'); } catch(e) { return []; }
+}
+function saveHist(entry) {
+  var h = getHist(); h.unshift(entry);
+  localStorage.setItem('darts_h', JSON.stringify(h.slice(0, 200)));
+}
+
+/* ---- Confirm delete all ---- */
+function openConfirm() {
+  document.getElementById('overlay-confirm').classList.add('show');
+}
+function closeConfirm() {
+  document.getElementById('overlay-confirm').classList.remove('show');
+}
+function deleteAll() {
+  localStorage.removeItem('darts_h');
+  closeConfirm();
+  renderHistory();
+}
+
+/* ---- Delete single entry ---- */
+function deleteOne(idx) {
+  var h = getHist();
+  h.splice(idx, 1);
+  localStorage.setItem('darts_h', JSON.stringify(h));
+  renderHistory();
+}
+
+/* ---- History ---- */
+function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+function recentAvg(hist, n) {
+  var sl = hist.slice(0, n);
+  if (!sl.length) return null;
+  var sum = 0; for (var i = 0; i < sl.length; i++) sum += sl[i].score;
+  return Math.round(sum / sl.length);
+}
+
+var pTab = 'day';
+function getPeriod(hist, unit) {
+  var bk = {};
+  for (var i = 0; i < hist.length; i++) {
+    var d = new Date(hist[i].date), key;
+    if (unit === 'day') key = d.getFullYear() + '/' + pad(d.getMonth()+1) + '/' + pad(d.getDate());
+    else if (unit === 'week') {
+      var t = new Date(d); t.setHours(0,0,0,0); t.setDate(t.getDate() + 4 - (t.getDay()||7));
+      var y = t.getFullYear(), wn = Math.ceil((((t - new Date(y,0,1))/86400000)+1)/7);
+      key = y + '-W' + pad(wn);
+    } else key = d.getFullYear() + '/' + pad(d.getMonth()+1);
+    if (!bk[key]) bk[key] = [];
+    bk[key].push(hist[i].score);
+  }
+  return Object.keys(bk).sort(function(a,b){ return b.localeCompare(a); }).slice(0,6).map(function(k) {
+    var sc = bk[k], sum = 0; for (var i=0;i<sc.length;i++) sum+=sc[i];
+    return { label: k, best: Math.max.apply(null,sc), avg: Math.round(sum/sc.length), count: sc.length };
+  });
+}
+
+function renderPeriod(hist) {
+  var wrap = document.getElementById('h-period');
+  if (!hist.length) { wrap.innerHTML = ''; return; }
+  var stats = getPeriod(hist, pTab);
+  var tabsHtml = [['day','日別'],['week','週別'],['month','月別']].map(function(t) {
+    return '<div class="p-tab' + (pTab===t[0]?' active':'') + '" data-t="' + t[0] + '">' + t[1] + '</div>';
+  }).join('');
+  var rowsHtml = stats.length ? stats.map(function(s) {
+    return '<div class="p-row"><div class="p-label">'+s.label+'</div><div class="p-best">'+s.best+'</div><div class="p-avg">'+s.avg+'</div><div class="p-cnt">'+s.count+'G</div></div>';
+  }).join('') : '<div class="p-empty">データなし</div>';
+  wrap.innerHTML = '<div class="period-card">' +
+    '<div class="p-tabs" id="p-tabs">' + tabsHtml + '</div>' +
+    '<div class="p-grid">' +
+    '<div class="p-head"><span>期間</span><span style="text-align:center">最高点</span><span style="text-align:center">平均点</span><span style="text-align:center">回数</span></div>' +
+    rowsHtml + '</div></div>';
+  document.getElementById('p-tabs').addEventListener('click', function(e) {
+    var t = e.target.getAttribute('data-t');
+    if (t) { pTab = t; renderPeriod(getHist()); }
+  });
+}
+
+function renderHistory() {
+  var hist = getHist();
+  var s3 = document.getElementById('h-stats3');
+  var a3 = document.getElementById('h-avg3');
+  var hl = document.getElementById('h-list');
+  if (!hist.length) {
+    s3.innerHTML = ''; a3.innerHTML = ''; document.getElementById('h-period').innerHTML = '';
+    hl.innerHTML = '<div class="h-empty"><div class="ei">🎯</div>まだ記録がありません。<br>ゲームを完了すると自動で保存されます。</div>';
+    return;
+  }
+  var scores = hist.map(function(h){ return h.score; });
+  var best = Math.max.apply(null, scores);
+  var sum = 0; for (var i=0;i<scores.length;i++) sum+=scores[i];
+  s3.innerHTML =
+    '<div class="stat-card"><div class="sv">'+hist.length+'</div><div class="sl">ゲーム数</div></div>' +
+    '<div class="stat-card"><div class="sv">'+best+'</div><div class="sl">自己ベスト</div></div>' +
+    '<div class="stat-card"><div class="sv">'+Math.round(sum/scores.length)+'</div><div class="sl">通算平均</div></div>';
+  a3.innerHTML = [10,20,30].map(function(n) {
+    var v = recentAvg(hist, n);
+    return '<div class="avg-card"><div class="av">'+(v!==null?v:'—')+'</div><div class="al">直近'+n+'G<br>平均</div></div>';
+  }).join('');
+  renderPeriod(hist);
+  hl.innerHTML = hist.map(function(h, idx) {
+    var isBest = h.score === best;
+    var d = new Date(h.date);
+    var ds = d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+' '+d.getHours()+':'+pad(d.getMinutes());
+    var pills = (h.rounds||[]).map(function(r,i){ return '<span class="h-pill">R'+(i+1)+':'+r+'</span>'; }).join('');
+    return '<div class="h-item">' +
+      '<div class="h-score'+(isBest?' best':'')+'">'+h.score+'</div>' +
+      '<div class="h-info"><div class="h-date">'+ds+'　'+rank(h.score)+'ランク</div><div class="h-pills">'+pills+'</div></div>' +
+      (isBest?'<div class="h-badge">BEST</div>':'') +
+      '<button class="h-del" onclick="deleteOne('+idx+')" title="削除">🗑</button>' +
+      '</div>';
+  }).join('');
+}
+
+/* ---- Keyboard ---- */
+document.addEventListener('keydown', function(e) {
+  if (document.getElementById('view-hist').className.indexOf('hidden') === -1) return;
+  if (e.key >= '0' && e.key <= '9') kp(parseInt(e.key));
+  else if (e.key === 'Backspace') { e.preventDefault(); kd(); }
+  else if (e.key === 'Enter') doOk();
+});
+
+/* ---- Init ---- */
+drawDots();
+updateDisp();
+
+// iOSでSafariかつスタンドアロンでない場合にインストール案内を表示
+(function() {
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  var isStandalone = window.navigator.standalone === true;
+  var shown = localStorage.getItem('pwa_hint_shown');
+  if (isIOS && !isStandalone && !shown) {
+    var banner = document.getElementById('pwa-banner');
+    if (banner) {
+      banner.style.display = 'flex';
+      localStorage.setItem('pwa_hint_shown', '1');
+    }
+  }
+})();
+</script>
+
+
+</body></html>
