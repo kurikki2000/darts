@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0053)file:///C:/Users/kurik/Downloads/darts_countup_7.html -->
+<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_10.html -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -46,7 +46,7 @@ body::before {
   padding-right: max(16px, env(safe-area-inset-right));
   min-height: 100vh;
   min-height: -webkit-fill-available;
-  display: flex; flex-direction: column; gap: 12px;
+  display: flex; flex-direction: column; gap: 8px;
 }
 
 /* Tabs */
@@ -55,56 +55,56 @@ body::before {
 .tab.active { background: var(--accent); color: #000; }
 
 /* Views */
-.view { display: flex; flex-direction: column; gap: 12px; }
+.view { display: flex; flex-direction: column; gap: 8px; }
 .view.hidden { display: none; }
 
 /* Round bar */
-.round-bar { display: flex; align-items: center; justify-content: space-between; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; }
+.round-bar { display: flex; align-items: center; justify-content: space-between; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 8px 14px; }
 .round-lbl { font-size: 11px; color: var(--muted); letter-spacing: 2px; }
-.round-num { font-family: 'Bebas Neue', cursive; font-size: 22px; color: var(--text); margin-top: 2px; }
+.round-num { font-family: 'Bebas Neue', cursive; font-size: 18px; color: var(--text); margin-top: 1px; }
 .round-num em { font-size: 14px; color: var(--muted); font-style: normal; }
 .dots { display: flex; gap: 6px; }
-.dot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--muted); transition: all 0.3s; }
+.dot { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: var(--muted); transition: all 0.3s; }
 .dot.done { border-color: var(--accent); color: var(--accent); background: rgba(232,255,71,0.1); }
 .dot.now { border-color: var(--accent2); color: var(--accent2); background: rgba(255,107,53,0.15); animation: pdot 1.5s infinite; }
 @keyframes pdot { 0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,0.4)} 50%{box-shadow:0 0 0 6px transparent} }
 
 /* Score card */
-.score-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; text-align: center; }
-.total { font-family: 'Bebas Neue', cursive; font-size: 88px; line-height: 1; color: var(--accent); letter-spacing: 4px; text-shadow: 0 0 40px rgba(232,255,71,0.3); transition: transform 0.15s; }
+.score-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; }
+.total { font-family: 'Bebas Neue', cursive; font-size: 60px; line-height: 1; color: var(--accent); letter-spacing: 4px; text-shadow: 0 0 40px rgba(232,255,71,0.3); transition: transform 0.15s; }
 .total.bump { transform: scale(1.08); }
-.sub-stats { display: flex; justify-content: center; gap: 24px; margin-top: 8px; }
-.sub-stat .val { font-size: 18px; font-weight: 700; }
+.sub-stats { display: flex; justify-content: center; gap: 16px; margin-top: 6px; }
+.sub-stat .val { font-size: 15px; font-weight: 700; }
 .sub-stat .lbl { font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-top: 2px; }
 
 /* Input */
-.input-section { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+.input-section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 6px; }
 .sec-title { font-size: 10px; color: var(--muted); letter-spacing: 2px; text-align: center; text-transform: uppercase; }
 
 /* Shortcuts */
 .shortcuts { display: grid; grid-template-columns: repeat(6,1fr); gap: 5px; }
-.sc { background: var(--surface2); border: 1px solid rgba(232,255,71,0.25); border-radius: 8px; padding: 8px 2px; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 17px; color: var(--accent); line-height: 1.1; transition: all 0.12s; -webkit-tap-highlight-color: transparent; user-select: none; }
+.sc { background: var(--surface2); border: 1px solid rgba(232,255,71,0.25); border-radius: 8px; padding: 6px 2px; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 15px; color: var(--accent); line-height: 1.1; transition: all 0.12s; -webkit-tap-highlight-color: transparent; user-select: none; }
 .sc:active { background: var(--accent); color: #000; transform: scale(0.93); }
 .sc small { display: block; font-family: 'Noto Sans JP', sans-serif; font-size: 8px; color: var(--muted); font-weight: 400; }
 
 /* Tenkey */
-.tk-display { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; min-height: 52px; }
-.tk-val { font-family: 'Bebas Neue', cursive; font-size: 40px; color: var(--accent); letter-spacing: 3px; }
+.tk-display { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; min-height: 44px; }
+.tk-val { font-family: 'Bebas Neue', cursive; font-size: 32px; color: var(--accent); letter-spacing: 3px; }
 .tk-val.empty { color: var(--muted); }
 .tk-hint { font-size: 10px; color: var(--muted); text-align: right; }
-.tk-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
-.tk { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 13px 8px; min-height: 52px; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 26px; color: var(--text); transition: all 0.12s; -webkit-tap-highlight-color: transparent; user-select: none; display: flex; align-items: center; justify-content: center; }
+.tk-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 5px; }
+.tk { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 8px; min-height: 44px; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 22px; color: var(--text); transition: all 0.12s; -webkit-tap-highlight-color: transparent; user-select: none; display: flex; align-items: center; justify-content: center; }
 .tk:active { background: var(--accent); color: #000; transform: scale(0.94); }
 .tk.wide { grid-column: span 2; }
 .tk.del { color: var(--muted); font-size: 20px; }
 .tk.del:active { background: var(--red); color: #fff; }
 .act-row { display: flex; gap: 8px; }
-.btn-miss { background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 10px; padding: 12px 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; cursor: pointer; }
-.btn-ok { flex: 1; background: var(--surface2); color: var(--muted); border: 1px solid var(--border); border-radius: 10px; padding: 14px; font-size: 14px; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: all 0.15s; }
+.btn-miss { background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 10px; padding: 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: 1px; cursor: pointer; }
+.btn-ok { flex: 1; background: var(--surface2); color: var(--muted); border: 1px solid var(--border); border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: all 0.15s; }
 .btn-ok.ready { background: var(--accent2); color: #fff; border-color: var(--accent2); }
 .btn-ok:disabled { opacity: 0.3; cursor: not-allowed; }
-.btn-del { background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 10px; padding: 12px; font-size: 18px; cursor: pointer; width: 52px; }
-.btn-reset { width: 100%; background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 10px; padding: 12px; font-size: 13px; font-weight: 700; letter-spacing: 2px; cursor: pointer; }
+.btn-del { background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 10px; padding: 10px; font-size: 16px; cursor: pointer; width: 46px; }
+.btn-reset { width: 100%; background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 10px; padding: 8px; font-size: 12px; font-weight: 700; letter-spacing: 2px; cursor: pointer; }
 .btn-reset:hover { border-color: var(--red); color: var(--red); }
 
 /* Result overlay */
@@ -245,7 +245,14 @@ body::before {
 
     <div class="input-section" id="input-section">
       <div class="sec-title">3投の合計点を入力</div>
-      <div class="shortcuts" id="shortcuts"><div class="sc">100<small>合計pt</small></div><div class="sc">85<small>合計pt</small></div><div class="sc">81<small>合計pt</small></div><div class="sc">60<small>合計pt</small></div><div class="sc">45<small>合計pt</small></div><div class="sc">41<small>合計pt</small></div></div>
+      <div class="shortcuts" id="shortcuts">
+        <div class="sc" onclick="commit(100)">100<small>合計pt</small></div>
+        <div class="sc" onclick="commit(85)">85<small>合計pt</small></div>
+        <div class="sc" onclick="commit(81)">81<small>合計pt</small></div>
+        <div class="sc" onclick="commit(60)">60<small>合計pt</small></div>
+        <div class="sc" onclick="commit(45)">45<small>合計pt</small></div>
+        <div class="sc" onclick="commit(41)">41<small>合計pt</small></div>
+      </div>
       <div class="tk-display">
         <div class="tk-val empty" id="tk-val">—</div>
         <div class="tk-hint" id="tk-hint">合計点を入力してください</div>
@@ -316,23 +323,10 @@ body::before {
 
 <script>
 var ROUNDS = 8;
-var SHORTCUTS = [100, 85, 81, 60, 45, 41];
 var g = { round: 1, scores: [], total: 0 };
 var buf = '';
 
-/* ---- Shortcuts ---- */
-(function() {
-  var row = document.getElementById('shortcuts');
-  for (var i = 0; i < SHORTCUTS.length; i++) {
-    (function(v) {
-      var b = document.createElement('div');
-      b.className = 'sc';
-      b.innerHTML = v + '<small>合計pt</small>';
-      b.onclick = function() { commit(v); };
-      row.appendChild(b);
-    })(SHORTCUTS[i]);
-  }
-})();
+/* ---- Shortcuts: HTMLに直接記述 ---- */
 
 /* ---- Dots ---- */
 function drawDots() {
