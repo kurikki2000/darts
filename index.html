@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_19.html -->
+<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_20.html -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -37,7 +37,7 @@ body::before {
   padding-top: max(12px, env(safe-area-inset-top));
   padding-bottom: max(12px, env(safe-area-inset-bottom));
   min-height: 100vh;
-  display: flex; flex-direction: column; gap: 8px;
+  display: flex; flex-direction: column; gap: 6px;
 }
 
 /* Tabs */
@@ -50,7 +50,7 @@ body::before {
 .hide { display: none !important; }
 
 /* Round bar */
-.rbar { display: flex; align-items: center; justify-content: space-between; background: var(--sur); border: 1px solid var(--bdr); border-radius: 10px; padding: 8px 14px; }
+.rbar { display: flex; align-items: center; justify-content: space-between; background: var(--sur); border: 1px solid var(--bdr); border-radius: 10px; padding: 6px 12px; }
 .rlbl { font-size: 10px; color: var(--mut); letter-spacing: 2px; }
 .rnum { font-family: 'Bebas Neue', cursive; font-size: 20px; color: var(--txt); margin-top: 1px; }
 .rnum em { font-size: 13px; color: var(--mut); font-style: normal; }
@@ -61,30 +61,33 @@ body::before {
 @keyframes pd { 0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,0.4)}50%{box-shadow:0 0 0 5px transparent} }
 
 /* Score card */
-.scard { background: var(--sur); border: 1px solid var(--bdr); border-radius: 12px; padding: 10px; text-align: center; }
-.total { font-family: 'Bebas Neue', cursive; font-size: 96px; line-height: 1; color: var(--acc); letter-spacing: 4px; text-shadow: 0 0 40px rgba(232,255,71,0.3); transition: transform 0.15s; }
+.scard { background: var(--sur); border: 1px solid var(--bdr); border-radius: 12px; padding: 5px; text-align: center; }
+.total { font-family: 'Bebas Neue', cursive; font-size: 68px; line-height: 1; color: var(--acc); letter-spacing: 4px; text-shadow: 0 0 40px rgba(232,255,71,0.3); transition: transform 0.15s; }
 .total.bump { transform: scale(1.06); }
-.substats { display: flex; justify-content: center; gap: 16px; margin-top: 6px; }
-.ss .val { font-size: 17px; font-weight: 700; }
-.ss .lbl { font-size: 9px; color: var(--mut); letter-spacing: 1px; margin-top: 1px; }
+.rgrid { display: grid; grid-template-columns: repeat(8,1fr); gap: 3px; margin-top: 5px; }
+.rcell { background: var(--sur2); border-radius: 5px; padding: 3px 2px; text-align: center; }
+.rcell .rn { font-size: 9px; color: var(--mut); letter-spacing: 0; }
+.rcell .rv { font-family: 'Bebas Neue', cursive; font-size: 18px; color: var(--txt); line-height: 1.1; }
+.rcell .rv.done { color: var(--acc2); }
+.rcell.now-cell { border: 1px solid var(--acc2); }
 
 /* Input section */
-.isec { background: var(--sur); border: 1px solid var(--bdr); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+.isec { background: var(--sur); border: 1px solid var(--bdr); border-radius: 12px; padding: 8px; display: flex; flex-direction: column; gap: 5px; }
 
 /* Shortcuts */
-.scrow { display: grid; grid-template-columns: repeat(7,1fr); gap: 5px; }
-.sc { background: var(--sur2); border: 1px solid rgba(232,255,71,0.25); border-radius: 8px; padding: 9px 2px; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 22px; color: var(--acc); transition: all 0.12s; }
+.scrow { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+.sc { background: var(--sur2); border: 1px solid rgba(232,255,71,0.25); border-radius: 12px; padding: 0; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 40px; color: var(--acc); transition: all 0.12s; min-height: 52px; display: flex; align-items: center; justify-content: center; }
 .sc:active { background: var(--acc); color: #000; transform: scale(0.93); }
 
 /* Tenkey display */
-.tkd { background: var(--sur2); border: 1px solid var(--bdr); border-radius: 10px; padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; min-height: 44px; }
-.tkv { font-family: 'Bebas Neue', cursive; font-size: 36px; color: var(--acc); letter-spacing: 3px; }
+.tkd { background: var(--sur2); border: 1px solid var(--bdr); border-radius: 10px; padding: 6px 12px; display: flex; align-items: center; justify-content: space-between; min-height: 38px; }
+.tkv { font-family: 'Bebas Neue', cursive; font-size: 30px; color: var(--acc); letter-spacing: 3px; }
 .tkv.empty { color: var(--mut); }
 .tkh { font-size: 10px; color: var(--mut); text-align: right; }
 
 /* Tenkey grid */
 .tkg { display: grid; grid-template-columns: repeat(3,1fr); gap: 5px; }
-.tk { background: var(--sur2); border: 1px solid var(--bdr); border-radius: 10px; padding: 10px 8px; min-height: 46px; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 26px; color: var(--txt); transition: all 0.12s; display: flex; align-items: center; justify-content: center; }
+.tk { background: var(--sur2); border: 1px solid var(--bdr); border-radius: 10px; padding: 8px; min-height: 42px; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 26px; color: var(--txt); transition: all 0.12s; display: flex; align-items: center; justify-content: center; }
 .tk:active { background: var(--acc); color: #000; transform: scale(0.94); }
 .tk.wide { grid-column: span 2; }
 .tk.del { color: var(--mut); font-size: 20px; }
@@ -92,12 +95,12 @@ body::before {
 
 /* Action row */
 .arow { display: flex; gap: 8px; }
-.bok { flex: 1; background: var(--sur2); color: var(--mut); border: 1px solid var(--bdr); border-radius: 10px; padding: 10px; font-size: 14px; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: all 0.15s; }
+.bok { flex: 1; background: var(--sur2); color: var(--mut); border: 1px solid var(--bdr); border-radius: 10px; padding: 8px; font-size: 13px; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: all 0.15s; }
 .bok.ready { background: var(--acc2); color: #fff; border-color: var(--acc2); }
 .bok:disabled { opacity: 0.3; cursor: not-allowed; }
-.breset { width: 100%; background: transparent; border: 1px solid var(--bdr); color: var(--mut); border-radius: 10px; padding: 8px; font-size: 12px; font-weight: 700; letter-spacing: 2px; cursor: pointer; }
+.breset { width: 100%; background: transparent; border: 1px solid var(--bdr); color: var(--mut); border-radius: 10px; padding: 6px; font-size: 11px; font-weight: 700; letter-spacing: 2px; cursor: pointer; }
 .breset:hover { border-color: var(--red); color: var(--red); }
-.bundo { width: 100%; background: transparent; border: 1px solid var(--acc2); color: var(--acc2); border-radius: 10px; padding: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1px; cursor: pointer; display: none; }
+.bundo { width: 100%; background: transparent; border: 1px solid var(--acc2); color: var(--acc2); border-radius: 10px; padding: 6px; font-size: 11px; font-weight: 700; letter-spacing: 1px; cursor: pointer; display: none; }
 .bundo.show { display: block; }
 .breset:hover { border-color: var(--red); color: var(--red); }
 
@@ -217,14 +220,11 @@ body::before {
     </div>
     <div class="scard">
       <div class="total" id="total">0</div>
-      <div class="substats">
-        <div class="ss"><div class="val" id="savg">—</div><div class="lbl">ラウンド平均</div></div>
-        <div class="ss"><div class="val" id="sbest">—</div><div class="lbl">最高ラウンド</div></div>
-        <div class="ss"><div class="val" id="space">—</div><div class="lbl">予測スコア</div></div>
-      </div>
+      <div class="rgrid" id="rgrid"><div class="rcell now-cell"><div class="rn">R1</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R2</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R3</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R4</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R5</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R6</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R7</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R8</div><div class="rv">—</div></div></div>
     </div>
     <div class="isec" id="isec">
       <div class="scrow">
+        <div class="sc" onclick="commit(140)">140</div>
         <div class="sc" onclick="commit(100)">100</div>
         <div class="sc" onclick="commit(85)">85</div>
         <div class="sc" onclick="commit(81)">81</div>
@@ -262,7 +262,7 @@ body::before {
       <div class="slbl">ゲーム履歴</div>
       <button class="bclr" onclick="openCfm()">全件削除</button>
     </div>
-    <div class="hlist" id="hlist"></div>
+    <div class="hlist" id="hlist"><div class="hempty"><div class="ei">🎯</div>まだ記録がありません。<br>ゲームを完了すると自動で保存されます。</div></div>
   </div>
 
 </div>
@@ -316,6 +316,22 @@ var ROUNDS = 8;
 var g = { round: 1, scores: [], total: 0 };
 var buf = '';
 
+/* Round grid */
+function drawRoundGrid() {
+  var el = document.getElementById('rgrid');
+  if (!el) return;
+  el.innerHTML = '';
+  for (var i = 1; i <= ROUNDS; i++) {
+    var cell = document.createElement('div');
+    var isDone = i <= g.scores.length;
+    var isNow = i === g.round && !isDone;
+    cell.className = 'rcell' + (isNow ? ' now-cell' : '');
+    var score = isDone ? g.scores[i-1] : '—';
+    cell.innerHTML = '<div class="rn">R'+i+'</div><div class="rv'+(isDone?' done':'')+'">'+score+'</div>';
+    el.appendChild(cell);
+  }
+}
+
 /* Dots */
 function drawDots() {
   var el = document.getElementById('dots');
@@ -338,10 +354,7 @@ function commit(total) {
   el.textContent = g.total;
   el.classList.add('bump');
   setTimeout(function(){ el.classList.remove('bump'); }, 200);
-  var n = g.scores.length;
-  document.getElementById('savg').textContent = Math.round(g.total / n);
-  document.getElementById('sbest').textContent = Math.max.apply(null, g.scores);
-  document.getElementById('space').textContent = Math.round((g.total / n) * ROUNDS);
+  drawRoundGrid();
   document.getElementById('bok').disabled = true;
   document.getElementById('bok').className = 'bok';
   updDisp();
@@ -407,16 +420,7 @@ function doUndo() {
   g.round = g.scores.length + 1;
   buf = '';
   document.getElementById('total').textContent = g.total;
-  var n = g.scores.length;
-  if (n > 0) {
-    document.getElementById('savg').textContent = Math.round(g.total / n);
-    document.getElementById('sbest').textContent = Math.max.apply(null, g.scores);
-    document.getElementById('space').textContent = Math.round((g.total / n) * ROUNDS);
-  } else {
-    document.getElementById('savg').textContent = '—';
-    document.getElementById('sbest').textContent = '—';
-    document.getElementById('space').textContent = '—';
-  }
+  drawRoundGrid();
   document.getElementById('rnum').innerHTML = g.round + ' <em>/ 8</em>';
   document.getElementById('bok').disabled = true;
   document.getElementById('bok').className = 'bok';
@@ -458,9 +462,7 @@ function goHist() { document.getElementById('ovr').classList.remove('show'); goT
 function resetState() {
   g = { round: 1, scores: [], total: 0 }; buf = '';
   document.getElementById('total').textContent = '0';
-  document.getElementById('savg').textContent = '—';
-  document.getElementById('sbest').textContent = '—';
-  document.getElementById('space').textContent = '—';
+  drawRoundGrid();
   document.getElementById('rnum').innerHTML = '1 <em>/ 8</em>';
   document.getElementById('bok').disabled = true;
   document.getElementById('bok').className = 'bok';
@@ -609,6 +611,7 @@ document.addEventListener('keydown', function(e) {
 
 /* Init */
 drawDots();
+drawRoundGrid();
 updDisp();
 </script>
 
