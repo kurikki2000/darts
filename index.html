@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_17.html -->
+<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_19.html -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -72,7 +72,7 @@ body::before {
 .isec { background: var(--sur); border: 1px solid var(--bdr); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 6px; }
 
 /* Shortcuts */
-.scrow { display: grid; grid-template-columns: repeat(6,1fr); gap: 5px; }
+.scrow { display: grid; grid-template-columns: repeat(7,1fr); gap: 5px; }
 .sc { background: var(--sur2); border: 1px solid rgba(232,255,71,0.25); border-radius: 8px; padding: 9px 2px; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 22px; color: var(--acc); transition: all 0.12s; }
 .sc:active { background: var(--acc); color: #000; transform: scale(0.93); }
 
@@ -92,12 +92,13 @@ body::before {
 
 /* Action row */
 .arow { display: flex; gap: 8px; }
-.bmiss { background: transparent; border: 1px solid var(--bdr); color: var(--mut); border-radius: 10px; padding: 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: 1px; cursor: pointer; }
 .bok { flex: 1; background: var(--sur2); color: var(--mut); border: 1px solid var(--bdr); border-radius: 10px; padding: 10px; font-size: 14px; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: all 0.15s; }
 .bok.ready { background: var(--acc2); color: #fff; border-color: var(--acc2); }
 .bok:disabled { opacity: 0.3; cursor: not-allowed; }
-.bdel { background: transparent; border: 1px solid var(--bdr); color: var(--mut); border-radius: 10px; padding: 10px; font-size: 16px; cursor: pointer; width: 46px; }
 .breset { width: 100%; background: transparent; border: 1px solid var(--bdr); color: var(--mut); border-radius: 10px; padding: 8px; font-size: 12px; font-weight: 700; letter-spacing: 2px; cursor: pointer; }
+.breset:hover { border-color: var(--red); color: var(--red); }
+.bundo { width: 100%; background: transparent; border: 1px solid var(--acc2); color: var(--acc2); border-radius: 10px; padding: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1px; cursor: pointer; display: none; }
+.bundo.show { display: block; }
 .breset:hover { border-color: var(--red); color: var(--red); }
 
 /* Next game prompt */
@@ -230,6 +231,7 @@ body::before {
         <div class="sc" onclick="commit(60)">60</div>
         <div class="sc" onclick="commit(45)">45</div>
         <div class="sc" onclick="commit(41)">41</div>
+        <div class="sc" onclick="commit(26)">26</div>
       </div>
       <div class="tkd">
         <div class="tkv empty" id="tkv">—</div>
@@ -242,11 +244,10 @@ body::before {
         <div class="tk wide" onclick="kp(0)">0</div><div class="tk del" onclick="kd()">⌫</div>
       </div>
       <div class="arow">
-        <button class="bmiss" onclick="miss()">MISS</button>
         <button class="bok" id="bok" onclick="doOk()" disabled="">ラウンド確定</button>
-        <button class="bdel" onclick="kd()">↩</button>
       </div>
     </div>
+    <button class="bundo" id="bundo" onclick="undoRound()">↩ 前のラウンドを修正</button>
     <button class="breset" onclick="resetGame()">↺ 新しいゲーム</button>
   </div>
 
@@ -298,6 +299,18 @@ body::before {
   </div>
 </div>
 
+<!-- Undo round confirm overlay -->
+<div class="overlay" id="oundo">
+  <div class="cbox">
+    <div class="ct">前のラウンドを修正</div>
+    <div class="cs" id="undo-msg"></div>
+    <div class="cbtns">
+      <button class="cc" onclick="closeUndo()">キャンセル</button>
+      <button class="cok" onclick="doUndo()" style="background:var(--acc2);">修正する</button>
+    </div>
+  </div>
+</div>
+
 <script>
 var ROUNDS = 8;
 var g = { round: 1, scores: [], total: 0 };
@@ -332,6 +345,10 @@ function commit(total) {
   document.getElementById('bok').disabled = true;
   document.getElementById('bok').className = 'bok';
   updDisp();
+  // undoボタンを表示（1ラウンド目完了後から）
+  var ub = document.getElementById('bundo');
+  if (ub) ub.className = g.scores.length >= 1 ? 'bundo show' : 'bundo';
+
   if (g.round >= ROUNDS) { setTimeout(showResult, 400); return; }
   g.round++;
   document.getElementById('rnum').innerHTML = g.round + ' <em>/ 8</em>';
@@ -368,6 +385,47 @@ function updDisp() {
     be.disabled = !ok;
     be.className = ok ? 'bok ready' : 'bok';
   }
+}
+
+/* Undo last round */
+function undoRound() {
+  if (g.scores.length === 0) return;
+  var prevRound = g.scores.length;
+  var prevScore = g.scores[g.scores.length - 1];
+  var msg = 'R' + prevRound + ' の ' + prevScore + ' pt を取り消して入力し直しますか？';
+  document.getElementById('undo-msg').textContent = msg;
+  document.getElementById('oundo').classList.add('show');
+}
+function closeUndo() {
+  document.getElementById('oundo').classList.remove('show');
+}
+function doUndo() {
+  closeUndo();
+  if (g.scores.length === 0) return;
+  var last = g.scores.pop();
+  g.total -= last;
+  g.round = g.scores.length + 1;
+  buf = '';
+  document.getElementById('total').textContent = g.total;
+  var n = g.scores.length;
+  if (n > 0) {
+    document.getElementById('savg').textContent = Math.round(g.total / n);
+    document.getElementById('sbest').textContent = Math.max.apply(null, g.scores);
+    document.getElementById('space').textContent = Math.round((g.total / n) * ROUNDS);
+  } else {
+    document.getElementById('savg').textContent = '—';
+    document.getElementById('sbest').textContent = '—';
+    document.getElementById('space').textContent = '—';
+  }
+  document.getElementById('rnum').innerHTML = g.round + ' <em>/ 8</em>';
+  document.getElementById('bok').disabled = true;
+  document.getElementById('bok').className = 'bok';
+  var ub = document.getElementById('bundo');
+  if (ub) ub.className = g.scores.length >= 1 ? 'bundo show' : 'bundo';
+  document.getElementById('isec').style.opacity = '';
+  document.getElementById('isec').style.pointerEvents = '';
+  updDisp();
+  drawDots();
 }
 
 /* Rank */
@@ -407,6 +465,8 @@ function resetState() {
   document.getElementById('bok').disabled = true;
   document.getElementById('bok').className = 'bok';
   document.getElementById('ngp').className = 'ngp';
+  var ub = document.getElementById('bundo');
+  if (ub) ub.className = 'bundo';
   document.getElementById('isec').style.opacity = '';
   document.getElementById('isec').style.pointerEvents = '';
   updDisp(); drawDots();
@@ -420,6 +480,8 @@ function resetGame() {
 function ngpYes() { resetState(); }
 function ngpNo() {
   document.getElementById('ngp').className = 'ngp';
+  var ub = document.getElementById('bundo');
+  if (ub) ub.className = 'bundo';
 }
 
 /* Tabs */
