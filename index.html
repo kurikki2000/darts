@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_27.html -->
+<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_28.html -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -80,7 +80,7 @@ body::before {
 
 /* Shortcuts */
 .scrow { display: grid; grid-template-columns: repeat(4,1fr); gap: 5px; }
-.sc { background: var(--sur2); border: 1px solid rgba(232,255,71,0.25); border-radius: 12px; padding: 0; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 34px; color: var(--acc); transition: background 0.08s; touch-action: manipulation; min-height: 40px; display: flex; align-items: center; justify-content: center; }
+.sc { background: var(--sur2); border: 1px solid rgba(232,255,71,0.25); border-radius: 12px; padding: 0; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 48px; color: var(--acc); transition: background 0.08s; touch-action: manipulation; min-height: 68px; display: flex; align-items: center; justify-content: center; }
 .sc:active, .sc.pressing { background: var(--acc); color: #000; transform: scale(0.93); }
 
 /* Tenkey display */
@@ -91,7 +91,7 @@ body::before {
 
 /* Tenkey grid */
 .tkg { display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(4,1fr); gap: 6px; flex: 1; }
-.tk { background: var(--sur2); border: 1px solid var(--bdr); border-radius: 10px; padding: 0; min-height: 0; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 46px; color: var(--txt); transition: background 0.08s; display: flex; align-items: center; justify-content: center; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.tk { background: var(--sur2); border: 1px solid var(--bdr); border-radius: 10px; padding: 0; min-height: 0; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 36px; color: var(--txt); transition: background 0.08s; display: flex; align-items: center; justify-content: center; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .tk:active, .tk.pressing { background: var(--acc); color: #000; transform: scale(0.94); }
 .tk.wide { grid-column: span 2; }
 .tk.del { color: var(--mut); font-size: 28px; }
@@ -609,19 +609,48 @@ document.addEventListener('keydown', function(e) {
   else if (e.key==='Enter') doOk();
 });
 
-/* タッチ時に即座に視覚フィードバック */
+/* 高速タッチ処理: touchstartで即座に実行、clickの300ms遅延を回避 */
+var _touched = false;
+
+function _handleTap(el) {
+  if (!el) return;
+  // 視覚フィードバック
+  el.classList.add('pressing');
+  setTimeout(function(){ el.classList.remove('pressing'); }, 120);
+  // onclick属性を実行
+  var fn = el.getAttribute('onclick');
+  if (fn) { try { eval(fn); } catch(e){} }
+}
+
 document.addEventListener('touchstart', function(e) {
-  var el = e.target.closest('.tk, .sc, .tab, .bundo, .breset, .ptab');
-  if (el) el.classList.add('pressing');
-}, {passive: true});
+  _touched = true;
+  var el = e.target.closest('.tk, .sc');
+  if (el) {
+    e.preventDefault(); // clickイベントをキャンセル
+    _handleTap(el);
+  }
+  // タブ・その他ボタンはフィードバックのみ
+  var fb = e.target.closest('.tab, .bundo, .breset, .ptab, .ngp-yes, .ngp-no, .rb-new, .rb-hist, .cok, .cc, .bclr');
+  if (fb) fb.classList.add('pressing');
+}, {passive: false});
+
 document.addEventListener('touchend', function(e) {
-  var el = e.target.closest('.tk, .sc, .tab, .bundo, .breset, .ptab');
-  if (el) { setTimeout(function(){ el.classList.remove('pressing'); }, 100); }
-}, {passive: true});
-document.addEventListener('touchcancel', function(e) {
-  var el = e.target.closest('.tk, .sc, .tab, .bundo, .breset, .ptab');
+  var el = e.target.closest('.tab, .bundo, .breset, .ptab, .ngp-yes, .ngp-no, .rb-new, .rb-hist, .cok, .cc, .bclr');
   if (el) el.classList.remove('pressing');
 }, {passive: true});
+
+document.addEventListener('touchcancel', function(e) {
+  document.querySelectorAll('.pressing').forEach(function(el){ el.classList.remove('pressing'); });
+}, {passive: true});
+
+// touchstart後のclickを無視（二重処理防止）
+document.addEventListener('click', function(e) {
+  if (_touched) {
+    var el = e.target.closest('.tk, .sc');
+    if (el) { e.stopPropagation(); e.preventDefault(); }
+  }
+  _touched = false;
+}, true);
 
 /* Init */
 drawDots();
