@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_20.html -->
+<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_21.html -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -91,6 +91,9 @@ body::before {
 .tk:active { background: var(--acc); color: #000; transform: scale(0.94); }
 .tk.wide { grid-column: span 2; }
 .tk.del { color: var(--mut); font-size: 20px; }
+.tk.del:active { background: var(--red); color: #fff; }
+.tk.enter { background: var(--sur2); color: var(--mut); font-size: 20px; font-family: 'Noto Sans JP', sans-serif; font-weight: 700; border: 1px solid var(--bdr); }
+.tk.enter.ready { background: var(--acc2); color: #fff; border-color: var(--acc2); }
 .tk.del:active { background: var(--red); color: #fff; }
 
 /* Action row */
@@ -238,13 +241,10 @@ body::before {
         <div class="tkh" id="tkh">合計点を入力してください</div>
       </div>
       <div class="tkg">
-        <div class="tk" onclick="kp(7)">7</div><div class="tk" onclick="kp(8)">8</div><div class="tk" onclick="kp(9)">9</div>
-        <div class="tk" onclick="kp(4)">4</div><div class="tk" onclick="kp(5)">5</div><div class="tk" onclick="kp(6)">6</div>
         <div class="tk" onclick="kp(1)">1</div><div class="tk" onclick="kp(2)">2</div><div class="tk" onclick="kp(3)">3</div>
-        <div class="tk wide" onclick="kp(0)">0</div><div class="tk del" onclick="kd()">⌫</div>
-      </div>
-      <div class="arow">
-        <button class="bok" id="bok" onclick="doOk()" disabled="">ラウンド確定</button>
+        <div class="tk" onclick="kp(4)">4</div><div class="tk" onclick="kp(5)">5</div><div class="tk" onclick="kp(6)">6</div>
+        <div class="tk" onclick="kp(7)">7</div><div class="tk" onclick="kp(8)">8</div><div class="tk" onclick="kp(9)">9</div>
+        <div class="tk del" onclick="kd()">⌫</div><div class="tk" onclick="kp(0)">0</div><div class="tk enter" id="bok" onclick="doOk()">Enter</div>
       </div>
     </div>
     <button class="bundo" id="bundo" onclick="undoRound()">↩ 前のラウンドを修正</button>
@@ -262,7 +262,7 @@ body::before {
       <div class="slbl">ゲーム履歴</div>
       <button class="bclr" onclick="openCfm()">全件削除</button>
     </div>
-    <div class="hlist" id="hlist"><div class="hempty"><div class="ei">🎯</div>まだ記録がありません。<br>ゲームを完了すると自動で保存されます。</div></div>
+    <div class="hlist" id="hlist"></div>
   </div>
 
 </div>
@@ -355,8 +355,7 @@ function commit(total) {
   el.classList.add('bump');
   setTimeout(function(){ el.classList.remove('bump'); }, 200);
   drawRoundGrid();
-  document.getElementById('bok').disabled = true;
-  document.getElementById('bok').className = 'bok';
+  document.getElementById('bok').className = 'tk enter';
   updDisp();
   // undoボタンを表示（1ラウンド目完了後から）
   var ub = document.getElementById('bundo');
@@ -389,14 +388,13 @@ function updDisp() {
   if (!buf) {
     ve.textContent = '—'; ve.className = 'tkv empty';
     he.textContent = '合計点を入力してください';
-    be.disabled = true; be.className = 'bok';
+    be.className = 'tk enter';
   } else {
     var v = parseInt(buf, 10);
     var ok = !isNaN(v) && v >= 0 && v <= 180;
     ve.textContent = buf; ve.className = 'tkv';
     he.textContent = ok ? ('= ' + v + ' pt') : '⚠ 0〜180で入力';
-    be.disabled = !ok;
-    be.className = ok ? 'bok ready' : 'bok';
+    be.className = ok ? 'tk enter ready' : 'tk enter';
   }
 }
 
@@ -422,8 +420,7 @@ function doUndo() {
   document.getElementById('total').textContent = g.total;
   drawRoundGrid();
   document.getElementById('rnum').innerHTML = g.round + ' <em>/ 8</em>';
-  document.getElementById('bok').disabled = true;
-  document.getElementById('bok').className = 'bok';
+  document.getElementById('bok').className = 'tk enter';
   var ub = document.getElementById('bundo');
   if (ub) ub.className = g.scores.length >= 1 ? 'bundo show' : 'bundo';
   document.getElementById('isec').style.opacity = '';
@@ -464,8 +461,7 @@ function resetState() {
   document.getElementById('total').textContent = '0';
   drawRoundGrid();
   document.getElementById('rnum').innerHTML = '1 <em>/ 8</em>';
-  document.getElementById('bok').disabled = true;
-  document.getElementById('bok').className = 'bok';
+  document.getElementById('bok').className = 'tk enter';
   document.getElementById('ngp').className = 'ngp';
   var ub = document.getElementById('bundo');
   if (ub) ub.className = 'bundo';
