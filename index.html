@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_28.html -->
+<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_31.html -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -80,7 +80,7 @@ body::before {
 
 /* Shortcuts */
 .scrow { display: grid; grid-template-columns: repeat(4,1fr); gap: 5px; }
-.sc { background: var(--sur2); border: 1px solid rgba(232,255,71,0.25); border-radius: 12px; padding: 0; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 48px; color: var(--acc); transition: background 0.08s; touch-action: manipulation; min-height: 68px; display: flex; align-items: center; justify-content: center; }
+.sc { background: var(--sur2); border: 1px solid rgba(232,255,71,0.25); border-radius: 12px; padding: 0; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 58px; color: var(--acc); transition: background 0.08s; touch-action: manipulation; min-height: 90px; display: flex; align-items: center; justify-content: center; }
 .sc:active, .sc.pressing { background: var(--acc); color: #000; transform: scale(0.93); }
 
 /* Tenkey display */
@@ -91,7 +91,7 @@ body::before {
 
 /* Tenkey grid */
 .tkg { display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(4,1fr); gap: 6px; flex: 1; }
-.tk { background: var(--sur2); border: 1px solid var(--bdr); border-radius: 10px; padding: 0; min-height: 0; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 36px; color: var(--txt); transition: background 0.08s; display: flex; align-items: center; justify-content: center; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.tk { background: var(--sur2); border: 1px solid var(--bdr); border-radius: 10px; padding: 0; min-height: 0; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 28px; color: var(--txt); transition: background 0.08s; display: flex; align-items: center; justify-content: center; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .tk:active, .tk.pressing { background: var(--acc); color: #000; transform: scale(0.94); }
 .tk.wide { grid-column: span 2; }
 .tk.del { color: var(--mut); font-size: 28px; }
@@ -231,24 +231,24 @@ body::before {
     </div>
     <div class="isec" id="isec">
       <div class="scrow">
-        <div class="sc" onclick="commit(140)">140</div>
-        <div class="sc" onclick="commit(100)">100</div>
-        <div class="sc" onclick="commit(85)">85</div>
-        <div class="sc" onclick="commit(81)">81</div>
-        <div class="sc" onclick="commit(60)">60</div>
-        <div class="sc" onclick="commit(45)">45</div>
-        <div class="sc" onclick="commit(41)">41</div>
-        <div class="sc" onclick="commit(26)">26</div>
+        <div class="sc" data-fn="commit" data-arg="140">140</div>
+        <div class="sc" data-fn="commit" data-arg="100">100</div>
+        <div class="sc" data-fn="commit" data-arg="85">85</div>
+        <div class="sc" data-fn="commit" data-arg="81">81</div>
+        <div class="sc" data-fn="commit" data-arg="60">60</div>
+        <div class="sc" data-fn="commit" data-arg="45">45</div>
+        <div class="sc" data-fn="commit" data-arg="41">41</div>
+        <div class="sc" data-fn="commit" data-arg="26">26</div>
       </div>
       <div class="tkd">
         <div class="tkv empty" id="tkv">—</div>
         <div class="tkh" id="tkh">合計点を入力してください</div>
       </div>
       <div class="tkg">
-        <div class="tk" onclick="kp(1)">1</div><div class="tk" onclick="kp(2)">2</div><div class="tk" onclick="kp(3)">3</div>
-        <div class="tk" onclick="kp(4)">4</div><div class="tk" onclick="kp(5)">5</div><div class="tk" onclick="kp(6)">6</div>
-        <div class="tk" onclick="kp(7)">7</div><div class="tk" onclick="kp(8)">8</div><div class="tk" onclick="kp(9)">9</div>
-        <div class="tk del" onclick="kd()">⌫</div><div class="tk" onclick="kp(0)">0</div><div class="tk enter" id="bok" onclick="doOk()">Enter</div>
+        <div class="tk" data-fn="kp" data-arg="1">1</div><div class="tk" data-fn="kp" data-arg="2">2</div><div class="tk" data-fn="kp" data-arg="3">3</div>
+        <div class="tk" data-fn="kp" data-arg="4">4</div><div class="tk" data-fn="kp" data-arg="5">5</div><div class="tk" data-fn="kp" data-arg="6">6</div>
+        <div class="tk" data-fn="kp" data-arg="7">7</div><div class="tk" data-fn="kp" data-arg="8">8</div><div class="tk" data-fn="kp" data-arg="9">9</div>
+        <div class="tk del" data-fn="kd">⌫</div><div class="tk" data-fn="kp" data-arg="0">0</div><div class="tk enter" id="bok" data-fn="doOk">Enter</div>
       </div>
     </div>
     <button class="bundo" id="bundo" onclick="undoRound()">↩ 前のラウンドを修正</button>
@@ -609,48 +609,31 @@ document.addEventListener('keydown', function(e) {
   else if (e.key==='Enter') doOk();
 });
 
-/* 高速タッチ処理: touchstartで即座に実行、clickの300ms遅延を回避 */
-var _touched = false;
+/* 高速タッチ処理 */
+var _fns = { kp: kp, kd: kd, doOk: doOk, commit: commit };
 
-function _handleTap(el) {
-  if (!el) return;
-  // 視覚フィードバック
+function _exec(el) {
+  var fn = el.getAttribute('data-fn');
+  var arg = el.getAttribute('data-arg');
+  if (!fn || !_fns[fn]) return;
   el.classList.add('pressing');
-  setTimeout(function(){ el.classList.remove('pressing'); }, 120);
-  // onclick属性を実行
-  var fn = el.getAttribute('onclick');
-  if (fn) { try { eval(fn); } catch(e){} }
+  setTimeout(function(){ el.classList.remove('pressing'); }, 100);
+  if (arg !== null) _fns[fn](parseInt(arg, 10));
+  else _fns[fn]();
 }
 
 document.addEventListener('touchstart', function(e) {
-  _touched = true;
-  var el = e.target.closest('.tk, .sc');
+  var el = e.target.closest('[data-fn]');
   if (el) {
-    e.preventDefault(); // clickイベントをキャンセル
-    _handleTap(el);
+    e.preventDefault();
+    _exec(el);
   }
-  // タブ・その他ボタンはフィードバックのみ
-  var fb = e.target.closest('.tab, .bundo, .breset, .ptab, .ngp-yes, .ngp-no, .rb-new, .rb-hist, .cok, .cc, .bclr');
-  if (fb) fb.classList.add('pressing');
 }, {passive: false});
 
-document.addEventListener('touchend', function(e) {
-  var el = e.target.closest('.tab, .bundo, .breset, .ptab, .ngp-yes, .ngp-no, .rb-new, .rb-hist, .cok, .cc, .bclr');
-  if (el) el.classList.remove('pressing');
-}, {passive: true});
-
+document.addEventListener('touchend', function(){}, {passive: true});
 document.addEventListener('touchcancel', function(e) {
   document.querySelectorAll('.pressing').forEach(function(el){ el.classList.remove('pressing'); });
 }, {passive: true});
-
-// touchstart後のclickを無視（二重処理防止）
-document.addEventListener('click', function(e) {
-  if (_touched) {
-    var el = e.target.closest('.tk, .sc');
-    if (el) { e.stopPropagation(); e.preventDefault(); }
-  }
-  _touched = false;
-}, true);
 
 /* Init */
 drawDots();
