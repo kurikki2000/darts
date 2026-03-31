@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_31.html -->
+<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_34.html -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -634,6 +634,15 @@ document.addEventListener('touchend', function(){}, {passive: true});
 document.addEventListener('touchcancel', function(e) {
   document.querySelectorAll('.pressing').forEach(function(el){ el.classList.remove('pressing'); });
 }, {passive: true});
+
+// Chrome/マウス用: clickでも同じ処理（touchstart後は_lastTouchでスキップ）
+var _lastTouch = 0;
+document.addEventListener('touchstart', function(){ _lastTouch = Date.now(); }, {passive: true});
+document.addEventListener('click', function(e) {
+  if (Date.now() - _lastTouch < 500) return; // touchstart直後のclickは無視
+  var el = e.target.closest('[data-fn]');
+  if (el) _exec(el);
+});
 
 /* Init */
 drawDots();
