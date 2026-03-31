@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_25.html -->
+<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_27.html -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -81,7 +81,7 @@ body::before {
 /* Shortcuts */
 .scrow { display: grid; grid-template-columns: repeat(4,1fr); gap: 5px; }
 .sc { background: var(--sur2); border: 1px solid rgba(232,255,71,0.25); border-radius: 12px; padding: 0; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 34px; color: var(--acc); transition: background 0.08s; touch-action: manipulation; min-height: 40px; display: flex; align-items: center; justify-content: center; }
-.sc:active { background: var(--acc); color: #000; transform: scale(0.93); }
+.sc:active, .sc.pressing { background: var(--acc); color: #000; transform: scale(0.93); }
 
 /* Tenkey display */
 .tkd { background: var(--sur2); border: 1px solid var(--bdr); border-radius: 8px; padding: 4px 10px; display: flex; align-items: center; justify-content: space-between; }
@@ -92,7 +92,7 @@ body::before {
 /* Tenkey grid */
 .tkg { display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(4,1fr); gap: 6px; flex: 1; }
 .tk { background: var(--sur2); border: 1px solid var(--bdr); border-radius: 10px; padding: 0; min-height: 0; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 46px; color: var(--txt); transition: background 0.08s; display: flex; align-items: center; justify-content: center; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
-.tk:active { background: var(--acc); color: #000; transform: scale(0.94); }
+.tk:active, .tk.pressing { background: var(--acc); color: #000; transform: scale(0.94); }
 .tk.wide { grid-column: span 2; }
 .tk.del { color: var(--mut); font-size: 28px; }
 .tk.del:active { background: var(--red); color: #fff; }
@@ -609,8 +609,19 @@ document.addEventListener('keydown', function(e) {
   else if (e.key==='Enter') doOk();
 });
 
-/* タッチ高速化: touchstart でクラス付与 */
-document.addEventListener('touchstart', function(){}, {passive: true});
+/* タッチ時に即座に視覚フィードバック */
+document.addEventListener('touchstart', function(e) {
+  var el = e.target.closest('.tk, .sc, .tab, .bundo, .breset, .ptab');
+  if (el) el.classList.add('pressing');
+}, {passive: true});
+document.addEventListener('touchend', function(e) {
+  var el = e.target.closest('.tk, .sc, .tab, .bundo, .breset, .ptab');
+  if (el) { setTimeout(function(){ el.classList.remove('pressing'); }, 100); }
+}, {passive: true});
+document.addEventListener('touchcancel', function(e) {
+  var el = e.target.closest('.tk, .sc, .tab, .bundo, .breset, .ptab');
+  if (el) el.classList.remove('pressing');
+}, {passive: true});
 
 /* Init */
 drawDots();
