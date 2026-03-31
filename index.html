@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_22.html -->
+<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_23.html -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -33,11 +33,13 @@ body::before {
 .app {
   position: relative; z-index: 1;
   max-width: 480px; margin: 0 auto;
-  padding: 12px;
-  padding-top: max(12px, env(safe-area-inset-top));
-  padding-bottom: max(12px, env(safe-area-inset-bottom));
-  min-height: 100vh;
+  padding: 10px;
+  padding-top: max(10px, env(safe-area-inset-top));
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
+  height: 100vh;
+  height: 100dvh;
   display: flex; flex-direction: column; gap: 5px;
+  overflow: hidden;
 }
 
 /* Tabs */
@@ -46,7 +48,7 @@ body::before {
 .tab.on { background: var(--acc); color: #000; }
 
 /* Views */
-.view { display: flex; flex-direction: column; gap: 8px; }
+.view { display: flex; flex-direction: column; gap: 5px; flex: 1; overflow: hidden; }
 .hide { display: none !important; }
 
 /* Round bar */
@@ -72,7 +74,7 @@ body::before {
 .rcell.now-cell { border: 1px solid var(--acc2); }
 
 /* Input section */
-.isec { background: var(--sur); border: 1px solid var(--bdr); border-radius: 10px; padding: 6px; display: flex; flex-direction: column; gap: 5px; }
+.isec { background: var(--sur); border: 1px solid var(--bdr); border-radius: 10px; padding: 6px; display: flex; flex-direction: column; gap: 5px; flex: 1; }
 
 /* Shortcuts */
 .scrow { display: grid; grid-template-columns: repeat(4,1fr); gap: 5px; }
@@ -80,19 +82,19 @@ body::before {
 .sc:active { background: var(--acc); color: #000; transform: scale(0.93); }
 
 /* Tenkey display */
-.tkd { background: var(--sur2); border: 1px solid var(--bdr); border-radius: 8px; padding: 4px 10px; display: flex; align-items: center; justify-content: space-between; min-height: 34px; }
+.tkd { background: var(--sur2); border: 1px solid var(--bdr); border-radius: 8px; padding: 4px 10px; display: flex; align-items: center; justify-content: space-between; }
 .tkv { font-family: 'Bebas Neue', cursive; font-size: 26px; color: var(--acc); letter-spacing: 3px; }
 .tkv.empty { color: var(--mut); }
 .tkh { font-size: 10px; color: var(--mut); text-align: right; }
 
 /* Tenkey grid */
-.tkg { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
-.tk { background: var(--sur2); border: 1px solid var(--bdr); border-radius: 10px; padding: 0; min-height: 56px; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 32px; color: var(--txt); transition: all 0.12s; display: flex; align-items: center; justify-content: center; }
+.tkg { display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(4,1fr); gap: 6px; flex: 1; }
+.tk { background: var(--sur2); border: 1px solid var(--bdr); border-radius: 10px; padding: 0; min-height: 0; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 46px; color: var(--txt); transition: all 0.12s; display: flex; align-items: center; justify-content: center; }
 .tk:active { background: var(--acc); color: #000; transform: scale(0.94); }
 .tk.wide { grid-column: span 2; }
-.tk.del { color: var(--mut); font-size: 20px; }
+.tk.del { color: var(--mut); font-size: 28px; }
 .tk.del:active { background: var(--red); color: #fff; }
-.tk.enter { background: var(--sur2); color: var(--mut); font-size: 18px; font-family: 'Noto Sans JP', sans-serif; font-weight: 700; border: 1px solid var(--bdr); }
+.tk.enter { background: var(--sur2); color: var(--mut); font-size: 22px; font-family: 'Noto Sans JP', sans-serif; font-weight: 700; border: 1px solid var(--bdr); }
 .tk.enter.ready { background: var(--acc2); color: #fff; border-color: var(--acc2); }
 .tk.del:active { background: var(--red); color: #fff; }
 
