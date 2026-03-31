@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_24.html -->
+<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_25.html -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -50,7 +50,7 @@ body::before {
 .tab.on { background: var(--acc); color: #000; }
 
 /* Views */
-.view { display: flex; flex-direction: column; gap: 5px; flex: 1; overflow: hidden; }
+.view { display: flex; flex-direction: column; gap: 5px; flex: 1; }
 .hide { display: none !important; }
 
 /* Round bar */
@@ -209,7 +209,7 @@ body::before {
   </div>
 
   <!-- Game view -->
-  <div class="view" id="vgame">
+  <div class="view" id="vgame" style="overflow:hidden;">
     <div class="ngp" id="ngp">
       <div class="ngp-t">ゲーム終了</div>
       <div class="ngp-s">次のゲームを始めますか？</div>
@@ -256,7 +256,7 @@ body::before {
   </div>
 
   <!-- History view -->
-  <div class="view hide" id="vhist">
+  <div class="view hide" id="vhist" style="overflow-y:auto;-webkit-overflow-scrolling:touch;">
     <div class="s3" id="hs3"></div>
     <div class="slbl">直近の平均スコア</div>
     <div class="a3" id="ha3"></div>
