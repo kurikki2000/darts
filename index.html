@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_47.html -->
+<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_49.html -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -38,7 +38,7 @@ body::before {
   padding: 8px;
   padding-top: max(8px, env(safe-area-inset-top));
   padding-bottom: max(8px, env(safe-area-inset-bottom));
-  height: 100svh;
+  height: 100svh; height: 100dvh;
   display: flex; flex-direction: column; gap: 5px;
   overflow: hidden;
 }
@@ -149,6 +149,37 @@ body::before {
 .cbtns button { flex: 1; padding: 11px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; }
 .cc { background: transparent; border: 1px solid var(--bdr); color: var(--mut); }
 .cok { background: var(--red); color: #fff; border: none; }
+
+/* Confetti overlay */
+#confetti-canvas {
+  position: fixed; inset: 0; z-index: 200;
+  pointer-events: none; display: none;
+}
+
+/* Shortcut editor */
+.sc-editor { display: none; flex-direction: column; gap: 8px; }
+.sc-editor.show { display: flex; }
+.sc-edit-title { font-size: 10px; color: var(--mut); letter-spacing: 2px; text-transform: uppercase; text-align: center; }
+.sc-edit-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
+.sc-edit-cell { display: flex; flex-direction: column; gap: 3px; align-items: center; }
+.sc-edit-cell input {
+  width: 100%; background: var(--sur2); border: 1px solid var(--bdr);
+  border-radius: 8px; padding: 8px 4px; text-align: center;
+  font-family: 'Bebas Neue', cursive; font-size: 22px; color: var(--acc);
+  -webkit-appearance: none; outline: none;
+  user-select: text; -webkit-user-select: text;
+}
+.sc-edit-cell input:focus { border-color: var(--acc); }
+.sc-edit-btns { display: flex; gap: 8px; }
+.sc-edit-save { flex: 1; background: var(--acc); color: #000; border: none; border-radius: 8px; padding: 10px; font-size: 13px; font-weight: 700; cursor: pointer; }
+.sc-edit-cancel { flex: 1; background: transparent; border: 1px solid var(--bdr); color: var(--mut); border-radius: 8px; padding: 10px; font-size: 13px; font-weight: 700; cursor: pointer; }
+.sc-customize-btn { background: transparent; border: none; color: var(--mut); font-size: 10px; cursor: pointer; padding: 2px 4px; letter-spacing: 1px; align-self: flex-end; }
+
+/* Score chart */
+.chart-wrap { background: var(--sur); border: 1px solid var(--bdr); border-radius: 12px; padding: 12px; }
+.chart-title { font-size: 10px; color: var(--mut); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+.chart-canvas-wrap { position: relative; height: 120px; }
+canvas.schart { width: 100%; height: 100%; }
 
 /* History */
 .hdr { display: flex; align-items: center; justify-content: space-between; }
@@ -262,6 +293,12 @@ body::before {
   <!-- History view -->
   <div class="view hide" id="vhist" style="overflow-y:auto;-webkit-overflow-scrolling:touch;">
     <div class="s3" id="hs3"></div>
+    <div class="chart-wrap" id="chart-wrap" style="display:none;">
+      <div class="chart-title">スコア推移</div>
+      <div class="chart-canvas-wrap">
+        <canvas class="schart" id="schart"></canvas>
+      </div>
+    </div>
     <div class="slbl">直近の平均スコア</div>
     <div class="a3" id="ha3"></div>
     <div class="slbl">期間別成績</div>
@@ -324,6 +361,7 @@ body::before {
   </div>
 </div>
 
+<canvas id="confetti-canvas"></canvas>
 <script>
 var ROUNDS = 8;
 var g = { round: 1, scores: [], total: 0 };
@@ -372,7 +410,7 @@ function commit(total) {
   updDisp();
   // undoボタンを表示（1ラウンド目完了後から）
   var ub = document.getElementById('bundo');
-  if (ub) ub.className = g.scores.length >= 1 ? 'bundo show' : 'bundo';
+  if (ub) ub.className = g.scores.length >= 2 ? 'bundo show' : 'bundo';
 
   if (g.round >= ROUNDS) { setTimeout(showResult, 400); return; }
   g.round++;
@@ -435,7 +473,7 @@ function doUndo() {
   document.getElementById('rnum').innerHTML = g.round + ' <em>/ 8</em>';
   document.getElementById('bok').className = 'tk enter';
   var ub = document.getElementById('bundo');
-  if (ub) ub.className = g.scores.length >= 1 ? 'bundo show' : 'bundo';
+  if (ub) ub.className = g.scores.length >= 2 ? 'bundo show' : 'bundo';
   document.getElementById('isec').style.opacity = '';
   document.getElementById('isec').style.pointerEvents = '';
   updDisp();
@@ -463,6 +501,7 @@ function showResult() {
   for (var i=0;i<g.scores.length;i++) html += '<div class="rc"><div class="rv">'+g.scores[i]+'</div><div class="rl">R'+(i+1)+'</div></div>';
   document.getElementById('rrounds').innerHTML = html;
   document.getElementById('rpb').style.display = isPB ? 'block' : 'none';
+  if (isPB) setTimeout(launchConfetti, 300);
   document.getElementById('ovr').classList.add('show');
 }
 function startNew() { document.getElementById('ovr').classList.remove('show'); resetState(); }
@@ -516,6 +555,210 @@ function openCfm() { document.getElementById('ocfm').classList.add('show'); }
 function closeCfm() { document.getElementById('ocfm').classList.remove('show'); }
 function delAll() { localStorage.removeItem('dh'); closeCfm(); renderHist(); }
 function delOne(i) { var h=getH(); h.splice(i,1); localStorage.setItem('dh',JSON.stringify(h)); renderHist(); }
+
+/* ============================================================
+   ショートカットカスタマイズ
+   ============================================================ */
+var DEFAULT_SC = [140, 100, 85, 81, 60, 45, 41, 26];
+
+function getSC() {
+  try {
+    var s = localStorage.getItem('dh_sc');
+    if (s) {
+      var arr = JSON.parse(s);
+      if (Array.isArray(arr) && arr.length === 8) return arr;
+    }
+  } catch(e) {}
+  return DEFAULT_SC.slice();
+}
+
+function saveSC(arr) {
+  localStorage.setItem('dh_sc', JSON.stringify(arr));
+}
+
+function buildScRow() {
+  var row = document.getElementById('scrow');
+  if (!row) return;
+  row.innerHTML = '';
+  var sc = getSC();
+  sc.forEach(function(v) {
+    var d = document.createElement('div');
+    d.className = 'sc';
+    d.setAttribute('data-fn', 'commit');
+    d.setAttribute('data-arg', String(v));
+    d.textContent = v;
+    row.appendChild(d);
+  });
+}
+
+function toggleScEditor() {
+  var ed = document.getElementById('sc-editor');
+  if (!ed) return;
+  var isOpen = ed.classList.contains('show');
+  if (!isOpen) {
+    var sc = getSC();
+    var grid = document.getElementById('sc-edit-grid');
+    grid.innerHTML = '';
+    sc.forEach(function(v, i) {
+      var cell = document.createElement('div');
+      cell.className = 'sc-edit-cell';
+      var inp = document.createElement('input');
+      inp.type = 'number';
+      inp.min = '0';
+      inp.max = '180';
+      inp.value = v;
+      inp.id = 'sc-inp-' + i;
+      cell.appendChild(inp);
+      grid.appendChild(cell);
+    });
+    ed.classList.add('show');
+  } else {
+    ed.classList.remove('show');
+  }
+}
+
+function saveScEditor() {
+  var sc = [];
+  for (var i = 0; i < 8; i++) {
+    var inp = document.getElementById('sc-inp-' + i);
+    var v = parseInt(inp ? inp.value : '0', 10);
+    if (isNaN(v) || v < 0 || v > 180) v = DEFAULT_SC[i];
+    sc.push(v);
+  }
+  saveSC(sc);
+  buildScRow();
+  document.getElementById('sc-editor').classList.remove('show');
+  // _fnsを再設定
+  _fns.commit = commit;
+}
+
+/* ============================================================
+   紙吹雪アニメーション
+   ============================================================ */
+function launchConfetti() {
+  var canvas = document.getElementById('confetti-canvas');
+  if (!canvas) return;
+  canvas.style.display = 'block';
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  var ctx = canvas.getContext('2d');
+  var pieces = [];
+  var colors = ['#e8ff47','#ff6b35','#47ffb4','#ff4757','#ffffff','#4fc3f7'];
+  for (var i = 0; i < 120; i++) {
+    pieces.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      w: Math.random() * 10 + 5,
+      h: Math.random() * 6 + 3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vx: (Math.random() - 0.5) * 4,
+      vy: Math.random() * 4 + 2,
+      angle: Math.random() * 360,
+      va: (Math.random() - 0.5) * 6,
+    });
+  }
+  var frame = 0;
+  var MAX = 90;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach(function(p) {
+      ctx.save();
+      ctx.translate(p.x + p.w/2, p.y + p.h/2);
+      ctx.rotate(p.angle * Math.PI / 180);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = Math.max(0, 1 - frame/MAX);
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+      p.x += p.vx; p.y += p.vy; p.angle += p.va;
+    });
+    frame++;
+    if (frame < MAX) requestAnimationFrame(draw);
+    else { ctx.clearRect(0, 0, canvas.width, canvas.height); canvas.style.display = 'none'; }
+  }
+  draw();
+}
+
+/* ============================================================
+   スコア推移グラフ
+   ============================================================ */
+function drawChart(hist) {
+  var wrap = document.getElementById('chart-wrap');
+  var canvas = document.getElementById('schart');
+  if (!wrap || !canvas) return;
+  if (hist.length < 2) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+
+  var scores = hist.slice(0, 30).reverse().map(function(h){ return h.score; });
+  var dpr = window.devicePixelRatio || 1;
+  var W = canvas.offsetWidth || 300;
+  var H = 120;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  var min = Math.min.apply(null, scores);
+  var max = Math.max.apply(null, scores);
+  var range = max - min || 1;
+  var pad = { top: 10, right: 10, bottom: 20, left: 36 };
+  var gw = W - pad.left - pad.right;
+  var gh = H - pad.top - pad.bottom;
+
+  // 背景グリッド
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 1;
+  for (var g = 0; g <= 4; g++) {
+    var gy = pad.top + (gh / 4) * g;
+    ctx.beginPath(); ctx.moveTo(pad.left, gy); ctx.lineTo(pad.left + gw, gy); ctx.stroke();
+    var lv = Math.round(max - (range / 4) * g);
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.font = '9px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(lv, pad.left - 4, gy + 3);
+  }
+
+  // グラデーション塗り
+  var pts = scores.map(function(s, i) {
+    return {
+      x: pad.left + (i / (scores.length - 1)) * gw,
+      y: pad.top + gh - ((s - min) / range) * gh
+    };
+  });
+
+  var grad = ctx.createLinearGradient(0, pad.top, 0, pad.top + gh);
+  grad.addColorStop(0, 'rgba(232,255,71,0.3)');
+  grad.addColorStop(1, 'rgba(232,255,71,0)');
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x, pad.top + gh);
+  pts.forEach(function(p){ ctx.lineTo(p.x, p.y); });
+  ctx.lineTo(pts[pts.length-1].x, pad.top + gh);
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // 折れ線
+  ctx.beginPath();
+  ctx.strokeStyle = '#e8ff47';
+  ctx.lineWidth = 2;
+  pts.forEach(function(p, i){ if (i===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y); });
+  ctx.stroke();
+
+  // ドット
+  pts.forEach(function(p, i) {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 3, 0, Math.PI*2);
+    ctx.fillStyle = i === pts.length-1 ? '#ff6b35' : '#e8ff47';
+    ctx.fill();
+  });
+
+  // X軸ラベル（最初・最後・中間）
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  ctx.font = '9px sans-serif';
+  ctx.textAlign = 'center';
+  [0, Math.floor(pts.length/2), pts.length-1].forEach(function(i) {
+    if (pts[i]) ctx.fillText('G'+(i+1), pts[i].x, H - 4);
+  });
+}
 
 /* Export / Import */
 // inputのchangeイベントをJSで設定（iPhoneのSafari対応）
@@ -708,6 +951,7 @@ document.addEventListener('click', function(e) {
 });
 
 /* Init */
+buildScRow();
 drawDots();
 drawRoundGrid();
 updDisp();
