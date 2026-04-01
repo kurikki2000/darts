@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_51.html -->
-<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="DARTS">
 <meta name="theme-color" content="#0a0a0f">
 <title>DARTS COUNT UP</title>
-<link href="./index_files/css2" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #0a0a0f; --sur: #13131a; --sur2: #1c1c28;
@@ -237,8 +237,8 @@ canvas.schart { width: 100%; height: 100%; }
 <div class="app">
 
   <div class="tabs">
-    <div class="tab on" id="tgame" onclick="goTab(&#39;game&#39;)">🎯 ゲーム</div>
-    <div class="tab" id="thist" onclick="goTab(&#39;hist&#39;)">📊 履歴</div>
+    <div class="tab on" id="tgame" onclick="goTab('game')">🎯 ゲーム</div>
+    <div class="tab" id="thist" onclick="goTab('hist')">📊 履歴</div>
   </div>
 
   <!-- Game view -->
@@ -256,7 +256,7 @@ canvas.schart { width: 100%; height: 100%; }
         <div class="rlbl">ROUND</div>
         <div class="rnum" id="rnum">1 <em>/ 8</em></div>
       </div>
-      <div class="dots" id="dots"><div class="dot now">1</div><div class="dot">2</div><div class="dot">3</div><div class="dot">4</div><div class="dot">5</div><div class="dot">6</div><div class="dot">7</div><div class="dot">8</div></div>
+      <div class="dots" id="dots"></div>
       <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex-shrink:0;">
         <button class="bundo" id="bundo" onclick="undoRound()">↩ 修正</button>
         <button class="breset" onclick="resetGame()">↺ リセット</button>
@@ -264,7 +264,7 @@ canvas.schart { width: 100%; height: 100%; }
     </div>
     <div class="scard">
       <div class="total" id="total">0</div>
-      <div class="rgrid" id="rgrid"><div class="rcell now-cell"><div class="rn">R1</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R2</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R3</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R4</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R5</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R6</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R7</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R8</div><div class="rv">—</div></div></div>
+      <div class="rgrid" id="rgrid"></div>
     </div>
     <div class="isec" id="isec">
       <div class="scrow">
@@ -961,6 +961,5 @@ if (impFile) {
   impFile.addEventListener('change', function(){ importData(this); });
 }
 </script>
-
-
-</body></html>
+</body>
+</html>
