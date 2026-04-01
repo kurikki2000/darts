@@ -273,8 +273,23 @@ canvas.schart { width: 100%; height: 100%; }
         <button class="sc-customize-btn" onclick="toggleScEditor()">⚙ カスタマイズ</button>
       </div>
       <div class="sc-editor" id="sc-editor">
-        <div class="sc-edit-title">ショートカット編集（0〜180）</div>
-        <div class="sc-edit-grid" id="sc-edit-grid"></div>
+        <div class="sc-edit-title">編集するボタンを選択</div>
+        <div class="sc-edit-slots" id="sc-edit-slots"></div>
+        <div class="sc-edit-cur" id="sc-edit-cur">—</div>
+        <div class="sc-edit-numpad">
+          <div class="sc-num" data-fn="scNum" data-arg="1">1</div>
+          <div class="sc-num" data-fn="scNum" data-arg="2">2</div>
+          <div class="sc-num" data-fn="scNum" data-arg="3">3</div>
+          <div class="sc-num" data-fn="scNum" data-arg="4">4</div>
+          <div class="sc-num" data-fn="scNum" data-arg="5">5</div>
+          <div class="sc-num" data-fn="scNum" data-arg="6">6</div>
+          <div class="sc-num" data-fn="scNum" data-arg="7">7</div>
+          <div class="sc-num" data-fn="scNum" data-arg="8">8</div>
+          <div class="sc-num" data-fn="scNum" data-arg="9">9</div>
+          <div class="sc-num del" data-fn="scDel">⌫</div>
+          <div class="sc-num" data-fn="scNum" data-arg="0">0</div>
+          <div class="sc-num ok" data-fn="scOk">OK</div>
+        </div>
         <div class="sc-edit-btns">
           <button class="sc-edit-cancel" onclick="toggleScEditor()">キャンセル</button>
           <button class="sc-edit-save" onclick="saveScEditor()">保存</button>
@@ -604,46 +619,99 @@ function buildScRow() {
   });
 }
 
+var _scEdit = { vals: [], sel: 0, buf: '' };
+
 function toggleScEditor() {
   var ed = document.getElementById('sc-editor');
   if (!ed) return;
-  var isOpen = ed.classList.contains('show');
-  if (!isOpen) {
-    var sc = getSC();
-    var grid = document.getElementById('sc-edit-grid');
-    grid.innerHTML = '';
-    sc.forEach(function(v, i) {
-      var cell = document.createElement('div');
-      cell.className = 'sc-edit-cell';
-      var inp = document.createElement('input');
-      inp.type = 'number';
-      inp.min = '0';
-      inp.max = '180';
-      inp.value = v;
-      inp.id = 'sc-inp-' + i;
-      // iPhoneでフォーカス時に全選択（既存の数字をバックスペースで消せるように）
-      inp.addEventListener('focus', function(){ var self = this; setTimeout(function(){ self.select(); }, 50); });
-      cell.appendChild(inp);
-      grid.appendChild(cell);
-    });
-    ed.classList.add('show');
-  } else {
+  if (ed.classList.contains('show')) {
     ed.classList.remove('show');
+    return;
+  }
+  _scEdit.vals = getSC().slice();
+  _scEdit.sel = 0;
+  _scEdit.buf = '';
+  _buildScSlots();
+  _scEditCur();
+  ed.classList.add('show');
+}
+
+function _buildScSlots() {
+  var slots = document.getElementById('sc-edit-slots');
+  if (!slots) return;
+  slots.innerHTML = '';
+  _scEdit.vals.forEach(function(v, i) {
+    var d = document.createElement('div');
+    d.className = 'sc-slot' + (i === _scEdit.sel ? ' active' : '');
+    d.textContent = v;
+    d.setAttribute('data-fn', 'scSel');
+    d.setAttribute('data-arg', String(i));
+    slots.appendChild(d);
+  });
+}
+
+function scSel(i) {
+  // 現在の入力を確定してから選択変更
+  if (_scEdit.buf !== '') {
+    var v = parseInt(_scEdit.buf, 10);
+    if (!isNaN(v) && v >= 0 && v <= 180) _scEdit.vals[_scEdit.sel] = v;
+  }
+  _scEdit.sel = i;
+  _scEdit.buf = '';
+  _buildScSlots();
+  _scEditCur();
+}
+
+function scNum(n) {
+  var next = _scEdit.buf + String(n);
+  if (parseInt(next, 10) > 180) return;
+  if (next.length > 3) return;
+  _scEdit.buf = next;
+  _scEditCur();
+}
+
+function scDel() {
+  _scEdit.buf = _scEdit.buf.slice(0, -1);
+  _scEditCur();
+}
+
+function scOk() {
+  if (_scEdit.buf !== '') {
+    var v = parseInt(_scEdit.buf, 10);
+    if (!isNaN(v) && v >= 0 && v <= 180) {
+      _scEdit.vals[_scEdit.sel] = v;
+      _scEdit.buf = '';
+    }
+  }
+  // 次のスロットへ
+  if (_scEdit.sel < 7) {
+    _scEdit.sel++;
+    _buildScSlots();
+  }
+  _scEditCur();
+}
+
+function _scEditCur() {
+  var cur = document.getElementById('sc-edit-cur');
+  if (!cur) return;
+  if (_scEdit.buf !== '') {
+    cur.textContent = _scEdit.buf;
+    cur.style.color = 'var(--acc)';
+  } else {
+    cur.textContent = _scEdit.vals[_scEdit.sel];
+    cur.style.color = 'var(--mut)';
   }
 }
 
 function saveScEditor() {
-  var sc = [];
-  for (var i = 0; i < 8; i++) {
-    var inp = document.getElementById('sc-inp-' + i);
-    var v = parseInt(inp ? inp.value : '0', 10);
-    if (isNaN(v) || v < 0 || v > 180) v = DEFAULT_SC[i];
-    sc.push(v);
+  // 未確定の入力を確定
+  if (_scEdit.buf !== '') {
+    var v = parseInt(_scEdit.buf, 10);
+    if (!isNaN(v) && v >= 0 && v <= 180) _scEdit.vals[_scEdit.sel] = v;
   }
-  saveSC(sc);
+  saveSC(_scEdit.vals);
   buildScRow();
   document.getElementById('sc-editor').classList.remove('show');
-  // _fnsを再設定
   _fns.commit = commit;
 }
 
@@ -934,7 +1002,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 /* 高速タッチ処理 */
-var _fns = { kp: kp, kd: kd, doOk: doOk, commit: commit };
+var _fns = { kp: kp, kd: kd, doOk: doOk, commit: commit, scNum: scNum, scDel: scDel, scOk: scOk, scSel: scSel };
 
 function _exec(el) {
   var fn = el.getAttribute('data-fn');
@@ -977,3 +1045,10 @@ drawDots();
 drawRoundGrid();
 updDisp();
 // インポートinputのchangeイベント設定
+var impFile = document.getElementById('imp-file');
+if (impFile) {
+  impFile.addEventListener('change', function(){ importData(this); });
+}
+</script>
+</body>
+</html>
