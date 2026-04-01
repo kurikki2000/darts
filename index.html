@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_46.html -->
+<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_47.html -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -35,11 +35,10 @@ body::before {
 .app {
   position: relative; z-index: 1;
   max-width: 480px; margin: 0 auto;
-  padding: 10px;
-  padding-top: max(10px, env(safe-area-inset-top));
-  padding-bottom: max(10px, env(safe-area-inset-bottom));
-  height: 100vh;
-  height: 100dvh;
+  padding: 8px;
+  padding-top: max(8px, env(safe-area-inset-top));
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
+  height: 100svh;
   display: flex; flex-direction: column; gap: 5px;
   overflow: hidden;
 }
@@ -50,23 +49,23 @@ body::before {
 .tab.on { background: var(--acc); color: #000; }
 
 /* Views */
-.view { display: flex; flex-direction: column; gap: 5px; flex: 1; min-height: 0; }
+.view { display: flex; flex-direction: column; gap: 5px; flex: 1; min-height: 0; overflow: hidden; }
 .hide { display: none !important; }
 
 /* Round bar */
-.rbar { display: flex; align-items: center; justify-content: space-between; background: var(--sur); border: 1px solid var(--bdr); border-radius: 8px; padding: 4px 10px; }
-.rlbl { font-size: 10px; color: var(--mut); letter-spacing: 2px; }
-.rnum { font-family: 'Bebas Neue', cursive; font-size: 16px; color: var(--txt); margin-top: 0; }
+.rbar { display: flex; align-items: center; gap: 6px; background: var(--sur); border: 1px solid var(--bdr); border-radius: 8px; padding: 4px 8px; }
+.rlbl { font-size: 9px; color: var(--mut); letter-spacing: 1px; }
+.rnum { font-family: 'Bebas Neue', cursive; font-size: 14px; color: var(--txt); margin-top: 0; }
 .rnum em { font-size: 13px; color: var(--mut); font-style: normal; }
-.dots { display: flex; gap: 3px; }
-.dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--bdr); display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: var(--mut); transition: all 0.3s; }
+.dots { display: flex; gap: 2px; flex-wrap: nowrap; }
+.dot { width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--bdr); display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; color: var(--mut); transition: all 0.3s; }
 .dot.done { border-color: var(--acc); color: var(--acc); background: rgba(232,255,71,0.1); }
 .dot.now { border-color: var(--acc2); color: var(--acc2); background: rgba(255,107,53,0.15); animation: pd 1.5s infinite; }
 @keyframes pd { 0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,0.4)}50%{box-shadow:0 0 0 5px transparent} }
 
 /* Score card */
 .scard { background: var(--sur); border: 1px solid var(--bdr); border-radius: 8px; padding: 4px; text-align: center; }
-.total { font-family: 'Bebas Neue', cursive; font-size: 56px; line-height: 1; color: var(--acc); letter-spacing: 4px; text-shadow: 0 0 40px rgba(232,255,71,0.3); transition: transform 0.15s; }
+.total { font-family: 'Bebas Neue', cursive; font-size: 48px; line-height: 1; color: var(--acc); letter-spacing: 4px; text-shadow: 0 0 40px rgba(232,255,71,0.3); transition: transform 0.15s; }
 .total.bump { transform: scale(1.06); }
 .rgrid { display: grid; grid-template-columns: repeat(8,1fr); gap: 3px; margin-top: 3px; }
 .rcell { background: var(--sur2); border-radius: 4px; padding: 2px; text-align: center; }
@@ -76,11 +75,11 @@ body::before {
 .rcell.now-cell { border: 1px solid var(--acc2); }
 
 /* Input section */
-.isec { background: var(--sur); border: 1px solid var(--bdr); border-radius: 10px; padding: 6px; display: flex; flex-direction: column; gap: 5px; flex: 1; min-height: 0; overflow: hidden; }
+.isec { background: var(--sur); border: 1px solid var(--bdr); border-radius: 10px; padding: 6px; display: flex; flex-direction: column; gap: 5px; flex: 1; min-height: 0; }
 
 /* Shortcuts */
 .scrow { display: grid; grid-template-columns: repeat(4,1fr); gap: 5px; }
-.sc { background: var(--sur2); border: 1px solid rgba(232,255,71,0.25); border-radius: 12px; padding: 0; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 58px; color: var(--acc); transition: background 0.08s; touch-action: manipulation; min-height: 90px; display: flex; align-items: center; justify-content: center; }
+.sc { background: var(--sur2); border: 1px solid rgba(232,255,71,0.25); border-radius: 12px; padding: 0; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 58px; color: var(--acc); transition: background 0.08s; touch-action: manipulation; min-height: 60px; display: flex; align-items: center; justify-content: center; }
 .sc:active, .sc.pressing { background: var(--acc); color: #000; transform: scale(0.93); }
 
 /* Tenkey display */
@@ -90,7 +89,7 @@ body::before {
 .tkh { font-size: 10px; color: var(--mut); text-align: right; }
 
 /* Tenkey grid */
-.tkg { display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(4,1fr); gap: 6px; flex: 1; min-height: 0; }
+.tkg { display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(4,1fr); gap: 5px; flex: 1; min-height: 0; }
 .tk { background: var(--sur2); border: 1px solid #4a4a5e; border-radius: 10px; padding: 0; min-height: 0; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 40px; color: var(--txt); transition: background 0.08s; display: flex; align-items: center; justify-content: center; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .tk:active, .tk.pressing { background: var(--acc); color: #000; transform: scale(0.94); }
 .tk.wide { grid-column: span 2; }
@@ -105,10 +104,10 @@ body::before {
 .bok { flex: 1; background: var(--sur2); color: var(--mut); border: 1px solid var(--bdr); border-radius: 10px; padding: 8px; font-size: 13px; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: all 0.15s; }
 .bok.ready { background: var(--acc2); color: #fff; border-color: var(--acc2); }
 .bok:disabled { opacity: 0.3; cursor: not-allowed; }
-.breset { width: 100%; background: transparent; border: 1px solid var(--bdr); color: var(--mut); border-radius: 8px; padding: 5px; font-size: 10px; font-weight: 700; letter-spacing: 2px; cursor: pointer; }
+.breset { background: transparent; border: 1px solid var(--bdr); color: var(--mut); border-radius: 5px; padding: 2px 6px; font-size: 9px; font-weight: 700; cursor: pointer; white-space: nowrap; }
 .breset:hover { border-color: var(--red); color: var(--red); }
-.bundo { width: 100%; background: transparent; border: 1px solid var(--acc2); color: var(--acc2); border-radius: 8px; padding: 5px; font-size: 10px; font-weight: 700; letter-spacing: 1px; cursor: pointer; display: none; }
-.bundo.show { display: block; }
+.bundo { background: transparent; border: 1px solid var(--acc2); color: var(--acc2); border-radius: 5px; padding: 2px 6px; font-size: 9px; font-weight: 700; cursor: pointer; display: none; white-space: nowrap; }
+.bundo.show { display: inline-block; }
 .breset:hover { border-color: var(--red); color: var(--red); }
 
 /* Next game prompt */
@@ -227,6 +226,10 @@ body::before {
         <div class="rnum" id="rnum">1 <em>/ 8</em></div>
       </div>
       <div class="dots" id="dots"><div class="dot now">1</div><div class="dot">2</div><div class="dot">3</div><div class="dot">4</div><div class="dot">5</div><div class="dot">6</div><div class="dot">7</div><div class="dot">8</div></div>
+      <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex-shrink:0;">
+        <button class="bundo" id="bundo" onclick="undoRound()">↩ 修正</button>
+        <button class="breset" onclick="resetGame()">↺ リセット</button>
+      </div>
     </div>
     <div class="scard">
       <div class="total" id="total">0</div>
@@ -253,8 +256,6 @@ body::before {
         <div class="tk" data-fn="kp" data-arg="7">7</div><div class="tk" data-fn="kp" data-arg="8">8</div><div class="tk" data-fn="kp" data-arg="9">9</div>
         <div class="tk del" data-fn="kd">⌫</div><div class="tk" data-fn="kp" data-arg="0">0</div><div class="tk enter" id="bok" data-fn="doOk">Enter</div>
       </div>
-      <button class="bundo" id="bundo" onclick="undoRound()">↩ 前のラウンドを修正</button>
-      <button class="breset" onclick="resetGame()">↺ 新しいゲーム</button>
     </div>
   </div>
 
