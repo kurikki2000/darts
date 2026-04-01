@@ -267,7 +267,18 @@ canvas.schart { width: 100%; height: 100%; }
       <div class="rgrid" id="rgrid"></div>
     </div>
     <div class="isec" id="isec">
-      <div class="scrow">
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="sc-customize-btn" onclick="toggleScEditor()">⚙ カスタマイズ</button>
+      </div>
+      <div class="sc-editor" id="sc-editor">
+        <div class="sc-edit-title">ショートカット編集（0〜180）</div>
+        <div class="sc-edit-grid" id="sc-edit-grid"></div>
+        <div class="sc-edit-btns">
+          <button class="sc-edit-cancel" onclick="toggleScEditor()">キャンセル</button>
+          <button class="sc-edit-save" onclick="saveScEditor()">保存</button>
+        </div>
+      </div>
+      <div class="scrow" id="scrow">
         <div class="sc" data-fn="commit" data-arg="140">140</div>
         <div class="sc" data-fn="commit" data-arg="100">100</div>
         <div class="sc" data-fn="commit" data-arg="85">85</div>
