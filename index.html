@@ -887,6 +887,8 @@ function renderHist() {
   var hl=document.getElementById('hlist');
   if (!h.length) {
     s3.innerHTML=''; a3.innerHTML=''; document.getElementById('hper').innerHTML='';
+    var cw = document.getElementById('chart-wrap');
+    if (cw) cw.style.display = 'none';
     hl.innerHTML='<div class="hempty"><div class="ei">🎯</div>まだ記録がありません。<br>ゲームを完了すると自動で保存されます。</div>';
     return;
   }
