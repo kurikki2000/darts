@@ -249,8 +249,8 @@ canvas.schart { width: 100%; height: 100%; }
 <div class="app">
 
   <div class="tabs">
-    <div class="tab on" id="tgame" onclick="goTab('game')">🎯 ゲーム</div>
-    <div class="tab" id="thist" onclick="goTab('hist')">📊 履歴</div>
+    <div class="tab on" id="tgame" data-fn="goTabGame">🎯 ゲーム</div>
+    <div class="tab" id="thist" data-fn="goTabHist">📊 履歴</div>
   </div>
 
   <!-- Game view -->
@@ -270,8 +270,8 @@ canvas.schart { width: 100%; height: 100%; }
       </div>
       <div class="dots" id="dots"></div>
       <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex-shrink:0;">
-        <button class="bundo" id="bundo" onclick="undoRound()">↩ 修正</button>
-        <button class="breset" onclick="resetGame()">↺ リセット</button>
+        <button class="bundo" id="bundo" data-fn="undoRound">↩ 修正</button>
+        <button class="breset" data-fn="resetGame">↺ リセット</button>
       </div>
     </div>
     <div class="scard">
@@ -280,7 +280,7 @@ canvas.schart { width: 100%; height: 100%; }
     </div>
     <div class="isec" id="isec">
       <div style="display:flex;justify-content:flex-end;">
-        <button class="sc-customize-btn" onclick="toggleScEditor()">⚙ カスタマイズ</button>
+        <button class="sc-customize-btn" data-fn="toggleScEditor">⚙ カスタマイズ</button>
       </div>
       <div class="sc-editor" id="sc-editor">
         <div style="font-size:18px;font-weight:700;color:var(--acc);letter-spacing:2px;">⚙ ショートカット編集</div>
@@ -971,7 +971,12 @@ document.addEventListener('keydown', function(e) {
 });
 
 /* 高速タッチ処理 */
-var _fns = { kp: kp, kd: kd, doOk: doOk, commit: commit };
+var _fns = { kp: kp, kd: kd, doOk: doOk, commit: commit,
+  undoRound: undoRound, resetGame: resetGame,
+  goTabGame: function(){ goTab('game'); },
+  goTabHist: function(){ goTab('hist'); },
+  toggleScEditor: toggleScEditor
+};
 
 function _exec(el) {
   var fn = el.getAttribute('data-fn');
@@ -983,21 +988,26 @@ function _exec(el) {
   else _fns[fn]();
 }
 
-// touchstart: 視覚フィードバックのみ（passive:true）
+// touchstart: 視覚フィードバックのみ（passive:true、sc-editor中は何もしない）
 document.addEventListener('touchstart', function(e) {
+  var scEd = document.getElementById('sc-editor');
+  if (scEd && scEd.classList.contains('show')) return;
   var el = e.target.closest('[data-fn]');
-  if (el && !el.closest('.sc-editor')) {
+  if (el) {
     el.classList.add('pressing');
     setTimeout(function(){ el.classList.remove('pressing'); }, 100);
   }
 }, {passive: true});
 
-// touchend: ゲームボタンの処理（sc-editor外のみ、sc-editorが開いている間はブロック）
+// touchend: ゲームボタンの処理
 document.addEventListener('touchend', function(e) {
-  if (e.target.closest('.sc-editor')) return;
-  // sc-editorが開いているときはゲームボタンのタップをブロック
+  // sc-editorが開いているときは一切ブロック
   var scEd = document.getElementById('sc-editor');
-  if (scEd && scEd.classList.contains('show')) return;
+  if (scEd && scEd.classList.contains('show')) {
+    e.preventDefault();
+    e.stopPropagation();
+    return;
+  }
   var el = e.target.closest('[data-fn]');
   if (el) {
     e.preventDefault();
