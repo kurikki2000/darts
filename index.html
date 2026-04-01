@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_55.html -->
-<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="DARTS">
 <meta name="theme-color" content="#0a0a0f">
 <title>DARTS COUNT UP</title>
-<link href="./DARTS COUNT UP1_files/css2" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #0a0a0f; --sur: #13131a; --sur2: #1c1c28;
@@ -189,7 +189,8 @@ body::before {
 .chart-title { font-size: 10px; color: var(--mut); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
 .chart-tabs { display: flex; gap: 6px; margin-bottom: 8px; }
 .chart-tab { font-size: 10px; font-weight: 700; letter-spacing: 1px; padding: 3px 10px; border-radius: 5px; cursor: pointer; color: var(--mut); background: transparent; border: 1px solid var(--bdr); }
-.chart-tab.on { background: var(--acc); color: #000; border-color: var(--acc); }
+.chart-tab.on-score { background: var(--acc); color: #000; border-color: var(--acc); }
+.chart-tab.on-avg { background: var(--acc2); color: #000; border-color: var(--acc2); }
 .chart-canvas-wrap { position: relative; height: 120px; }
 canvas.schart { width: 100%; height: 100%; }
 
@@ -268,7 +269,7 @@ canvas.schart { width: 100%; height: 100%; }
         <div class="rlbl">ROUND</div>
         <div class="rnum" id="rnum">1 <em>/ 8</em></div>
       </div>
-      <div class="dots" id="dots"><div class="dot now">1</div><div class="dot">2</div><div class="dot">3</div><div class="dot">4</div><div class="dot">5</div><div class="dot">6</div><div class="dot">7</div><div class="dot">8</div></div>
+      <div class="dots" id="dots"></div>
       <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex-shrink:0;">
         <button class="bundo" id="bundo" data-fn="undoRound">↩ 修正</button>
         <button class="breset" data-fn="resetGame">↺ リセット</button>
@@ -276,7 +277,7 @@ canvas.schart { width: 100%; height: 100%; }
     </div>
     <div class="scard">
       <div class="total" id="total">0</div>
-      <div class="rgrid" id="rgrid"><div class="rcell now-cell"><div class="rn">R1</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R2</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R3</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R4</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R5</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R6</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R7</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R8</div><div class="rv">—</div></div></div>
+      <div class="rgrid" id="rgrid"></div>
     </div>
     <div class="isec" id="isec">
       <div style="display:flex;justify-content:flex-end;">
@@ -291,7 +292,16 @@ canvas.schart { width: 100%; height: 100%; }
           <button class="sc-edit-save" onclick="saveScEditor()">保存</button>
         </div>
       </div>
-      <div class="scrow" id="scrow"><div class="sc" data-fn="commit" data-arg="140">140</div><div class="sc" data-fn="commit" data-arg="100">100</div><div class="sc" data-fn="commit" data-arg="85">85</div><div class="sc" data-fn="commit" data-arg="81">81</div><div class="sc" data-fn="commit" data-arg="60">60</div><div class="sc" data-fn="commit" data-arg="45">45</div><div class="sc" data-fn="commit" data-arg="41">41</div><div class="sc" data-fn="commit" data-arg="26">26</div></div>
+      <div class="scrow" id="scrow">
+        <div class="sc" data-fn="commit" data-arg="140">140</div>
+        <div class="sc" data-fn="commit" data-arg="100">100</div>
+        <div class="sc" data-fn="commit" data-arg="85">85</div>
+        <div class="sc" data-fn="commit" data-arg="81">81</div>
+        <div class="sc" data-fn="commit" data-arg="60">60</div>
+        <div class="sc" data-fn="commit" data-arg="45">45</div>
+        <div class="sc" data-fn="commit" data-arg="41">41</div>
+        <div class="sc" data-fn="commit" data-arg="26">26</div>
+      </div>
       <div class="tkd">
         <div class="tkv empty" id="tkv">—</div>
         <div class="tkh" id="tkh">合計点を入力してください</div>
@@ -307,20 +317,20 @@ canvas.schart { width: 100%; height: 100%; }
 
   <!-- History view -->
   <div class="view hide" id="vhist" style="overflow-y:auto;-webkit-overflow-scrolling:touch;">
-    <div class="s3" id="hs3"><div class="sc3"><div class="sv">9</div><div class="sl">ゲーム数</div></div><div class="sc3"><div class="sv">1120</div><div class="sl">自己ベスト</div></div><div class="sc3"><div class="sv">656</div><div class="sl">通算平均</div></div></div>
-    <div class="chart-wrap" id="chart-wrap" style="display: block;">
+    <div class="s3" id="hs3"></div>
+    <div class="chart-wrap" id="chart-wrap" style="display:none;">
       <div class="chart-tabs">
-        <button class="chart-tab on" id="ct-score" onclick="switchChart(&#39;score&#39;)">スコア推移</button>
-        <button class="chart-tab" id="ct-avg" onclick="switchChart(&#39;avg&#39;)">平均推移</button>
+        <button class="chart-tab on-score" id="ct-score" onclick="switchChart('score')">スコア推移</button>
+        <button class="chart-tab" id="ct-avg" onclick="switchChart('avg')">平均推移</button>
       </div>
       <div class="chart-canvas-wrap">
-        <canvas class="schart" id="schart" width="423" height="120"></canvas>
+        <canvas class="schart" id="schart"></canvas>
       </div>
     </div>
     <div class="slbl">直近の平均スコア</div>
-    <div class="a3" id="ha3"><div class="ac"><div class="av">656</div><div class="al">直近10G<br>平均</div></div><div class="ac"><div class="av">656</div><div class="al">直近20G<br>平均</div></div><div class="ac"><div class="av">656</div><div class="al">直近30G<br>平均</div></div></div>
+    <div class="a3" id="ha3"></div>
     <div class="slbl">期間別成績</div>
-    <div id="hper"><div class="pcrd"><div class="ptabs" id="ptabs"><div class="ptab on" data-t="day">日別</div><div class="ptab" data-t="week">週別</div><div class="ptab" data-t="month">月別</div></div><div class="pgrid"><div class="phd"><span>期間</span><span>最高点</span><span>平均点</span><span>回数</span><span>180</span></div><div class="pr"><div class="plbl">2026/04/01</div><div class="pbest">1120</div><div class="pavg">656</div><div class="pcnt">9G</div><div class="p180">—</div></div></div></div></div>
+    <div id="hper"></div>
     <div class="exp-row">
       <button class="bexp" onclick="exportData()">📤 エクスポート</button>
       <button class="bexp" onclick="triggerImport()">📥 インポート</button>
@@ -330,7 +340,7 @@ canvas.schart { width: 100%; height: 100%; }
       <div class="slbl">ゲーム履歴</div>
       <button class="bclr" onclick="openCfm()">全件削除</button>
     </div>
-    <div class="hlist" id="hlist"><div class="hi"><div class="hsc">372</div><div class="hinf"><div class="hdate">2026/4/1 15:22　Cランク</div><div class="hpills"><span class="hpill">R1:85</span><span class="hpill">R2:41</span><span class="hpill">R3:41</span><span class="hpill">R4:41</span><span class="hpill">R5:41</span><span class="hpill">R6:41</span><span class="hpill">R7:41</span><span class="hpill">R8:41</span></div></div><button class="hdel" onclick="delOne(0)">🗑</button></div><div class="hi"><div class="hsc">920</div><div class="hinf"><div class="hdate">2026/4/1 15:22　Sランク</div><div class="hpills"><span class="hpill">R1:140</span><span class="hpill">R2:140</span><span class="hpill">R3:140</span><span class="hpill">R4:100</span><span class="hpill">R5:100</span><span class="hpill">R6:100</span><span class="hpill">R7:100</span><span class="hpill">R8:100</span></div></div><button class="hdel" onclick="delOne(1)">🗑</button></div><div class="hi"><div class="hsc best">1120</div><div class="hinf"><div class="hdate">2026/4/1 12:13　S+ランク</div><div class="hpills"><span class="hpill">R1:140</span><span class="hpill">R2:140</span><span class="hpill">R3:140</span><span class="hpill">R4:140</span><span class="hpill">R5:140</span><span class="hpill">R6:140</span><span class="hpill">R7:140</span><span class="hpill">R8:140</span></div></div><div class="hbdg">BEST</div><button class="hdel" onclick="delOne(2)">🗑</button></div><div class="hi"><div class="hsc">800</div><div class="hinf"><div class="hdate">2026/4/1 12:12　Sランク</div><div class="hpills"><span class="hpill">R1:100</span><span class="hpill">R2:100</span><span class="hpill">R3:100</span><span class="hpill">R4:100</span><span class="hpill">R5:100</span><span class="hpill">R6:100</span><span class="hpill">R7:100</span><span class="hpill">R8:100</span></div></div><button class="hdel" onclick="delOne(3)">🗑</button></div><div class="hi"><div class="hsc">800</div><div class="hinf"><div class="hdate">2026/4/1 12:12　Sランク</div><div class="hpills"><span class="hpill">R1:100</span><span class="hpill">R2:100</span><span class="hpill">R3:100</span><span class="hpill">R4:100</span><span class="hpill">R5:100</span><span class="hpill">R6:100</span><span class="hpill">R7:100</span><span class="hpill">R8:100</span></div></div><button class="hdel" onclick="delOne(4)">🗑</button></div><div class="hi"><div class="hsc">208</div><div class="hinf"><div class="hdate">2026/4/1 10:24　Dランク</div><div class="hpills"><span class="hpill">R1:26</span><span class="hpill">R2:26</span><span class="hpill">R3:26</span><span class="hpill">R4:26</span><span class="hpill">R5:26</span><span class="hpill">R6:26</span><span class="hpill">R7:26</span><span class="hpill">R8:26</span></div></div><button class="hdel" onclick="delOne(5)">🗑</button></div><div class="hi"><div class="hsc">208</div><div class="hinf"><div class="hdate">2026/4/1 10:23　Dランク</div><div class="hpills"><span class="hpill">R1:26</span><span class="hpill">R2:26</span><span class="hpill">R3:26</span><span class="hpill">R4:26</span><span class="hpill">R5:26</span><span class="hpill">R6:26</span><span class="hpill">R7:26</span><span class="hpill">R8:26</span></div></div><button class="hdel" onclick="delOne(6)">🗑</button></div><div class="hi"><div class="hsc">680</div><div class="hinf"><div class="hdate">2026/4/1 10:23　Aランク</div><div class="hpills"><span class="hpill">R1:85</span><span class="hpill">R2:85</span><span class="hpill">R3:85</span><span class="hpill">R4:85</span><span class="hpill">R5:85</span><span class="hpill">R6:85</span><span class="hpill">R7:85</span><span class="hpill">R8:85</span></div></div><button class="hdel" onclick="delOne(7)">🗑</button></div><div class="hi"><div class="hsc">800</div><div class="hinf"><div class="hdate">2026/4/1 10:23　Sランク</div><div class="hpills"><span class="hpill">R1:100</span><span class="hpill">R2:100</span><span class="hpill">R3:100</span><span class="hpill">R4:100</span><span class="hpill">R5:100</span><span class="hpill">R6:100</span><span class="hpill">R7:100</span><span class="hpill">R8:100</span></div></div><button class="hdel" onclick="delOne(8)">🗑</button></div></div>
+    <div class="hlist" id="hlist"></div>
   </div>
 
 </div>
@@ -708,8 +718,8 @@ var _chartMode = 'score';
 
 function switchChart(mode) {
   _chartMode = mode;
-  document.getElementById('ct-score').className = 'chart-tab' + (mode === 'score' ? ' on' : '');
-  document.getElementById('ct-avg').className = 'chart-tab' + (mode === 'avg' ? ' on' : '');
+  document.getElementById('ct-score').className = 'chart-tab' + (mode === 'score' ? ' on-score' : '');
+  document.getElementById('ct-avg').className = 'chart-tab' + (mode === 'avg' ? ' on-avg' : '');
   drawChart(getH());
 }
 
@@ -722,10 +732,14 @@ function drawChart(hist) {
 
   var scores;
   if (_chartMode === 'avg') {
-    // 直近10ゲームの累積平均（古い順）
-    var recent = hist.slice(0, 10).reverse();
-    var running = 0;
-    scores = recent.map(function(h, i){ running += h.score; return Math.round(running / (i+1)); });
+    // 直近30ゲーム分、各ゲーム時点での過去10ゲーム移動平均
+    var base = hist.slice(0, 30).reverse(); // 古い順に30ゲーム
+    scores = base.map(function(h, i) {
+      var window10 = base.slice(Math.max(0, i - 9), i + 1);
+      var sum = 0;
+      for (var j = 0; j < window10.length; j++) sum += window10[j].score;
+      return Math.round(sum / window10.length);
+    });
   } else {
     scores = hist.slice(0, 30).reverse().map(function(h){ return h.score; });
   }
@@ -766,7 +780,7 @@ function drawChart(hist) {
   });
 
   var grad = ctx.createLinearGradient(0, pad.top, 0, pad.top + gh);
-  var gc = _chartMode === 'avg' ? '71,255,180' : '232,255,71';
+  var gc = _chartMode === 'avg' ? '255,107,53' : '232,255,71';
   grad.addColorStop(0, 'rgba('+gc+',0.3)');
   grad.addColorStop(1, 'rgba('+gc+',0)');
   ctx.beginPath();
@@ -779,7 +793,7 @@ function drawChart(hist) {
 
   // 折れ線
   ctx.beginPath();
-  ctx.strokeStyle = _chartMode === 'avg' ? '#47ffb4' : '#e8ff47';
+  ctx.strokeStyle = _chartMode === 'avg' ? '#ff6b35' : '#e8ff47';
   ctx.lineWidth = 2;
   pts.forEach(function(p, i){ if (i===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y); });
   ctx.stroke();
@@ -788,7 +802,7 @@ function drawChart(hist) {
   pts.forEach(function(p, i) {
     ctx.beginPath();
     ctx.arc(p.x, p.y, 3, 0, Math.PI*2);
-    ctx.fillStyle = i === pts.length-1 ? '#ff6b35' : '#e8ff47';
+    ctx.fillStyle = _chartMode === 'avg' ? '#ff6b35' : '#e8ff47';
     ctx.fill();
   });
 
@@ -796,9 +810,12 @@ function drawChart(hist) {
   ctx.fillStyle = 'rgba(255,255,255,0.3)';
   ctx.font = '9px sans-serif';
   ctx.textAlign = 'center';
-  var offset = _chartMode === 'avg' ? (hist.length > 10 ? hist.length - 10 : 0) : 0;
+  // X軸ラベル：スコア推移も平均推移も同じく古い順にG1〜G30
+  var totalGames = hist.length;
+  var shown = scores.length;
+  var startIdx = totalGames - shown; // 何ゲーム目から始まるか
   [0, Math.floor(pts.length/2), pts.length-1].forEach(function(i) {
-    if (pts[i]) ctx.fillText('G'+(i+1+offset), pts[i].x, H - 4);
+    if (pts[i]) ctx.fillText('G'+(startIdx+i+1), pts[i].x, H - 4);
   });
 }
 
@@ -930,11 +947,29 @@ function renderHist() {
     '<div class="sc3"><div class="sv">'+h.length+'</div><div class="sl">ゲーム数</div></div>'+
     '<div class="sc3"><div class="sv">'+best+'</div><div class="sl">自己ベスト</div></div>'+
     '<div class="sc3"><div class="sv">'+Math.round(sum/sc.length)+'</div><div class="sl">通算平均</div></div>';
-  a3.innerHTML=[10,20,30].map(function(n){
+  // 直近10G/20G/30Gの平均を計算（現在 & 1ゲーム前）
+  var avgs = [10,20,30].map(function(n){
     var sl=h.slice(0,n), s2=0;
-    for(var i=0;i<sl.length;i++) s2+=sl[i].score;
-    var v=sl.length?Math.round(s2/sl.length):null;
-    return '<div class="ac"><div class="av">'+(v!==null?v:'—')+'</div><div class="al">直近'+n+'G<br>平均</div></div>';
+    for(var j=0;j<sl.length;j++) s2+=sl[j].score;
+    return sl.length ? Math.round(s2/sl.length) : null;
+  });
+  // 1ゲーム前（最新ゲームを除いた）の平均
+  var avgsPrev = [10,20,30].map(function(n){
+    var sl=h.slice(1, n+1), s2=0;
+    for(var j=0;j<sl.length;j++) s2+=sl[j].score;
+    return sl.length ? Math.round(s2/sl.length) : null;
+  });
+  a3.innerHTML=[10,20,30].map(function(n, idx){
+    var v = avgs[idx];
+    var vPrev = avgsPrev[idx];
+    var arrow = '';
+    if (v !== null && vPrev !== null) {
+      if (v > vPrev) arrow = '<span style="color:#ff6b35;font-size:13px;font-weight:bold;"> ↑</span>';
+      else if (v < vPrev) arrow = '<span style="color:#4fc3f7;font-size:13px;font-weight:bold;"> ↓</span>';
+    }
+    // 直近10Gはオレンジ、20G・30Gは白っぽい色
+    var style = n===10 ? ' style="color:var(--acc2)"' : ' style="color:#c8c8d8"';
+    return '<div class="ac"><div class="av"'+style+'>'+(v!==null?v:'—')+arrow+'</div><div class="al">直近'+n+'G<br>平均</div></div>';
   }).join('');
   renderPer(h);
   setTimeout(function(){ drawChart(h); }, 50);
@@ -1031,6 +1066,5 @@ if (impFile) {
   impFile.addEventListener('change', function(){ importData(this); });
 }
 </script>
-
-
-</body></html>
+</body>
+</html>
