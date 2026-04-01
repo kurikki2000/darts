@@ -180,6 +180,9 @@ body::before {
 /* Score chart */
 .chart-wrap { background: var(--sur); border: 1px solid var(--bdr); border-radius: 12px; padding: 12px; }
 .chart-title { font-size: 10px; color: var(--mut); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+.chart-tabs { display: flex; gap: 6px; margin-bottom: 8px; }
+.chart-tab { font-size: 10px; font-weight: 700; letter-spacing: 1px; padding: 3px 10px; border-radius: 5px; cursor: pointer; color: var(--mut); background: transparent; border: 1px solid var(--bdr); }
+.chart-tab.on { background: var(--acc); color: #000; border-color: var(--acc); }
 .chart-canvas-wrap { position: relative; height: 120px; }
 canvas.schart { width: 100%; height: 100%; }
 
@@ -307,7 +310,10 @@ canvas.schart { width: 100%; height: 100%; }
   <div class="view hide" id="vhist" style="overflow-y:auto;-webkit-overflow-scrolling:touch;">
     <div class="s3" id="hs3"></div>
     <div class="chart-wrap" id="chart-wrap" style="display:none;">
-      <div class="chart-title">スコア推移</div>
+      <div class="chart-tabs">
+        <button class="chart-tab on" id="ct-score" onclick="switchChart('score')">スコア推移</button>
+        <button class="chart-tab" id="ct-avg" onclick="switchChart('avg')">平均推移</button>
+      </div>
       <div class="chart-canvas-wrap">
         <canvas class="schart" id="schart"></canvas>
       </div>
@@ -698,6 +704,15 @@ function launchConfetti() {
 /* ============================================================
    スコア推移グラフ
    ============================================================ */
+var _chartMode = 'score';
+
+function switchChart(mode) {
+  _chartMode = mode;
+  document.getElementById('ct-score').className = 'chart-tab' + (mode === 'score' ? ' on' : '');
+  document.getElementById('ct-avg').className = 'chart-tab' + (mode === 'avg' ? ' on' : '');
+  drawChart(getH());
+}
+
 function drawChart(hist) {
   var wrap = document.getElementById('chart-wrap');
   var canvas = document.getElementById('schart');
@@ -705,7 +720,15 @@ function drawChart(hist) {
   if (hist.length < 2) { wrap.style.display = 'none'; return; }
   wrap.style.display = 'block';
 
-  var scores = hist.slice(0, 30).reverse().map(function(h){ return h.score; });
+  var scores;
+  if (_chartMode === 'avg') {
+    // 直近10ゲームの累積平均（古い順）
+    var recent = hist.slice(0, 10).reverse();
+    var running = 0;
+    scores = recent.map(function(h, i){ running += h.score; return Math.round(running / (i+1)); });
+  } else {
+    scores = hist.slice(0, 30).reverse().map(function(h){ return h.score; });
+  }
   var dpr = window.devicePixelRatio || 1;
   var W = canvas.offsetWidth || 300;
   var H = 120;
@@ -743,8 +766,9 @@ function drawChart(hist) {
   });
 
   var grad = ctx.createLinearGradient(0, pad.top, 0, pad.top + gh);
-  grad.addColorStop(0, 'rgba(232,255,71,0.3)');
-  grad.addColorStop(1, 'rgba(232,255,71,0)');
+  var gc = _chartMode === 'avg' ? '71,255,180' : '232,255,71';
+  grad.addColorStop(0, 'rgba('+gc+',0.3)');
+  grad.addColorStop(1, 'rgba('+gc+',0)');
   ctx.beginPath();
   ctx.moveTo(pts[0].x, pad.top + gh);
   pts.forEach(function(p){ ctx.lineTo(p.x, p.y); });
@@ -755,7 +779,7 @@ function drawChart(hist) {
 
   // 折れ線
   ctx.beginPath();
-  ctx.strokeStyle = '#e8ff47';
+  ctx.strokeStyle = _chartMode === 'avg' ? '#47ffb4' : '#e8ff47';
   ctx.lineWidth = 2;
   pts.forEach(function(p, i){ if (i===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y); });
   ctx.stroke();
@@ -772,8 +796,9 @@ function drawChart(hist) {
   ctx.fillStyle = 'rgba(255,255,255,0.3)';
   ctx.font = '9px sans-serif';
   ctx.textAlign = 'center';
+  var offset = _chartMode === 'avg' ? (hist.length > 10 ? hist.length - 10 : 0) : 0;
   [0, Math.floor(pts.length/2), pts.length-1].forEach(function(i) {
-    if (pts[i]) ctx.fillText('G'+(i+1), pts[i].x, H - 4);
+    if (pts[i]) ctx.fillText('G'+(i+1+offset), pts[i].x, H - 4);
   });
 }
 
@@ -950,47 +975,4 @@ function _exec(el) {
 
 // touchstart: 視覚フィードバックのみ（passive:true）
 document.addEventListener('touchstart', function(e) {
-  var el = e.target.closest('[data-fn]');
-  if (el && !el.closest('.sc-editor')) {
-    el.classList.add('pressing');
-    setTimeout(function(){ el.classList.remove('pressing'); }, 100);
-  }
-}, {passive: true});
-
-// touchend: ゲームボタンの処理（sc-editor外のみ）
-document.addEventListener('touchend', function(e) {
-  if (e.target.closest('.sc-editor')) return;
-  var el = e.target.closest('[data-fn]');
-  if (el) {
-    e.preventDefault();
-    _exec(el);
-  }
-}, {passive: false});
-
-
-document.addEventListener('touchcancel', function(e) {
-  document.querySelectorAll('.pressing').forEach(function(el){ el.classList.remove('pressing'); });
-}, {passive: true});
-
-// Chrome/マウス用: clickでも同じ処理（touchstart後は_lastTouchでスキップ）
-var _lastTouch = 0;
-document.addEventListener('touchstart', function(){ _lastTouch = Date.now(); }, {passive: true});
-document.addEventListener('click', function(e) {
-  if (Date.now() - _lastTouch < 500) return; // touchstart直後のclickは無視
-  var el = e.target.closest('[data-fn]');
-  if (el) _exec(el);
-});
-
-/* Init */
-buildScRow();
-drawDots();
-drawRoundGrid();
-updDisp();
-// インポートinputのchangeイベント設定
-var impFile = document.getElementById('imp-file');
-if (impFile) {
-  impFile.addEventListener('change', function(){ importData(this); });
-}
-</script>
-</body>
-</html>
+  var el = e
