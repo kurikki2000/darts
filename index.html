@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_41.html -->
+<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_43.html -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -200,8 +200,6 @@ body::before {
 .exp-row { display: flex; gap: 8px; margin-bottom: 4px; }
 .bexp { flex: 1; background: transparent; border: 1px solid var(--bdr); color: var(--mut); border-radius: 8px; padding: 10px; font-size: 12px; font-weight: 700; letter-spacing: 1px; cursor: pointer; }
 .bimp { flex: 1; background: transparent; border: 1px solid var(--bdr); color: var(--mut); border-radius: 8px; padding: 10px; font-size: 12px; font-weight: 700; letter-spacing: 1px; cursor: pointer; }
-.bimp-label { flex: 1; background: transparent; border: 1px solid var(--bdr); color: var(--mut); border-radius: 8px; padding: 10px; font-size: 12px; font-weight: 700; letter-spacing: 1px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; }
-#imp-file { display: none; }
 .hempty .ei { font-size: 36px; margin-bottom: 10px; }
 </style>
 </head>
@@ -269,8 +267,8 @@ body::before {
     <div id="hper"></div>
     <div class="exp-row">
       <button class="bexp" onclick="exportData()">📤 エクスポート</button>
-      <label class="bimp-label" for="imp-file">📥 インポート</label>
-      <input type="file" id="imp-file" accept=".json" onchange="importData(this)">
+      <button class="bexp" onclick="triggerImport()">📥 インポート</button>
+      <input type="file" id="imp-file" accept=".json" style="position:absolute;left:-9999px;opacity:0;width:1px;height:1px;">
     </div>
     <div class="hdr">
       <div class="slbl">ゲーム履歴</div>
@@ -519,6 +517,7 @@ function delAll() { localStorage.removeItem('dh'); closeCfm(); renderHist(); }
 function delOne(i) { var h=getH(); h.splice(i,1); localStorage.setItem('dh',JSON.stringify(h)); renderHist(); }
 
 /* Export / Import */
+// inputのchangeイベントをJSで設定（iPhoneのSafari対応）
 function exportData() {
   var h = getH();
   if (!h.length) { alert('履歴がありません'); return; }
@@ -532,6 +531,12 @@ function exportData() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+function triggerImport() {
+  var input = document.getElementById('imp-file');
+  input.value = '';
+  input.click();
 }
 
 function importData(input) {
@@ -705,6 +710,11 @@ document.addEventListener('click', function(e) {
 drawDots();
 drawRoundGrid();
 updDisp();
+// インポートinputのchangeイベント設定
+var impFile = document.getElementById('imp-file');
+if (impFile) {
+  impFile.addEventListener('change', function(){ importData(this); });
+}
 </script>
 
 
