@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_44.html -->
+<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_45.html -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -585,7 +585,7 @@ function getPer(h, u) {
     if (!bk[k]) bk[k]=[];
     bk[k].push(h[i]);
   }
-  var limit = (u === 'month') ? 12 : 6;
+  var limit = u === 'month' ? 24 : u === 'week' ? 12 : 30;
   return Object.keys(bk).sort(function(a,b){return b.localeCompare(a);}).slice(0,limit).map(function(k){
     var games=bk[k], sum=0, c180=0;
     for(var i=0;i<games.length;i++){
