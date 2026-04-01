@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_45.html -->
+<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_46.html -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -50,7 +50,7 @@ body::before {
 .tab.on { background: var(--acc); color: #000; }
 
 /* Views */
-.view { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+.view { display: flex; flex-direction: column; gap: 5px; flex: 1; min-height: 0; }
 .hide { display: none !important; }
 
 /* Round bar */
@@ -76,7 +76,7 @@ body::before {
 .rcell.now-cell { border: 1px solid var(--acc2); }
 
 /* Input section */
-.isec { background: var(--sur); border: 1px solid var(--bdr); border-radius: 10px; padding: 6px; display: flex; flex-direction: column; gap: 5px; flex: 1; }
+.isec { background: var(--sur); border: 1px solid var(--bdr); border-radius: 10px; padding: 6px; display: flex; flex-direction: column; gap: 5px; flex: 1; min-height: 0; overflow: hidden; }
 
 /* Shortcuts */
 .scrow { display: grid; grid-template-columns: repeat(4,1fr); gap: 5px; }
@@ -90,7 +90,7 @@ body::before {
 .tkh { font-size: 10px; color: var(--mut); text-align: right; }
 
 /* Tenkey grid */
-.tkg { display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(4,1fr); gap: 6px; flex: 1; }
+.tkg { display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(4,1fr); gap: 6px; flex: 1; min-height: 0; }
 .tk { background: var(--sur2); border: 1px solid #4a4a5e; border-radius: 10px; padding: 0; min-height: 0; text-align: center; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 40px; color: var(--txt); transition: background 0.08s; display: flex; align-items: center; justify-content: center; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .tk:active, .tk.pressing { background: var(--acc); color: #000; transform: scale(0.94); }
 .tk.wide { grid-column: span 2; }
