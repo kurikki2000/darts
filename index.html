@@ -906,6 +906,7 @@ function renderHist() {
     return '<div class="ac"><div class="av">'+(v!==null?v:'—')+'</div><div class="al">直近'+n+'G<br>平均</div></div>';
   }).join('');
   renderPer(h);
+  setTimeout(function(){ drawChart(h); }, 50);
   hl.innerHTML=h.map(function(x,idx){
     var isBest=x.score===best;
     var d=new Date(x.date);
@@ -942,6 +943,8 @@ function _exec(el) {
 }
 
 document.addEventListener('touchstart', function(e) {
+  // inputフィールドの上ではpreventDefaultしない（キーボード・バックスペースが効かなくなるため）
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
   var el = e.target.closest('[data-fn]');
   if (el) {
     e.preventDefault();
