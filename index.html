@@ -612,9 +612,12 @@ function buildScRow() {
 
 function toggleScEditor() {
   var ed = document.getElementById('sc-editor');
+  var isec = document.getElementById('isec');
   if (!ed) return;
   if (ed.classList.contains('show')) {
     ed.classList.remove('show');
+    // isecを元に戻す
+    if (isec) { isec.style.pointerEvents = ''; isec.style.userSelect = ''; }
     return;
   }
   var sc = getSC();
@@ -634,7 +637,10 @@ function toggleScEditor() {
     grid.appendChild(cell);
   });
   ed.classList.add('show');
-  // 最初のinputにフォーカス
+  // isecのsc-editor以外をタッチ無効化
+  if (isec) { isec.style.pointerEvents = 'none'; }
+  // sc-editorだけ有効に戻す
+  ed.style.pointerEvents = 'auto';
   setTimeout(function(){
     var first = document.getElementById('sc-inp-0');
     if (first) first.focus();
@@ -652,6 +658,9 @@ function saveScEditor() {
   saveSC(sc);
   buildScRow();
   document.getElementById('sc-editor').classList.remove('show');
+  // isecを元に戻す
+  var isec = document.getElementById('isec');
+  if (isec) { isec.style.pointerEvents = ''; }
   _fns.commit = commit;
 }
 
@@ -964,15 +973,4 @@ document.addEventListener('keydown', function(e) {
 var _fns = { kp: kp, kd: kd, doOk: doOk, commit: commit };
 
 function _exec(el) {
-  var fn = el.getAttribute('data-fn');
-  var arg = el.getAttribute('data-arg');
-  if (!fn || !_fns[fn]) return;
-  el.classList.add('pressing');
-  setTimeout(function(){ el.classList.remove('pressing'); }, 100);
-  if (arg !== null) _fns[fn](parseInt(arg, 10));
-  else _fns[fn]();
-}
-
-// touchstart: 視覚フィードバックのみ（passive:true）
-document.addEventListener('touchstart', function(e) {
-  var el = e
+  var fn = el.getAttribu
