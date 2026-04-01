@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0054)file:///C:/Users/kurik/Downloads/darts_countup_55.html -->
+<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="DARTS">
 <meta name="theme-color" content="#0a0a0f">
 <title>DARTS COUNT UP</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="./DARTS COUNT UP1_files/css2" rel="stylesheet">
 <style>
 :root {
   --bg: #0a0a0f; --sur: #13131a; --sur2: #1c1c28;
@@ -268,7 +268,7 @@ canvas.schart { width: 100%; height: 100%; }
         <div class="rlbl">ROUND</div>
         <div class="rnum" id="rnum">1 <em>/ 8</em></div>
       </div>
-      <div class="dots" id="dots"></div>
+      <div class="dots" id="dots"><div class="dot now">1</div><div class="dot">2</div><div class="dot">3</div><div class="dot">4</div><div class="dot">5</div><div class="dot">6</div><div class="dot">7</div><div class="dot">8</div></div>
       <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex-shrink:0;">
         <button class="bundo" id="bundo" data-fn="undoRound">↩ 修正</button>
         <button class="breset" data-fn="resetGame">↺ リセット</button>
@@ -276,7 +276,7 @@ canvas.schart { width: 100%; height: 100%; }
     </div>
     <div class="scard">
       <div class="total" id="total">0</div>
-      <div class="rgrid" id="rgrid"></div>
+      <div class="rgrid" id="rgrid"><div class="rcell now-cell"><div class="rn">R1</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R2</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R3</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R4</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R5</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R6</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R7</div><div class="rv">—</div></div><div class="rcell"><div class="rn">R8</div><div class="rv">—</div></div></div>
     </div>
     <div class="isec" id="isec">
       <div style="display:flex;justify-content:flex-end;">
@@ -291,16 +291,7 @@ canvas.schart { width: 100%; height: 100%; }
           <button class="sc-edit-save" onclick="saveScEditor()">保存</button>
         </div>
       </div>
-      <div class="scrow" id="scrow">
-        <div class="sc" data-fn="commit" data-arg="140">140</div>
-        <div class="sc" data-fn="commit" data-arg="100">100</div>
-        <div class="sc" data-fn="commit" data-arg="85">85</div>
-        <div class="sc" data-fn="commit" data-arg="81">81</div>
-        <div class="sc" data-fn="commit" data-arg="60">60</div>
-        <div class="sc" data-fn="commit" data-arg="45">45</div>
-        <div class="sc" data-fn="commit" data-arg="41">41</div>
-        <div class="sc" data-fn="commit" data-arg="26">26</div>
-      </div>
+      <div class="scrow" id="scrow"><div class="sc" data-fn="commit" data-arg="140">140</div><div class="sc" data-fn="commit" data-arg="100">100</div><div class="sc" data-fn="commit" data-arg="85">85</div><div class="sc" data-fn="commit" data-arg="81">81</div><div class="sc" data-fn="commit" data-arg="60">60</div><div class="sc" data-fn="commit" data-arg="45">45</div><div class="sc" data-fn="commit" data-arg="41">41</div><div class="sc" data-fn="commit" data-arg="26">26</div></div>
       <div class="tkd">
         <div class="tkv empty" id="tkv">—</div>
         <div class="tkh" id="tkh">合計点を入力してください</div>
@@ -316,20 +307,20 @@ canvas.schart { width: 100%; height: 100%; }
 
   <!-- History view -->
   <div class="view hide" id="vhist" style="overflow-y:auto;-webkit-overflow-scrolling:touch;">
-    <div class="s3" id="hs3"></div>
-    <div class="chart-wrap" id="chart-wrap" style="display:none;">
+    <div class="s3" id="hs3"><div class="sc3"><div class="sv">9</div><div class="sl">ゲーム数</div></div><div class="sc3"><div class="sv">1120</div><div class="sl">自己ベスト</div></div><div class="sc3"><div class="sv">656</div><div class="sl">通算平均</div></div></div>
+    <div class="chart-wrap" id="chart-wrap" style="display: block;">
       <div class="chart-tabs">
-        <button class="chart-tab on" id="ct-score" onclick="switchChart('score')">スコア推移</button>
-        <button class="chart-tab" id="ct-avg" onclick="switchChart('avg')">平均推移</button>
+        <button class="chart-tab on" id="ct-score" onclick="switchChart(&#39;score&#39;)">スコア推移</button>
+        <button class="chart-tab" id="ct-avg" onclick="switchChart(&#39;avg&#39;)">平均推移</button>
       </div>
       <div class="chart-canvas-wrap">
-        <canvas class="schart" id="schart"></canvas>
+        <canvas class="schart" id="schart" width="423" height="120"></canvas>
       </div>
     </div>
     <div class="slbl">直近の平均スコア</div>
-    <div class="a3" id="ha3"></div>
+    <div class="a3" id="ha3"><div class="ac"><div class="av">656</div><div class="al">直近10G<br>平均</div></div><div class="ac"><div class="av">656</div><div class="al">直近20G<br>平均</div></div><div class="ac"><div class="av">656</div><div class="al">直近30G<br>平均</div></div></div>
     <div class="slbl">期間別成績</div>
-    <div id="hper"></div>
+    <div id="hper"><div class="pcrd"><div class="ptabs" id="ptabs"><div class="ptab on" data-t="day">日別</div><div class="ptab" data-t="week">週別</div><div class="ptab" data-t="month">月別</div></div><div class="pgrid"><div class="phd"><span>期間</span><span>最高点</span><span>平均点</span><span>回数</span><span>180</span></div><div class="pr"><div class="plbl">2026/04/01</div><div class="pbest">1120</div><div class="pavg">656</div><div class="pcnt">9G</div><div class="p180">—</div></div></div></div></div>
     <div class="exp-row">
       <button class="bexp" onclick="exportData()">📤 エクスポート</button>
       <button class="bexp" onclick="triggerImport()">📥 インポート</button>
@@ -339,7 +330,7 @@ canvas.schart { width: 100%; height: 100%; }
       <div class="slbl">ゲーム履歴</div>
       <button class="bclr" onclick="openCfm()">全件削除</button>
     </div>
-    <div class="hlist" id="hlist"></div>
+    <div class="hlist" id="hlist"><div class="hi"><div class="hsc">372</div><div class="hinf"><div class="hdate">2026/4/1 15:22　Cランク</div><div class="hpills"><span class="hpill">R1:85</span><span class="hpill">R2:41</span><span class="hpill">R3:41</span><span class="hpill">R4:41</span><span class="hpill">R5:41</span><span class="hpill">R6:41</span><span class="hpill">R7:41</span><span class="hpill">R8:41</span></div></div><button class="hdel" onclick="delOne(0)">🗑</button></div><div class="hi"><div class="hsc">920</div><div class="hinf"><div class="hdate">2026/4/1 15:22　Sランク</div><div class="hpills"><span class="hpill">R1:140</span><span class="hpill">R2:140</span><span class="hpill">R3:140</span><span class="hpill">R4:100</span><span class="hpill">R5:100</span><span class="hpill">R6:100</span><span class="hpill">R7:100</span><span class="hpill">R8:100</span></div></div><button class="hdel" onclick="delOne(1)">🗑</button></div><div class="hi"><div class="hsc best">1120</div><div class="hinf"><div class="hdate">2026/4/1 12:13　S+ランク</div><div class="hpills"><span class="hpill">R1:140</span><span class="hpill">R2:140</span><span class="hpill">R3:140</span><span class="hpill">R4:140</span><span class="hpill">R5:140</span><span class="hpill">R6:140</span><span class="hpill">R7:140</span><span class="hpill">R8:140</span></div></div><div class="hbdg">BEST</div><button class="hdel" onclick="delOne(2)">🗑</button></div><div class="hi"><div class="hsc">800</div><div class="hinf"><div class="hdate">2026/4/1 12:12　Sランク</div><div class="hpills"><span class="hpill">R1:100</span><span class="hpill">R2:100</span><span class="hpill">R3:100</span><span class="hpill">R4:100</span><span class="hpill">R5:100</span><span class="hpill">R6:100</span><span class="hpill">R7:100</span><span class="hpill">R8:100</span></div></div><button class="hdel" onclick="delOne(3)">🗑</button></div><div class="hi"><div class="hsc">800</div><div class="hinf"><div class="hdate">2026/4/1 12:12　Sランク</div><div class="hpills"><span class="hpill">R1:100</span><span class="hpill">R2:100</span><span class="hpill">R3:100</span><span class="hpill">R4:100</span><span class="hpill">R5:100</span><span class="hpill">R6:100</span><span class="hpill">R7:100</span><span class="hpill">R8:100</span></div></div><button class="hdel" onclick="delOne(4)">🗑</button></div><div class="hi"><div class="hsc">208</div><div class="hinf"><div class="hdate">2026/4/1 10:24　Dランク</div><div class="hpills"><span class="hpill">R1:26</span><span class="hpill">R2:26</span><span class="hpill">R3:26</span><span class="hpill">R4:26</span><span class="hpill">R5:26</span><span class="hpill">R6:26</span><span class="hpill">R7:26</span><span class="hpill">R8:26</span></div></div><button class="hdel" onclick="delOne(5)">🗑</button></div><div class="hi"><div class="hsc">208</div><div class="hinf"><div class="hdate">2026/4/1 10:23　Dランク</div><div class="hpills"><span class="hpill">R1:26</span><span class="hpill">R2:26</span><span class="hpill">R3:26</span><span class="hpill">R4:26</span><span class="hpill">R5:26</span><span class="hpill">R6:26</span><span class="hpill">R7:26</span><span class="hpill">R8:26</span></div></div><button class="hdel" onclick="delOne(6)">🗑</button></div><div class="hi"><div class="hsc">680</div><div class="hinf"><div class="hdate">2026/4/1 10:23　Aランク</div><div class="hpills"><span class="hpill">R1:85</span><span class="hpill">R2:85</span><span class="hpill">R3:85</span><span class="hpill">R4:85</span><span class="hpill">R5:85</span><span class="hpill">R6:85</span><span class="hpill">R7:85</span><span class="hpill">R8:85</span></div></div><button class="hdel" onclick="delOne(7)">🗑</button></div><div class="hi"><div class="hsc">800</div><div class="hinf"><div class="hdate">2026/4/1 10:23　Sランク</div><div class="hpills"><span class="hpill">R1:100</span><span class="hpill">R2:100</span><span class="hpill">R3:100</span><span class="hpill">R4:100</span><span class="hpill">R5:100</span><span class="hpill">R6:100</span><span class="hpill">R7:100</span><span class="hpill">R8:100</span></div></div><button class="hdel" onclick="delOne(8)">🗑</button></div></div>
   </div>
 
 </div>
@@ -634,6 +625,8 @@ function toggleScEditor() {
     inp.value = v;
     inp.id = 'sc-inp-' + i;
     inp.addEventListener('focus', function(){ this.select(); });
+    // touchstartでfocusを即座に発火させる（長押し不要）
+    inp.addEventListener('touchstart', function(e){ e.stopPropagation(); this.focus(); }, {passive: false});
     cell.appendChild(inp);
     grid.appendChild(cell);
   });
@@ -1001,11 +994,9 @@ document.addEventListener('touchstart', function(e) {
 
 // touchend: ゲームボタンの処理
 document.addEventListener('touchend', function(e) {
-  // sc-editorが開いているときは一切ブロック
   var scEd = document.getElementById('sc-editor');
   if (scEd && scEd.classList.contains('show')) {
-    e.preventDefault();
-    e.stopPropagation();
+    // sc-editor内のタッチは通過させる（inputの選択・キーボード操作のため）
     return;
   }
   var el = e.target.closest('[data-fn]');
@@ -1040,5 +1031,6 @@ if (impFile) {
   impFile.addEventListener('change', function(){ importData(this); });
 }
 </script>
-</body>
-</html>
+
+
+</body></html>
