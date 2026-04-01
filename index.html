@@ -622,7 +622,6 @@ function toggleScEditor() {
       inp.id = 'sc-inp-' + i;
       // iPhoneでフォーカス時に全選択（既存の数字をバックスペースで消せるように）
       inp.addEventListener('focus', function(){ var self = this; setTimeout(function(){ self.select(); }, 50); });
-      inp.addEventListener('touchstart', function(e){ e.stopPropagation(); }, {passive: true});
       cell.appendChild(inp);
       grid.appendChild(cell);
     });
@@ -970,4 +969,12 @@ document.addEventListener('click', function(e) {
   if (Date.now() - _lastTouch < 500) return; // touchstart直後のclickは無視
   var el = e.target.closest('[data-fn]');
   if (el) _exec(el);
-})
+});
+
+/* Init */
+buildScRow();
+drawDots();
+drawRoundGrid();
+updDisp();
+// インポートinputのchangeイベント設定
+v
