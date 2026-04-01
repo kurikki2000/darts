@@ -158,6 +158,7 @@ body::before {
 
 /* Shortcut editor */
 .sc-editor { display: none; flex-direction: column; gap: 8px; touch-action: auto; }
+.sc-editor * { touch-action: auto; }
 .sc-editor.show { display: flex; }
 .sc-edit-title { font-size: 10px; color: var(--mut); letter-spacing: 2px; text-transform: uppercase; text-align: center; }
 .sc-edit-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
@@ -946,10 +947,9 @@ function _exec(el) {
 }
 
 document.addEventListener('touchstart', function(e) {
-  // inputフィールド内・またはsc-editor内のタッチはpreventDefaultしない
-  // iPhoneのSafariではe.targetが親要素になる場合があるため closest で確認
+  // sc-editor内・input・textarea は一切干渉しない
+  if (e.target.closest('.sc-editor, input, textarea, [type=number]')) return;
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-  if (e.target.closest('.sc-editor')) return;
   var el = e.target.closest('[data-fn]');
   if (el) {
     e.preventDefault();
@@ -977,4 +977,3 @@ drawDots();
 drawRoundGrid();
 updDisp();
 // インポートinputのchangeイベント設定
-v
