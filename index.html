@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="DARTS">
+
 <meta name="theme-color" content="#0a0a0f">
 <title>DARTS COUNT UP</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiREFSVFMgQ09VTlQgVVAiLCJzaG9ydF9uYW1lIjoiREFSVFMiLCJkZXNjcmlwdGlvbiI6IuOCueODhuOCo+ODvOODq+ODgOODvOODhCDjgqvjgqbjg7Pjg4jjgqLjg4Pjg5cg44K544Kz44Ki566h55CGIiwic3RhcnRfdXJsIjoiLi8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMGEwYTBmIiwidGhlbWVfY29sb3IiOiIjMGEwYTBmIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSFpwWlhkQ2IzZzlJakFnTUNBMU1USWdOVEV5SWo0S0lDQThjbVZqZENCM2FXUjBhRDBpTlRFeUlpQm9aV2xuYUhROUlqVXhNaUlnWm1sc2JEMGlJekJoTUdFd1ppSWdjbmc5SWpnd0lpOCtDaUFnUEdOcGNtTnNaU0JqZUQwaU1qVTJJaUJqZVQwaU1qVTJJaUJ5UFNJeU1EQWlJR1pwYkd3OUltNXZibVVpSUhOMGNtOXJaVDBpSXpKaE1tRXpZU0lnYzNSeWIydGxMWGRwWkhSb1BTSTRJaTgrQ2lBZ1BHTnBjbU5zWlNCamVEMGlNalUySWlCamVUMGlNalUySWlCeVBTSXhOVEFpSUdacGJHdzlJbTV2Ym1VaUlITjBjbTlyWlQwaUl6SmhNbUV6WVNJZ2MzUnliMnRsTFhkcFpIUm9QU0k0SWk4K0NpQWdQR05wY21Oc1pTQmplRDBpTWpVMklpQmplVDBpTWpVMklpQnlQU0l4TURBaUlHWnBiR3c5SW01dmJtVWlJSE4wY205clpUMGlJekpoTW1FellTSWdjM1J5YjJ0bExYZHBaSFJvUFNJNElpOCtDaUFnUEdOcGNtTnNaU0JqZUQwaU1qVTJJaUJqZVQwaU1qVTJJaUJ5UFNJMU1DSWdabWxzYkQwaUkyVTRabVkwTnlJZ2IzQmhZMmwwZVQwaU1DNDVJaTgrQ2lBZ1BHTnBjbU5zWlNCamVEMGlNalUySWlCamVUMGlNalUySWlCeVBTSXlNQ0lnWm1sc2JEMGlJekJoTUdFd1ppSXZQZ29nSUR4c2FXNWxJSGd4UFNJMU5pSWdlVEU5SWpJMU5pSWdlREk5SWpRMU5pSWdlVEk5SWpJMU5pSWdjM1J5YjJ0bFBTSWpNV014WXpJNElpQnpkSEp2YTJVdGQybGtkR2c5SWpRaUx6NEtJQ0E4YkdsdVpTQjRNVDBpTWpVMklpQjVNVDBpTlRZaUlIZ3lQU0l5TlRZaUlIa3lQU0kwTlRZaUlITjBjbTlyWlQwaUl6RmpNV015T0NJZ2MzUnliMnRsTFhkcFpIUm9QU0kwSWk4K0NpQWdQQ0V0TFNEamc0RGpnN3pqZzRRZ0xTMCtDaUFnUEdjZ2RISmhibk5tYjNKdFBTSnliM1JoZEdVb0xUUTFJREkxTmlBeU5UWXBJajRLSUNBZ0lEeHlaV04wSUhnOUlqSTBPQ0lnZVQwaU9EQWlJSGRwWkhSb1BTSTRJaUJvWldsbmFIUTlJakV5TUNJZ1ptbHNiRDBpSTJabU5tSXpOU0lnY25nOUlqUWlMejRLSUNBZ0lEeHdiMng1WjI5dUlIQnZhVzUwY3owaU1qVXlMRFl3SURJME5DdzROU0F5TmpBc09EVWlJR1pwYkd3OUlpTmxPR1ptTkRjaUx6NEtJQ0FnSUR4eVpXTjBJSGc5SWpJME5pSWdlVDBpTWpBd0lpQjNhV1IwYUQwaU1USWlJR2hsYVdkb2REMGlOaUlnWm1sc2JEMGlJelppTm1JNE9DSXZQZ29nSUR3dlp6NEtQQzl6ZG1jKyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIiwicHVycG9zZSI6ImFueSBtYXNrYWJsZSJ9XX0=">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgZmlsbD0iIzBhMGEwZiIgcng9IjgwIi8+CiAgPGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIyMDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJhMmEzYSIgc3Ryb2tlLXdpZHRoPSI4Ii8+CiAgPGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIxNTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJhMmEzYSIgc3Ryb2tlLXdpZHRoPSI4Ii8+CiAgPGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIxMDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJhMmEzYSIgc3Ryb2tlLXdpZHRoPSI4Ii8+CiAgPGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSI1MCIgZmlsbD0iI2U4ZmY0NyIgb3BhY2l0eT0iMC45Ii8+CiAgPGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIyMCIgZmlsbD0iIzBhMGEwZiIvPgogIDxsaW5lIHgxPSI1NiIgeTE9IjI1NiIgeDI9IjQ1NiIgeTI9IjI1NiIgc3Ryb2tlPSIjMWMxYzI4IiBzdHJva2Utd2lkdGg9IjQiLz4KICA8bGluZSB4MT0iMjU2IiB5MT0iNTYiIHgyPSIyNTYiIHkyPSI0NTYiIHN0cm9rZT0iIzFjMWMyOCIgc3Ryb2tlLXdpZHRoPSI0Ii8+CiAgPCEtLSDjg4Djg7zjg4QgLS0+CiAgPGcgdHJhbnNmb3JtPSJyb3RhdGUoLTQ1IDI1NiAyNTYpIj4KICAgIDxyZWN0IHg9IjI0OCIgeT0iODAiIHdpZHRoPSI4IiBoZWlnaHQ9IjEyMCIgZmlsbD0iI2ZmNmIzNSIgcng9IjQiLz4KICAgIDxwb2x5Z29uIHBvaW50cz0iMjUyLDYwIDI0NCw4NSAyNjAsODUiIGZpbGw9IiNlOGZmNDciLz4KICAgIDxyZWN0IHg9IjI0NiIgeT0iMjAwIiB3aWR0aD0iMTIiIGhlaWdodD0iNiIgZmlsbD0iIzZiNmI4OCIvPgogIDwvZz4KPC9zdmc+">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DARTS">
 <style>
 :root {
   --bg: #0a0a0f; --sur: #13131a; --sur2: #1c1c28;
@@ -189,6 +192,10 @@ body::before {
 .sc-edit-save { flex: 1; background: var(--acc); color: #000; border: none; border-radius: 8px; padding: 10px; font-size: 13px; font-weight: 700; cursor: pointer; }
 .sc-edit-cancel { flex: 1; background: transparent; border: 1px solid var(--bdr); color: var(--mut); border-radius: 8px; padding: 10px; font-size: 13px; font-weight: 700; cursor: pointer; }
 .sc-customize-btn { background: transparent; border: none; color: var(--mut); font-size: 10px; cursor: pointer; padding: 2px 4px; letter-spacing: 1px; align-self: flex-end; }
+.timer-disp { font-size: 10px; color: var(--mut); letter-spacing: 1px; text-align: center; padding: 2px 0; }
+.practice-time { background: var(--sur); border: 1px solid var(--bdr); border-radius: 12px; padding: 10px; text-align: center; margin-bottom: 0; }
+.practice-time .pt-val { font-family: 'Bebas Neue', cursive; font-size: 28px; color: var(--acc); letter-spacing: 2px; }
+.practice-time .pt-lbl { font-size: 9px; color: var(--mut); letter-spacing: 1px; margin-top: 2px; }
 
 /* Score chart */
 .chart-wrap { background: var(--sur); border: 1px solid var(--bdr); border-radius: 12px; padding: 12px; }
@@ -197,6 +204,7 @@ body::before {
 .chart-tab { font-size: 10px; font-weight: 700; letter-spacing: 1px; padding: 3px 10px; border-radius: 5px; cursor: pointer; color: var(--mut); background: transparent; border: 1px solid var(--bdr); }
 .chart-tab.on-score { background: var(--acc); color: #000; border-color: var(--acc); }
 .chart-tab.on-avg { background: var(--acc2); color: #000; border-color: var(--acc2); }
+.chart-tab.on-time { background: var(--grn); color: #000; border-color: var(--grn); }
 .chart-canvas-wrap { position: relative; height: 120px; }
 canvas.schart { width: 100%; height: 100%; }
 
@@ -233,6 +241,20 @@ canvas.schart { width: 100%; height: 100%; }
 .p180  { text-align: center; font-family: 'Bebas Neue', cursive; font-size: 52px; color: var(--grn); display: flex; align-items: center; justify-content: center; }
 .pempty { padding: 14px 10px; font-size: 11px; color: var(--mut); grid-column: span 5; }
 
+/* Onboarding */
+.onboard { display: none; position: fixed; inset: 0; z-index: 300; background: #0a0a0f; flex-direction: column; align-items: center; justify-content: center; padding: 28px; }
+.onboard.show { display: flex; }
+.ob-logo { font-size: 48px; margin-bottom: 8px; }
+.ob-title { font-family: 'Bebas Neue', cursive; font-size: 32px; color: var(--acc); letter-spacing: 4px; margin-bottom: 4px; }
+.ob-sub { font-size: 12px; color: var(--mut); letter-spacing: 2px; margin-bottom: 32px; }
+.ob-steps { display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px; margin-bottom: 32px; }
+.ob-step { display: flex; align-items: flex-start; gap: 14px; background: var(--sur); border: 1px solid var(--bdr); border-radius: 12px; padding: 14px 16px; }
+.ob-num { font-family: 'Bebas Neue', cursive; font-size: 28px; color: var(--acc); line-height: 1; min-width: 24px; }
+.ob-text { flex: 1; }
+.ob-text strong { font-size: 13px; color: var(--txt); font-weight: 700; display: block; margin-bottom: 3px; }
+.ob-text span { font-size: 11px; color: var(--mut); line-height: 1.5; }
+.ob-start { background: var(--acc); color: #000; border: none; border-radius: 14px; padding: 16px 48px; font-size: 16px; font-weight: 700; letter-spacing: 2px; cursor: pointer; width: 100%; max-width: 320px; }
+
 /* History list */
 .hlist { display: flex; flex-direction: column; gap: 8px; }
 .hi { background: var(--sur); border: 1px solid var(--bdr); border-radius: 12px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
@@ -253,6 +275,36 @@ canvas.schart { width: 100%; height: 100%; }
 </style>
 </head>
 <body>
+<div class="onboard" id="onboard">
+  <div class="ob-logo">🎯</div>
+  <div class="ob-title">DARTS COUNT UP</div>
+  <div class="ob-sub">スティールダーツ スコア管理アプリ</div>
+  <div class="ob-steps">
+    <div class="ob-step">
+      <div class="ob-num">1</div>
+      <div class="ob-text">
+        <strong>ラウンドのスコアを入力</strong>
+        <span>ショートカットボタンかテンキーで<br>各ラウンドの合計点を入力してください</span>
+      </div>
+    </div>
+    <div class="ob-step">
+      <div class="ob-num">2</div>
+      <div class="ob-text">
+        <strong>8ラウンドで自動集計</strong>
+        <span>8ラウンド終了後にスコアとランクを表示。<br>自己ベスト更新で紙吹雪が舞います🎉</span>
+      </div>
+    </div>
+    <div class="ob-step">
+      <div class="ob-num">3</div>
+      <div class="ob-text">
+        <strong>履歴で成長を確認</strong>
+        <span>スコア推移グラフ・平均・期間別成績で<br>上達の過程を記録できます</span>
+      </div>
+    </div>
+  </div>
+  <button class="ob-start" onclick="closeOnboard()">はじめる →</button>
+</div>
+
 <div class="app">
 
   <div class="tabs">
@@ -276,6 +328,7 @@ canvas.schart { width: 100%; height: 100%; }
         <div class="rnum" id="rnum">1 <em>/ 8</em></div>
       </div>
       <div class="dots" id="dots"></div>
+      <div id="timer-disp" class="timer-disp" style="min-width:36px;text-align:center;"></div>
       <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex-shrink:0;">
         <button class="bundo" id="bundo" data-fn="undoRound">↩ 修正</button>
         <button class="breset" data-fn="resetGame">↺ リセット</button>
@@ -329,6 +382,7 @@ canvas.schart { width: 100%; height: 100%; }
       <div class="chart-tabs">
         <button class="chart-tab on-score" id="ct-score" onclick="switchChart('score')">スコア推移</button>
         <button class="chart-tab" id="ct-avg" onclick="switchChart('avg')">平均推移</button>
+        <button class="chart-tab" id="ct-time" onclick="switchChart('time')">練習時間</button>
       </div>
       <div class="chart-canvas-wrap">
         <canvas class="schart" id="schart"></canvas>
@@ -338,6 +392,7 @@ canvas.schart { width: 100%; height: 100%; }
       <div class="slbl">直近の平均スコア</div>
       <div id="streak-badge" style="font-size:11px;color:var(--acc);font-weight:700;"></div>
     </div>
+
     <div class="a3" id="ha3"></div>
     <div class="slbl">期間別成績</div>
     <div id="hper"></div>
@@ -416,6 +471,29 @@ canvas.schart { width: 100%; height: 100%; }
 var ROUNDS = 8;
 var g = { round: 1, scores: [], total: 0 };
 var buf = '';
+var _gameStartTime = null;
+var _timerInterval = null;
+
+function startTimer() {
+  _gameStartTime = Date.now();
+  if (_timerInterval) clearInterval(_timerInterval);
+  _timerInterval = setInterval(function() {
+    var el = document.getElementById('timer-disp');
+    if (!el) return;
+    var sec = Math.floor((Date.now() - _gameStartTime) / 1000);
+    var m = Math.floor(sec / 60), s = sec % 60;
+    el.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+  }, 1000);
+}
+
+function stopTimer() {
+  if (_timerInterval) { clearInterval(_timerInterval); _timerInterval = null; }
+  var elapsed = _gameStartTime ? Math.round((Date.now() - _gameStartTime) / 1000) : 0;
+  _gameStartTime = null;
+  var el = document.getElementById('timer-disp');
+  if (el) el.textContent = '';
+  return elapsed;
+}
 
 /* Round grid */
 function drawRoundGrid() {
@@ -448,6 +526,8 @@ function drawDots() {
 /* Commit round */
 function commit(total) {
   if (g.scores.length >= ROUNDS) return;
+  // 最初のラウンドでタイマースタート
+  if (g.scores.length === 0) startTimer();
   g.scores.push(total);
   g.total += total;
   buf = '';
@@ -573,7 +653,8 @@ function showResult() {
     if (h[i].date && h[i].date.slice(0,10) === todayStr && h[i].score > todayBest) todayBest = h[i].score;
   }
   var isDB = !isPB && g.total > todayBest; // 自己ベストでないが本日ベスト
-  saveH({ score: g.total, rounds: g.scores.slice(), date: new Date().toISOString() });
+  var elapsed = stopTimer();
+  saveH({ score: g.total, rounds: g.scores.slice(), date: new Date().toISOString(), duration: elapsed });
   document.getElementById('rscore').textContent = g.total;
   document.getElementById('ravg').textContent = Math.round(g.total / ROUNDS);
   document.getElementById('rbest').textContent = Math.max.apply(null, g.scores);
@@ -583,6 +664,17 @@ function showResult() {
   document.getElementById('rrounds').innerHTML = html;
   document.getElementById('rpb').style.display = isPB ? 'block' : 'none';
   document.getElementById('rdb').style.display = isDB ? 'block' : 'none';
+  // タイム表示をTOTAL SCOREの下に
+  var timeEl = document.querySelector('.ovr-time');
+  if (!timeEl) {
+    timeEl = document.createElement('div');
+    timeEl.className = 'ovr-time';
+    timeEl.style.cssText = 'font-size:10px;color:var(--mut);letter-spacing:1px;margin-bottom:6px;';
+    var scoreEl = document.querySelector('[style*="TOTAL SCORE"]') || document.getElementById('rscore').nextElementSibling;
+    if (scoreEl) scoreEl.after(timeEl);
+  }
+  var em = Math.floor(elapsed/60), es = elapsed%60;
+  timeEl.textContent = 'GAME TIME: ' + em + ':' + (es<10?'0':'') + es;
   if (isPB) setTimeout(launchConfetti, 300);
   document.getElementById('ovr').classList.add('show');
 }
@@ -614,6 +706,9 @@ function resetState() {
   updDisp(); drawDots();
   var pb = document.getElementById('pace-bar');
   if (pb) pb.style.display = 'none';
+  stopTimer();
+  var el = document.getElementById('timer-disp');
+  if (el) el.textContent = '';
 }
 function resetGame() {
   if (g.scores.length > 0 && !window.confirm('ゲームをリセットしますか？')) return;
@@ -790,6 +885,7 @@ function switchChart(mode) {
   _chartMode = mode;
   document.getElementById('ct-score').className = 'chart-tab' + (mode === 'score' ? ' on-score' : '');
   document.getElementById('ct-avg').className = 'chart-tab' + (mode === 'avg' ? ' on-avg' : '');
+  document.getElementById('ct-time').className = 'chart-tab' + (mode === 'time' ? ' on-time' : '');
   drawChart(getH());
 }
 
@@ -799,6 +895,68 @@ function drawChart(hist) {
   if (!wrap || !canvas) return;
   if (hist.length < 2) { wrap.style.display = 'none'; return; }
   wrap.style.display = 'block';
+
+  // 練習時間モード: 過去30日の日別合計練習時間
+  if (_chartMode === 'time') {
+    // 過去30日分の日別合計秒数を集計
+    var dayMap = {};
+    for (var i=0; i<hist.length; i++) {
+      if (!hist[i].date) continue;
+      var dkey = hist[i].date.slice(0,10);
+      if (!dayMap[dkey]) dayMap[dkey] = 0;
+      if (hist[i].duration) dayMap[dkey] += hist[i].duration;
+    }
+    // 過去30日分のキーを古い順に生成
+    var days = [];
+    for (var d=29; d>=0; d--) {
+      var dd = new Date(); dd.setDate(dd.getDate()-d);
+      var dk = dd.getFullYear()+'-'+(dd.getMonth()<9?'0':'')+(dd.getMonth()+1)+'-'+(dd.getDate()<10?'0':'')+dd.getDate();
+      days.push(dk);
+    }
+    var scores = days.map(function(dk){ return Math.round((dayMap[dk]||0)/60*10)/10; }); // 分単位
+    // データが全て0なら表示しない
+    var hasData = scores.some(function(s){ return s>0; });
+    if (!hasData) { wrap.style.display = 'none'; return; }
+    wrap.style.display = 'block';
+
+    var dpr = window.devicePixelRatio || 1;
+    var W = canvas.offsetWidth || 300;
+    var H = 120;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    var max = Math.max.apply(null, scores) || 1;
+    var pad = { top: 10, right: 10, bottom: 20, left: 36 };
+    var gw = W - pad.left - pad.right;
+    var gh = H - pad.top - pad.bottom;
+    // グリッド
+    ctx.strokeStyle = 'rgba(255,255,255,0.05)'; ctx.lineWidth = 1;
+    for (var gi=0; gi<=4; gi++) {
+      var gy = pad.top + (gh/4)*gi;
+      ctx.beginPath(); ctx.moveTo(pad.left,gy); ctx.lineTo(pad.left+gw,gy); ctx.stroke();
+      var lv = Math.round(max - (max/4)*gi * 10)/10;
+      ctx.fillStyle='rgba(255,255,255,0.3)'; ctx.font='9px sans-serif'; ctx.textAlign='right';
+      ctx.fillText(lv+'分', pad.left-4, gy+3);
+    }
+    // 棒グラフ
+    var barW = Math.max(2, gw/30 - 2);
+    scores.forEach(function(s, i) {
+      if (s <= 0) return;
+      var bh = (s/max)*gh;
+      var bx = pad.left + (i/(30-1))*gw - barW/2;
+      var by = pad.top + gh - bh;
+      ctx.fillStyle = 'rgba(71,255,180,0.7)';
+      ctx.fillRect(bx, by, barW, bh);
+    });
+    // X軸ラベル
+    ctx.fillStyle='rgba(255,255,255,0.3)'; ctx.font='9px sans-serif'; ctx.textAlign='center';
+    [0, 14, 29].forEach(function(i) {
+      var d2 = new Date(); d2.setDate(d2.getDate()-(29-i));
+      var lbl = (d2.getMonth()+1)+'/'+(d2.getDate());
+      ctx.fillText(lbl, pad.left+(i/(30-1))*gw, H-4);
+    });
+    return;
+  }
 
   var scores;
   if (_chartMode === 'avg') {
@@ -973,6 +1131,12 @@ function getPer(h, u) {
 function renderPer(h) {
   var w=document.getElementById('hper');
   if (!h.length){w.innerHTML='';return;}
+  // 本日の合計練習時間を計算
+  var todayStr3 = new Date().toISOString().slice(0,10);
+  var totalSec2 = 0;
+  for (var i=0; i<h.length; i++) {
+    if (h[i].date && h[i].date.slice(0,10) === todayStr3 && h[i].duration) totalSec2 += h[i].duration;
+  }
   var s=getPer(h,pTab);
   var tabs=[['day','日別'],['week','週別'],['month','月別']].map(function(t){
     return '<div class="ptab'+(pTab===t[0]?' on':'')+'" data-t="'+t[0]+'">'+t[1]+'</div>';
@@ -986,7 +1150,17 @@ function renderPer(h) {
       '<div class="p180">'+(r.c180>0?r.c180:'—')+'</div>'+
       '</div>';
   }).join('') : '<div class="pempty">データなし</div>';
+  var ptHtml = '';
+  if (totalSec2 > 0) {
+    var ptM2=Math.floor(totalSec2/60), ptS2=totalSec2%60;
+    var ptStr = ptM2>0 ? ptM2+'分'+(ptS2>0?ptS2+'秒':'') : ptS2+'秒';
+    ptHtml = '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px 0;">' +
+      '<div style="font-size:9px;color:var(--mut);letter-spacing:1px;">本日の合計練習時間</div>' +
+      '<div style="font-size:16px;color:var(--acc);font-weight:700;">⏱ '+ptStr+'</div>' +
+      '</div>';
+  }
   w.innerHTML='<div class="pcrd">'+
+    ptHtml+
     '<div class="ptabs" id="ptabs">'+tabs+'</div>'+
     '<div class="pgrid">'+
     '<div class="phd"><span>期間</span><span>最高点</span><span>平均点</span><span>回数</span><span>180</span></div>'+
@@ -1042,13 +1216,20 @@ function renderHist() {
     var vPrev = avgsPrev[idx];
     var arrow = '';
     if (v !== null && vPrev !== null) {
-      if (v > vPrev) arrow = '<span style="color:#ff6b35;font-size:13px;font-weight:bold;"> ↑</span>';
-      else if (v < vPrev) arrow = '<span style="color:#4fc3f7;font-size:13px;font-weight:bold;"> ↓</span>';
+      if (v > vPrev) arrow = '<span style="color:#ff6b35;font-size:18px;font-weight:900;line-height:1;"> ▲</span>';
+      else if (v < vPrev) arrow = '<span style="color:#4fc3f7;font-size:18px;font-weight:900;line-height:1;"> ▼</span>';
     }
     // 直近10Gはオレンジ、20G・30Gは白っぽい色
     var style = n===10 ? ' style="color:var(--acc2)"' : ' style="color:#c8c8d8"';
     return '<div class="ac"><div class="av"'+style+'>'+(v!==null?v:'—')+arrow+'</div><div class="al">直近'+n+'G<br>平均</div></div>';
   }).join('');
+  // 本日の合計練習時間
+  var todayStr2 = new Date().toISOString().slice(0,10);
+  var totalSec = 0;
+  for (var i=0; i<h.length; i++) {
+    if (h[i].date && h[i].date.slice(0,10) === todayStr2 && h[i].duration) totalSec += h[i].duration;
+  }
+
   // ストリーク計算
   var streak = 0;
   var today = new Date(); today.setHours(0,0,0,0);
@@ -1075,7 +1256,7 @@ function renderHist() {
     var pills=(x.rounds||[]).map(function(r,i){return '<span class="hpill">R'+(i+1)+':'+r+'</span>';}).join('');
     return '<div class="hi">'+
       '<div class="hsc'+(isBest?' best':'')+'">'+x.score+'</div>'+
-      '<div class="hinf"><div class="hdate">'+ds+'　'+rank(x.score)+'ランク</div><div class="hpills">'+pills+'</div></div>'+
+      '<div class="hinf"><div class="hdate">'+ds+'　'+rank(x.score)+'ランク'+(x.duration?' ⏱'+Math.floor(x.duration/60)+'分'+(x.duration%60>0?x.duration%60+'秒':''):'')+'</div><div class="hpills">'+pills+'</div></div>'+
       (isBest?'<div class="hbdg">BEST</div>':'')+
       '<button class="hdel" onclick="delOne('+idx+')">🗑</button>'+
       '</div>';
@@ -1150,11 +1331,21 @@ document.addEventListener('click', function(e) {
   if (el) _exec(el);
 });
 
+/* Onboarding */
+function closeOnboard() {
+  document.getElementById('onboard').classList.remove('show');
+  localStorage.setItem('ob_done', '1');
+}
+
 /* Init */
 buildScRow();
 drawDots();
 drawRoundGrid();
 updDisp();
+// 初回のみオンボーディング表示
+if (!localStorage.getItem('ob_done')) {
+  document.getElementById('onboard').classList.add('show');
+}
 // インポートinputのchangeイベント設定
 var impFile = document.getElementById('imp-file');
 if (impFile) {
