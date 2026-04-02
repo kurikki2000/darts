@@ -1194,25 +1194,27 @@ function getPer(h, u) {
 function renderPer(h) {
   var w=document.getElementById('hper');
   if (!h.length){w.innerHTML='';return;}
-  // トレーニング時間計算（本日・今週・今月）
-  var todayStr3 = new Date().toISOString().slice(0,10);
+  // トレーニング時間計算（本日・今週・今月）- ローカル時間で統一
   var now = new Date();
-  // 今週の月曜日を取得
-  var weekStart = new Date(now);
-  weekStart.setHours(0,0,0,0);
-  var day = weekStart.getDay() || 7;
-  weekStart.setDate(weekStart.getDate() - day + 1);
-  // 今月
+  // 今日の日付をローカル時間で取得
+  var todayStr3 = now.getFullYear() + '-' + ('0'+(now.getMonth()+1)).slice(-2) + '-' + ('0'+now.getDate()).slice(-2);
+  // 今週の月曜日（ローカル時間、時刻は0:00:00）
+  var weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var dow = weekStart.getDay() || 7;
+  weekStart.setDate(weekStart.getDate() - dow + 1);
+  // 今月キー（ローカル時間）
   var monthKey = now.getFullYear() + '/' + ('0'+(now.getMonth()+1)).slice(-2);
 
   var totalSecDay = 0, totalSecWeek = 0, totalSecMonth = 0;
   for (var i=0; i<h.length; i++) {
     if (!h[i].duration || !h[i].date) continue;
     var hd = new Date(h[i].date);
-    var hdk = hd.getFullYear() + '-' + ('0'+(hd.getMonth()+1)).slice(-2) + '-' + ('0'+hd.getDate()).slice(-2);
+    // ローカル時間で日付キーを生成
+    var hdStr = hd.getFullYear() + '-' + ('0'+(hd.getMonth()+1)).slice(-2) + '-' + ('0'+hd.getDate()).slice(-2);
     var hdMonth = hd.getFullYear() + '/' + ('0'+(hd.getMonth()+1)).slice(-2);
-    if (hdk === todayStr3) totalSecDay += h[i].duration;
-    if (hd >= weekStart) totalSecWeek += h[i].duration;
+    var hdDay = new Date(hd.getFullYear(), hd.getMonth(), hd.getDate());
+    if (hdStr === todayStr3) totalSecDay += h[i].duration;
+    if (hdDay >= weekStart) totalSecWeek += h[i].duration;
     if (hdMonth === monthKey) totalSecMonth += h[i].duration;
   }
   function fmtTime(sec) {
