@@ -1227,6 +1227,10 @@ function renderHist() {
     s3.innerHTML=''; a3.innerHTML=''; document.getElementById('hper').innerHTML='';
     var cw = document.getElementById('chart-wrap');
     if (cw) cw.style.display = 'none';
+    var rc = document.getElementById('rrate-card');
+    if (rc) rc.style.display = 'none';
+    var sb = document.getElementById('streak-badge');
+    if (sb) sb.textContent = '';
     hl.innerHTML='<div class="hempty"><div class="ei">🎯</div>まだ記録がありません。<br>ゲームを完了すると自動で保存されます。</div>';
     return;
   }
