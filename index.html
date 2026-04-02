@@ -141,6 +141,7 @@ body::before {
 .rc .rv { font-size: 15px; font-weight: 700; }
 .rc .rl { font-size: 9px; color: var(--mut); }
 .rpb { font-size: 12px; color: var(--acc); font-weight: 700; letter-spacing: 2px; margin-bottom: 12px; display: none; }
+.rdb { font-size: 12px; color: #4fc3f7; font-weight: 700; letter-spacing: 2px; margin-bottom: 4px; display: none; }
 .rbtns { display: flex; gap: 8px; }
 .rbtns button { flex: 1; padding: 11px; border-radius: 10px; font-size: 13px; font-weight: 700; letter-spacing: 1px; cursor: pointer; }
 .rb-new { background: var(--acc); color: #000; border: none; }
@@ -367,8 +368,20 @@ canvas.schart { width: 100%; height: 100%; }
     </div>
     <div class="rrounds" id="rrounds"></div>
     <div class="rpb" id="rpb">🏆 自己ベスト更新！</div>
+    <div class="rdb" id="rdb">📅 本日のベスト更新！</div>
+    <div class="rank-table">
+      <div class="rank-cell"><div class="rk">S+</div><div class="rs">1000+</div></div>
+      <div class="rank-cell"><div class="rk">S</div><div class="rs">800-999</div></div>
+      <div class="rank-cell"><div class="rk">A+</div><div class="rs">700-799</div></div>
+      <div class="rank-cell"><div class="rk">A</div><div class="rs">600-699</div></div>
+      <div class="rank-cell"><div class="rk">B+</div><div class="rs">500-599</div></div>
+      <div class="rank-cell"><div class="rk">B</div><div class="rs">400-499</div></div>
+      <div class="rank-cell"><div class="rk">C</div><div class="rs">300-399</div></div>
+      <div class="rank-cell"><div class="rk">D</div><div class="rs">~299</div></div>
+    </div>
     <div class="rbtns">
       <button class="rb-new" onclick="startNew()">もう一度</button>
+      <button class="bx-share" onclick="shareX()">𝕏 シェア</button>
       <button class="rb-hist" onclick="goHist()">履歴を見る</button>
     </div>
   </div>
@@ -553,6 +566,13 @@ function showResult() {
   var h = getH();
   var pb = 0; for (var i=0;i<h.length;i++) if(h[i].score>pb) pb=h[i].score;
   var isPB = g.total > pb;
+  // 本日のベスト判定（保存前に今日のスコアを取得）
+  var todayStr = new Date().toISOString().slice(0,10);
+  var todayBest = 0;
+  for (var i=0;i<h.length;i++) {
+    if (h[i].date && h[i].date.slice(0,10) === todayStr && h[i].score > todayBest) todayBest = h[i].score;
+  }
+  var isDB = !isPB && g.total > todayBest; // 自己ベストでないが本日ベスト
   saveH({ score: g.total, rounds: g.scores.slice(), date: new Date().toISOString() });
   document.getElementById('rscore').textContent = g.total;
   document.getElementById('ravg').textContent = Math.round(g.total / ROUNDS);
@@ -562,6 +582,7 @@ function showResult() {
   for (var i=0;i<g.scores.length;i++) html += '<div class="rc"><div class="rv">'+g.scores[i]+'</div><div class="rl">R'+(i+1)+'</div></div>';
   document.getElementById('rrounds').innerHTML = html;
   document.getElementById('rpb').style.display = isPB ? 'block' : 'none';
+  document.getElementById('rdb').style.display = isDB ? 'block' : 'none';
   if (isPB) setTimeout(launchConfetti, 300);
   document.getElementById('ovr').classList.add('show');
 }
@@ -569,9 +590,11 @@ function startNew() { document.getElementById('ovr').classList.remove('show'); r
 function shareX() {
   var score = g.total;
   var rnk = rank(score);
+  var appUrl = 'https://ricky-ak-180.github.io/steel-darts-countup/';
   var text = 'スティールダーツ カウントアップ\n' +
     'スコア: ' + score + '点\n' +
     'ランク: ' + rnk + '\n' +
+    appUrl + '\n' +
     '#スティールダーツ #ダーツ #カウントアップ';
   var url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
   window.open(url, '_blank');
