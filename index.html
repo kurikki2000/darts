@@ -126,6 +126,11 @@ body::before {
 
 /* Result box */
 .rbox { background: var(--sur); border: 1px solid var(--acc); border-radius: 20px; padding: 28px 36px; text-align: center; box-shadow: 0 0 60px rgba(232,255,71,0.15); max-width: 320px; width: 90%; }
+.rank-table { display: grid; grid-template-columns: repeat(4,1fr); gap: 4px; margin: 8px 0; }
+.rank-cell { background: var(--sur2); border-radius: 6px; padding: 4px 2px; text-align: center; font-size: 10px; }
+.rank-cell .rk { font-family: 'Bebas Neue', cursive; font-size: 16px; color: var(--acc); }
+.rank-cell .rs { font-size: 9px; color: var(--mut); }
+.bx-share { background: #000; color: #fff; border: none; border-radius: 10px; padding: 11px; font-size: 13px; font-weight: 700; cursor: pointer; flex: 1; }
 .rt { font-family: 'Bebas Neue', cursive; font-size: 36px; color: var(--acc); letter-spacing: 6px; margin-bottom: 6px; }
 .rs { font-family: 'Bebas Neue', cursive; font-size: 88px; line-height: 1; color: var(--txt); letter-spacing: 4px; }
 .rstats { display: flex; justify-content: center; gap: 20px; margin: 14px 0; padding: 14px; background: var(--sur2); border-radius: 12px; }
@@ -278,6 +283,7 @@ canvas.schart { width: 100%; height: 100%; }
     <div class="scard">
       <div class="total" id="total">0</div>
       <div class="rgrid" id="rgrid"></div>
+      <div id="pace-bar" style="display:none;margin-top:4px;font-size:10px;color:var(--mut);text-align:center;letter-spacing:1px;"></div>
     </div>
     <div class="isec" id="isec">
       <div style="display:flex;justify-content:flex-end;">
@@ -327,7 +333,10 @@ canvas.schart { width: 100%; height: 100%; }
         <canvas class="schart" id="schart"></canvas>
       </div>
     </div>
-    <div class="slbl">直近の平均スコア</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div class="slbl">直近の平均スコア</div>
+      <div id="streak-badge" style="font-size:11px;color:var(--acc);font-weight:700;"></div>
+    </div>
     <div class="a3" id="ha3"></div>
     <div class="slbl">期間別成績</div>
     <div id="hper"></div>
@@ -444,6 +453,7 @@ function commit(total) {
   g.round++;
   document.getElementById('rnum').innerHTML = g.round + ' <em>/ 8</em>';
   drawDots();
+  updatePace();
 }
 
 /* Tenkey */
@@ -513,6 +523,31 @@ function rank(s) {
   if (s>=300) return 'C'; return 'D';
 }
 
+/* Pace */
+function updatePace() {
+  var pb = document.getElementById('pace-bar');
+  if (!pb) return;
+  if (g.scores.length === 0) { pb.style.display = 'none'; return; }
+  // このペースで行くと最終スコアは？
+  var avg = g.total / g.scores.length;
+  var pred = Math.round(avg * ROUNDS);
+  var predRank = rank(pred);
+  // 自己ベストを取得
+  var h = getH();
+  var best = 0;
+  for (var i=0; i<h.length; i++) if(h[i].score > best) best = h[i].score;
+  var pbText = 'このペース → 予測 <strong style="color:var(--acc);font-size:13px;">' + pred + '点</strong> <span style="color:var(--mut);">(' + predRank + 'ランク)</span>';
+  if (best > 0) {
+    if (pred > best) {
+      pbText += ' <span style="color:#ff6b35;font-weight:bold;">🔥 自己ベスト更新ペース！</span>';
+    } else {
+      pbText += ' <span style="color:var(--mut);">自己ベスト:' + best + '点</span>';
+    }
+  }
+  pb.innerHTML = pbText;
+  pb.style.display = 'block';
+}
+
 /* Result */
 function showResult() {
   var h = getH();
@@ -531,6 +566,16 @@ function showResult() {
   document.getElementById('ovr').classList.add('show');
 }
 function startNew() { document.getElementById('ovr').classList.remove('show'); resetState(); }
+function shareX() {
+  var score = g.total;
+  var rnk = rank(score);
+  var text = 'スティールダーツ カウントアップ\n' +
+    'スコア: ' + score + '点\n' +
+    'ランク: ' + rnk + '\n' +
+    '#スティールダーツ #ダーツ #カウントアップ';
+  var url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
+  window.open(url, '_blank');
+}
 function goHist() { document.getElementById('ovr').classList.remove('show'); goTab('hist'); }
 
 /* Reset */
@@ -544,6 +589,8 @@ function resetState() {
   var ub = document.getElementById('bundo');
   if (ub) ub.className = 'bundo';
   updDisp(); drawDots();
+  var pb = document.getElementById('pace-bar');
+  if (pb) pb.style.display = 'none';
 }
 function resetGame() {
   if (g.scores.length > 0 && !window.confirm('ゲームをリセットしますか？')) return;
@@ -943,9 +990,17 @@ function renderHist() {
   var sc=h.map(function(x){return x.score;});
   var best=Math.max.apply(null,sc);
   var sum=0; for(var i=0;i<sc.length;i++) sum+=sc[i];
+  // 自己ベスト達成日を取得
+  var bestGame = h[0];
+  for (var i=0; i<h.length; i++) if(h[i].score === best) { bestGame = h[i]; break; }
+  var bestDate = '';
+  if (bestGame && bestGame.date) {
+    var bd = new Date(bestGame.date);
+    bestDate = '<div style="font-size:9px;color:var(--mut);margin-top:2px;">' + bd.getFullYear() + '/' + (bd.getMonth()+1) + '/' + bd.getDate() + '</div>';
+  }
   s3.innerHTML=
     '<div class="sc3"><div class="sv">'+h.length+'</div><div class="sl">ゲーム数</div></div>'+
-    '<div class="sc3"><div class="sv">'+best+'</div><div class="sl">自己ベスト</div></div>'+
+    '<div class="sc3"><div class="sv">'+best+'</div>'+bestDate+'<div class="sl">自己ベスト</div></div>'+
     '<div class="sc3"><div class="sv">'+Math.round(sum/sc.length)+'</div><div class="sl">通算平均</div></div>';
   // 直近10G/20G/30Gの平均を計算（現在 & 1ゲーム前）
   var avgs = [10,20,30].map(function(n){
@@ -971,6 +1026,23 @@ function renderHist() {
     var style = n===10 ? ' style="color:var(--acc2)"' : ' style="color:#c8c8d8"';
     return '<div class="ac"><div class="av"'+style+'>'+(v!==null?v:'—')+arrow+'</div><div class="al">直近'+n+'G<br>平均</div></div>';
   }).join('');
+  // ストリーク計算
+  var streak = 0;
+  var today = new Date(); today.setHours(0,0,0,0);
+  var checkDay = new Date(today);
+  var usedDates = {};
+  for (var i=0; i<h.length; i++) {
+    var d = new Date(h[i].date); d.setHours(0,0,0,0);
+    usedDates[d.getTime()] = true;
+  }
+  // 今日または昨日からストリーク開始
+  if (!usedDates[today.getTime()]) checkDay.setDate(checkDay.getDate()-1);
+  while (usedDates[checkDay.getTime()]) {
+    streak++;
+    checkDay.setDate(checkDay.getDate()-1);
+  }
+  var sb = document.getElementById('streak-badge');
+  if (sb) sb.textContent = streak >= 2 ? '🔥 ' + streak + '日連続プレー' : '';
   renderPer(h);
   setTimeout(function(){ drawChart(h); }, 50);
   hl.innerHTML=h.map(function(x,idx){
