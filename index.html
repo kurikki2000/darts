@@ -950,11 +950,12 @@ function drawChart(hist) {
 
   // 練習時間モード: 過去30日の日別合計練習時間
   if (_chartMode === 'time') {
-    // 過去30日分の日別合計秒数を集計
+    // 過去30日分の日別合計秒数を集計（ローカル時間で統一）
     var dayMap = {};
     for (var i=0; i<hist.length; i++) {
       if (!hist[i].date) continue;
-      var dkey = hist[i].date.slice(0,10);
+      var hd = new Date(hist[i].date);
+      var dkey = hd.getFullYear()+'-'+('0'+(hd.getMonth()+1)).slice(-2)+'-'+('0'+hd.getDate()).slice(-2);
       if (!dayMap[dkey]) dayMap[dkey] = 0;
       if (hist[i].duration) dayMap[dkey] += hist[i].duration;
     }
