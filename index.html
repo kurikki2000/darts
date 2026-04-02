@@ -8,7 +8,7 @@
 <title>DARTS COUNT UP</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
 <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiQ09VTlRVUCIsInNob3J0X25hbWUiOiJDT1VOVFVQIiwiZGVzY3JpcHRpb24iOiLjgrnjg4bjgqPjg7zjg6vjg4Djg7zjg4Qg44Kr44Km44Oz44OI44Ki44OD44OXIiwic3RhcnRfdXJsIjoiLi8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMGEwYTBmIiwidGhlbWVfY29sb3IiOiIjMGEwYTBmIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJpY29uLnBuZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmciLCJwdXJwb3NlIjoiYW55IG1hc2thYmxlIn1dfQ==">
-<link rel="apple-touch-icon" href="icon.png">
+<link rel="apple-touch-icon" href="/steel-darts-countup/icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="COUNTUP">
@@ -116,6 +116,12 @@ body::before {
 /* Next game prompt */
 .ngp { display: none; background: var(--sur); border: 1px solid var(--acc); border-radius: 14px; padding: 16px 20px; text-align: center; box-shadow: 0 0 30px rgba(232,255,71,0.1); }
 .ngp.show { display: block; }
+/* ゲームスタート画面 */
+.game-start { position: fixed; inset: 0; z-index: 200; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
+.game-start.hide { display: none; }
+.gs-title { font-family: 'Bebas Neue', cursive; font-size: 36px; color: var(--acc); letter-spacing: 6px; }
+.gs-sub { font-size: 12px; color: var(--mut); letter-spacing: 2px; }
+.gs-btn { background: var(--acc); color: #000; border: none; border-radius: 16px; padding: 20px 60px; font-family: 'Bebas Neue', cursive; font-size: 32px; letter-spacing: 4px; cursor: pointer; margin-top: 10px; }
 .ngp-t { font-family: 'Bebas Neue', cursive; font-size: 22px; color: var(--acc); letter-spacing: 3px; margin-bottom: 4px; }
 .ngp-s { font-size: 11px; color: var(--mut); margin-bottom: 14px; }
 .ngp-b { display: flex; gap: 8px; }
@@ -213,14 +219,24 @@ canvas.schart { width: 100%; height: 100%; }
 .slbl { font-size: 10px; color: var(--mut); letter-spacing: 2px; text-transform: uppercase; padding: 4px 0; }
 .bclr { background: transparent; border: 1px solid var(--bdr); color: var(--mut); border-radius: 8px; padding: 7px 12px; font-size: 11px; cursor: pointer; letter-spacing: 1px; }
 .bclr:hover { border-color: var(--red); color: var(--red); }
-.s3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.s3 { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
 .sc3 { background: var(--sur); border: 1px solid var(--bdr); border-radius: 12px; padding: 12px 8px; text-align: center; }
-.sc3 .sv { font-family: 'Bebas Neue', cursive; font-size: 30px; color: var(--acc); letter-spacing: 2px; }
+.sc3 .sv { font-family: 'Bebas Neue', cursive; font-size: 24px; color: var(--acc); letter-spacing: 1px; }
 .sc3 .sl { font-size: 9px; color: var(--mut); letter-spacing: 1px; margin-top: 2px; }
-.a3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
-.ac { background: var(--sur); border: 1px solid var(--bdr); border-radius: 12px; padding: 10px 6px; text-align: center; }
-.ac .av { font-family: 'Bebas Neue', cursive; font-size: 26px; color: var(--grn); letter-spacing: 2px; }
+.a3 { display: grid; grid-template-columns: repeat(1,1fr); gap: 8px; }
+.ac { background: var(--sur); border: 1px solid var(--bdr); border-radius: 12px; padding: 12px 14px; text-align: center; }
+.ac .av { font-family: 'Bebas Neue', cursive; font-size: 36px; color: var(--acc2); letter-spacing: 2px; }
 .ac .al { font-size: 9px; color: var(--mut); line-height: 1.4; margin-top: 2px; }
+/* ラウンド割合カード */
+.rrate-card { background: var(--sur); border: 1px solid var(--bdr); border-radius: 12px; padding: 12px 14px; }
+.rrate-title { font-size: 9px; color: var(--mut); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+.rrate-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+.rrate-row:last-child { margin-bottom: 0; }
+.rrate-lbl { font-size: 11px; color: var(--mut); width: 38px; flex-shrink: 0; text-align: right; }
+.rrate-bar-wrap { flex: 1; background: var(--sur2); border-radius: 4px; height: 14px; overflow: hidden; }
+.rrate-bar { height: 100%; border-radius: 4px; transition: width 0.4s; }
+.rrate-cnt { font-family: 'Bebas Neue', cursive; font-size: 13px; width: 28px; text-align: right; flex-shrink: 0; }
+.rrate-pct { font-family: 'Bebas Neue', cursive; font-size: 13px; width: 34px; text-align: right; flex-shrink: 0; color: var(--mut); }
 
 /* Period table */
 .pcrd { background: var(--sur); border: 1px solid var(--bdr); border-radius: 12px; overflow: hidden; }
@@ -283,6 +299,12 @@ canvas.schart { width: 100%; height: 100%; }
 </script>
 </head>
 <body>
+<div class="game-start" id="game-start">
+  <div class="gs-title">🎯 STEEL DARTS</div>
+  <div class="gs-sub">COUNTUP</div>
+  <button class="gs-btn" onclick="gameStart()">GAME START</button>
+</div>
+
 <div class="onboard" id="onboard">
   <div class="ob-logo">🎯</div>
   <div class="ob-title" style="font-size:24px;letter-spacing:2px;">STEEL DARTS COUNTUP</div>
@@ -386,6 +408,8 @@ canvas.schart { width: 100%; height: 100%; }
   <!-- History view -->
   <div class="view hide" id="vhist" style="overflow-y:auto;-webkit-overflow-scrolling:touch;">
     <div class="s3" id="hs3"></div>
+    <div class="slbl">期間別成績</div>
+    <div id="hper"></div>
     <div class="chart-wrap" id="chart-wrap" style="display:none;">
       <div class="chart-tabs">
         <button class="chart-tab on-score" id="ct-score" onclick="switchChart('score')">スコア推移</button>
@@ -396,14 +420,12 @@ canvas.schart { width: 100%; height: 100%; }
         <canvas class="schart" id="schart"></canvas>
       </div>
     </div>
-    <div style="display:flex;align-items:center;justify-content:space-between;">
-      <div class="slbl">直近の平均スコア</div>
-      <div id="streak-badge" style="font-size:11px;color:var(--acc);font-weight:700;"></div>
+    <div id="streak-badge" style="font-size:11px;color:var(--acc);font-weight:700;text-align:right;"></div>
+    <div id="ha3" style="display:none;"></div>
+    <div class="rrate-card" id="rrate-card" style="display:none;">
+      <div class="rrate-title">直近30G スコア分布</div>
+      <div id="rrate-rows"></div>
     </div>
-
-    <div class="a3" id="ha3"></div>
-    <div class="slbl">期間別成績</div>
-    <div id="hper"></div>
     <div class="exp-row">
       <button class="bexp" onclick="exportData()">📤 エクスポート</button>
       <button class="bexp" onclick="triggerImport()">📥 インポート</button>
@@ -534,8 +556,8 @@ function drawDots() {
 /* Commit round */
 function commit(total) {
   if (g.scores.length >= ROUNDS) return;
-  // 最初のラウンドでタイマースタート
-  if (g.scores.length === 0) startTimer();
+  // タイマーが未開始の場合のみ開始（resetStateで既に開始済みの場合はスキップ）
+  if (g.scores.length === 0 && !_gameStartTime) startTimer();
   g.scores.push(total);
   g.total += total;
   buf = '';
@@ -715,8 +737,8 @@ function resetState() {
   var pb = document.getElementById('pace-bar');
   if (pb) pb.style.display = 'none';
   stopTimer();
-  var el = document.getElementById('timer-disp');
-  if (el) el.textContent = '';
+  // タイマーリセット（次のゲーム・もう一度でも即開始）
+  startTimer();
 }
 function resetGame() {
   if (g.scores.length > 0 && !window.confirm('ゲームをリセットしますか？')) return;
@@ -1133,7 +1155,9 @@ function getPer(h, u) {
       for(var j=0;j<rounds.length;j++) if(rounds[j]===180) c180++;
     }
     var sc=games.map(function(x){return x.score;});
-    return {label:k, best:Math.max.apply(null,sc), avg:Math.round(sum/games.length), count:games.length, c180:c180};
+    var allR=[];
+    for(var i=0;i<games.length;i++) if(games[i].rounds) for(var j=0;j<games[i].rounds.length;j++) allR.push(games[i].rounds[j]);
+    return {label:k, best:Math.max.apply(null,sc), avg:Math.round(sum/games.length), count:games.length, c180:c180, rounds:allR};
   });
 }
 function renderPer(h) {
@@ -1150,12 +1174,26 @@ function renderPer(h) {
     return '<div class="ptab'+(pTab===t[0]?' on':'')+'" data-t="'+t[0]+'">'+t[1]+'</div>';
   }).join('');
   var rows=s.length?s.map(function(r){
+    var rr=r.rounds||[];
+    var m180=rr.filter(function(v){return v===180;}).length;
+    var m140=rr.filter(function(v){return v>=140&&v<180;}).length;
+    var m100=rr.filter(function(v){return v>=100&&v<140;}).length;
+    var m60=rr.filter(function(v){return v>=60&&v<100;}).length;
+    var m59=rr.filter(function(v){return v<60;}).length;
+    var mp=[];
+    if(m180>0) mp.push('<span style="color:#e8ff47;">180:'+m180+'</span>');
+    if(m140>0) mp.push('<span style="color:#47ffb4;">140+:'+m140+'</span>');
+    if(m100>0) mp.push('<span style="color:#ff6b35;">100+:'+m100+'</span>');
+    if(m60>0)  mp.push('<span style="color:#4fc3f7;">60+:'+m60+'</span>');
+    if(m59>0)  mp.push('<span style="color:#6b6b88;">59-:'+m59+'</span>');
+    var mHtml=mp.length?'<div style="grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap;padding:3px 6px 5px;border-top:1px solid var(--bdr);font-size:9px;opacity:0.85;">'+mp.join('')+'</div>':'';
     return '<div class="pr">'+
       '<div class="plbl">'+r.label+'</div>'+
       '<div class="pbest">'+r.best+'</div>'+
       '<div class="pavg">'+r.avg+'</div>'+
       '<div class="pcnt">'+r.count+'G</div>'+
       '<div class="p180">'+(r.c180>0?r.c180:'—')+'</div>'+
+      mHtml+
       '</div>';
   }).join('') : '<div class="pempty">データなし</div>';
   var ptHtml = '';
@@ -1203,34 +1241,75 @@ function renderHist() {
     var bd = new Date(bestGame.date);
     bestDate = '<div style="font-size:9px;color:var(--mut);margin-top:2px;">' + bd.getFullYear() + '/' + (bd.getMonth()+1) + '/' + bd.getDate() + '</div>';
   }
+  // 直近30G平均
+  var sl30s=h.slice(0,30), s30s=0;
+  for(var i=0;i<sl30s.length;i++) s30s+=sl30s[i].score;
+  var avg30s = sl30s.length ? Math.round(s30s/sl30s.length) : 0;
+  // 1ゲーム前と比較して↑↓
+  var sl30sp=h.slice(1,31), s30sp=0;
+  for(var i=0;i<sl30sp.length;i++) s30sp+=sl30sp[i].score;
+  var avg30sp = sl30sp.length ? Math.round(s30sp/sl30sp.length) : null;
+  var arrow30s = '';
+  if (avg30sp !== null) {
+    if (avg30s > avg30sp) arrow30s = '<span style="color:#ff6b35;font-size:16px;font-weight:900;"> ▲</span>';
+    else if (avg30s < avg30sp) arrow30s = '<span style="color:#4fc3f7;font-size:16px;font-weight:900;"> ▼</span>';
+  }
+  // 通算180回数
+  var total180 = 0;
+  for(var i=0;i<h.length;i++) {
+    var r=h[i].rounds||[];
+    for(var j=0;j<r.length;j++) if(r[j]===180) total180++;
+  }
   s3.innerHTML=
-    '<div class="sc3"><div class="sv">'+h.length+'</div><div class="sl">ゲーム数</div></div>'+
+    '<div class="sc3"><div class="sv">'+h.length+'</div><div class="sl">通算ゲーム数</div></div>'+
     '<div class="sc3"><div class="sv">'+best+'</div>'+bestDate+'<div class="sl">自己ベスト</div></div>'+
-    '<div class="sc3"><div class="sv">'+Math.round(sum/sc.length)+'</div><div class="sl">通算平均</div></div>';
-  // 直近10G/20G/30Gの平均を計算（現在 & 1ゲーム前）
-  var avgs = [10,20,30].map(function(n){
-    var sl=h.slice(0,n), s2=0;
-    for(var j=0;j<sl.length;j++) s2+=sl[j].score;
-    return sl.length ? Math.round(s2/sl.length) : null;
-  });
-  // 1ゲーム前（最新ゲームを除いた）の平均
-  var avgsPrev = [10,20,30].map(function(n){
-    var sl=h.slice(1, n+1), s2=0;
-    for(var j=0;j<sl.length;j++) s2+=sl[j].score;
-    return sl.length ? Math.round(s2/sl.length) : null;
-  });
-  a3.innerHTML=[10,20,30].map(function(n, idx){
-    var v = avgs[idx];
-    var vPrev = avgsPrev[idx];
-    var arrow = '';
-    if (v !== null && vPrev !== null) {
-      if (v > vPrev) arrow = '<span style="color:#ff6b35;font-size:18px;font-weight:900;line-height:1;"> ▲</span>';
-      else if (v < vPrev) arrow = '<span style="color:#4fc3f7;font-size:18px;font-weight:900;line-height:1;"> ▼</span>';
-    }
-    // 直近10Gはオレンジ、20G・30Gは白っぽい色
-    var style = n===10 ? ' style="color:var(--acc2)"' : ' style="color:#c8c8d8"';
-    return '<div class="ac"><div class="av"'+style+'>'+(v!==null?v:'—')+arrow+'</div><div class="al">直近'+n+'G<br>平均</div></div>';
-  }).join('');
+    '<div class="sc3"><div class="sv" style="color:var(--acc2);">'+avg30s+arrow30s+'</div><div class="sl">直近30G平均</div></div>'+
+    '<div class="sc3"><div class="sv" style="color:var(--grn);">'+total180+'</div><div class="sl">通算180回数</div></div>';
+  // 直近30G平均（1本化）
+  var sl30=h.slice(0,30), s30=0;
+  for(var j=0;j<sl30.length;j++) s30+=sl30[j].score;
+  var avg30 = sl30.length ? Math.round(s30/sl30.length) : null;
+  // 1ゲーム前と比較
+  var sl30p=h.slice(1,31), s30p=0;
+  for(var j=0;j<sl30p.length;j++) s30p+=sl30p[j].score;
+  var avg30prev = sl30p.length ? Math.round(s30p/sl30p.length) : null;
+  var arrow30 = '';
+  if (avg30 !== null && avg30prev !== null) {
+    if (avg30 > avg30prev) arrow30 = '<span style="color:#ff6b35;font-size:22px;font-weight:900;line-height:1;"> ▲</span>';
+    else if (avg30 < avg30prev) arrow30 = '<span style="color:#4fc3f7;font-size:22px;font-weight:900;line-height:1;"> ▼</span>';
+  }
+  a3.innerHTML = '<div class="ac"><div class="av">'+(avg30!==null?avg30:'—')+arrow30+'</div><div class="al">直近30G 平均スコア</div></div>';
+
+  // ラウンド割合を計算（直近30G）
+  var allRounds = [];
+  for(var i=0;i<sl30.length;i++) {
+    if(sl30[i].rounds) for(var j=0;j<sl30[i].rounds.length;j++) allRounds.push(sl30[i].rounds[j]);
+  }
+  var total = allRounds.length;
+  var rrateCard = document.getElementById('rrate-card');
+  var rrateRows = document.getElementById('rrate-rows');
+  if (total > 0 && rrateCard && rrateRows) {
+    rrateCard.style.display = 'block';
+    var bands = [
+      { lbl: '180',  color: '#e8ff47', fn: function(s){ return s===180; } },
+      { lbl: '140+', color: '#47ffb4', fn: function(s){ return s>=140 && s<180; } },
+      { lbl: '100+', color: '#ff6b35', fn: function(s){ return s>=100 && s<140; } },
+      { lbl: '60+',  color: '#4fc3f7', fn: function(s){ return s>=60 && s<100; } },
+      { lbl: '59-',  color: '#6b6b88', fn: function(s){ return s<60; } },
+    ];
+    rrateRows.innerHTML = bands.map(function(b) {
+      var cnt = allRounds.filter(b.fn).length;
+      var pct = Math.round(cnt/total*100);
+      return '<div class="rrate-row">' +
+        '<div class="rrate-lbl" style="color:'+b.color+';">'+b.lbl+'</div>' +
+        '<div class="rrate-bar-wrap"><div class="rrate-bar" style="width:'+pct+'%;background:'+b.color+';opacity:0.85;"></div></div>' +
+        '<div class="rrate-cnt" style="color:'+b.color+';">'+cnt+'回</div>' +
+        '<div class="rrate-pct" style="color:'+b.color+';">'+pct+'%</div>' +
+        '</div>';
+    }).join('');
+  } else if (rrateCard) {
+    rrateCard.style.display = 'none';
+  }
   // 本日の合計練習時間
   var todayStr2 = new Date().toISOString().slice(0,10);
   var totalSec = 0;
@@ -1262,9 +1341,26 @@ function renderHist() {
     var d=new Date(x.date);
     var ds=d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+' '+d.getHours()+':'+pad(d.getMinutes());
     var pills=(x.rounds||[]).map(function(r,i){return '<span class="hpill">R'+(i+1)+':'+r+'</span>';}).join('');
+    // スコア分布ミニ表示
+    var rds=x.rounds||[];
+    var mini='';
+    if(rds.length>0){
+      var c180=rds.filter(function(r){return r===180;}).length;
+      var c140=rds.filter(function(r){return r>=140&&r<180;}).length;
+      var c100=rds.filter(function(r){return r>=100&&r<140;}).length;
+      var c60=rds.filter(function(r){return r>=60&&r<100;}).length;
+      var c59=rds.filter(function(r){return r<60;}).length;
+      var parts=[];
+      if(c180>0) parts.push('<span style="color:#e8ff47;">180:'+c180+'</span>');
+      if(c140>0) parts.push('<span style="color:#47ffb4;">140+:'+c140+'</span>');
+      if(c100>0) parts.push('<span style="color:#ff6b35;">100+:'+c100+'</span>');
+      if(c60>0)  parts.push('<span style="color:#4fc3f7;">60+:'+c60+'</span>');
+      if(c59>0)  parts.push('<span style="color:#6b6b88;">59-:'+c59+'</span>');
+      mini=parts.length?'<div style="font-size:10px;margin-top:3px;display:flex;gap:6px;">'+parts.join('')+'</div>':'';
+    }
     return '<div class="hi">'+
       '<div class="hsc'+(isBest?' best':'')+'">'+x.score+'</div>'+
-      '<div class="hinf"><div class="hdate">'+ds+'　'+rank(x.score)+'ランク'+(x.duration?' ⏱'+Math.floor(x.duration/60)+'分'+(x.duration%60>0?x.duration%60+'秒':''):'')+'</div><div class="hpills">'+pills+'</div></div>'+
+      '<div class="hinf"><div class="hdate">'+ds+'　'+rank(x.score)+'ランク'+(x.duration?' ⏱'+Math.floor(x.duration/60)+'分'+(x.duration%60>0?x.duration%60+'秒':''):'')+'</div><div class="hpills">'+pills+'</div>'+mini+'</div>'+
       (isBest?'<div class="hbdg">BEST</div>':'')+
       '<button class="hdel" onclick="delOne('+idx+')">🗑</button>'+
       '</div>';
@@ -1345,14 +1441,25 @@ function closeOnboard() {
   localStorage.setItem('ob_done', '1');
 }
 
+function gameStart() {
+  var gs = document.getElementById('game-start');
+  if (gs) gs.classList.add('hide');
+  startTimer();
+}
+
 /* Init */
 buildScRow();
 drawDots();
 drawRoundGrid();
 updDisp();
+// タイマーはゲームスタートボタンで開始
 // 初回のみオンボーディング表示
 if (!localStorage.getItem('ob_done')) {
   document.getElementById('onboard').classList.add('show');
+  // オンボーディング中はゲームスタート画面を隠す
+  document.getElementById('game-start').classList.add('hide');
+} else {
+  // 2回目以降：ゲームスタートボタンを表示（タイマー未開始状態）
 }
 // インポートinputのchangeイベント設定
 var impFile = document.getElementById('imp-file');
