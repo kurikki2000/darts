@@ -235,7 +235,7 @@ canvas.schart { width: 100%; height: 100%; }
 .s3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
 .sc3 { background: var(--sur); border: 1px solid var(--bdr); border-radius: 14px; padding: 12px 6px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80px; }
 .sc3 .sv { font-family: 'Bebas Neue', cursive; font-size: 36px; color: var(--acc); letter-spacing: 1px; line-height: 1; display: flex; align-items: center; justify-content: center; }
-.sc3 .sl { font-size: 9px; color: var(--mut); letter-spacing: 1px; margin-top: 4px; text-transform: uppercase; }
+.sc3 .sl { font-size: 10px; color: var(--mut); letter-spacing: 0.5px; margin-top: 5px; }
 .a3 { display: grid; grid-template-columns: repeat(1,1fr); gap: 8px; }
 .ac { background: var(--sur); border: 1px solid var(--bdr); border-radius: 12px; padding: 12px 14px; text-align: center; }
 .ac .av { font-family: 'Bebas Neue', cursive; font-size: 36px; color: var(--acc2); letter-spacing: 2px; }
@@ -425,7 +425,7 @@ canvas.schart { width: 100%; height: 100%; }
       <div class="chart-tabs">
         <button class="chart-tab on-score" id="ct-score" onclick="switchChart('score')">スコア推移</button>
         <button class="chart-tab" id="ct-avg" onclick="switchChart('avg')">平均推移</button>
-        <button class="chart-tab" id="ct-3da" onclick="switchChart('3da')">3-Dart Avg</button>
+        <button class="chart-tab" id="ct-3da" onclick="switchChart('3da')">3ダーツ平均</button>
         <button class="chart-tab" id="ct-time" onclick="switchChart('time')">ゲーム時間</button>
       </div>
       <div class="chart-canvas-wrap">
@@ -459,10 +459,10 @@ canvas.schart { width: 100%; height: 100%; }
   <div class="rbox">
     <div class="rt">FINISH!</div>
     <div class="rs" id="rscore"></div>
-    <div style="font-size:10px;color:var(--mut);letter-spacing:1px;margin-bottom:6px;">TOTAL SCORE</div>
+    <div style="font-size:10px;color:var(--mut);letter-spacing:1px;margin-bottom:6px;">トータルスコア</div>
     <div class="rstats">
       <div class="rst rst-3da">
-        <div class="rv3da-label">3-DART AVG</div>
+        <div class="rv3da-label">3ダーツ平均</div>
         <div class="rv" id="ravg" style="font-size:28px;color:#b47fff;letter-spacing:1px;"></div>
         <div class="rv3da-sub" id="ravg-sub"></div>
       </div>
@@ -510,6 +510,18 @@ canvas.schart { width: 100%; height: 100%; }
     <div class="cbtns">
       <button class="cc" onclick="closeUndo()">キャンセル</button>
       <button class="cok" onclick="doUndo()" style="background:var(--acc2);">修正する</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reset confirm overlay -->
+<div class="overlay" id="oreset">
+  <div class="cbox">
+    <div class="ct">リセット確認</div>
+    <div class="cs">入力中のゲームをリセットします。<br>この操作は元に戻せません。</div>
+    <div class="cbtns">
+      <button class="cc" onclick="closeReset()">キャンセル</button>
+      <button class="cok" onclick="doReset()">リセット</button>
     </div>
   </div>
 </div>
@@ -762,7 +774,17 @@ function resetState() {
   startTimer();
 }
 function resetGame() {
-  if (g.scores.length > 0 && !window.confirm('ゲームをリセットしますか？')) return;
+  if (g.scores.length > 0) {
+    document.getElementById('oreset').classList.add('show');
+  } else {
+    resetState();
+  }
+}
+function closeReset() {
+  document.getElementById('oreset').classList.remove('show');
+}
+function doReset() {
+  closeReset();
   resetState();
 }
 
@@ -1197,25 +1219,24 @@ function renderPer(h) {
   if (!h.length){w.innerHTML='';return;}
   // トレーニング時間計算（本日・今週・今月）- ローカル時間で統一
   var now = new Date();
-  // 今日の日付をローカル時間で取得
   var todayStr3 = now.getFullYear() + '-' + ('0'+(now.getMonth()+1)).slice(-2) + '-' + ('0'+now.getDate()).slice(-2);
-  // 今週の月曜日（ローカル時間、時刻は0:00:00）
+  // 今週月曜日のタイムスタンプ（ローカル0:00:00）
   var weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   var dow = weekStart.getDay() || 7;
   weekStart.setDate(weekStart.getDate() - dow + 1);
-  // 今月キー（ローカル時間）
+  var weekStartTs = weekStart.getTime();
+  // 今月キー
   var monthKey = now.getFullYear() + '/' + ('0'+(now.getMonth()+1)).slice(-2);
 
   var totalSecDay = 0, totalSecWeek = 0, totalSecMonth = 0;
   for (var i=0; i<h.length; i++) {
     if (!h[i].duration || !h[i].date) continue;
     var hd = new Date(h[i].date);
-    // ローカル時間で日付キーを生成
     var hdStr = hd.getFullYear() + '-' + ('0'+(hd.getMonth()+1)).slice(-2) + '-' + ('0'+hd.getDate()).slice(-2);
     var hdMonth = hd.getFullYear() + '/' + ('0'+(hd.getMonth()+1)).slice(-2);
-    var hdDay = new Date(hd.getFullYear(), hd.getMonth(), hd.getDate());
+    var hdDayTs = new Date(hd.getFullYear(), hd.getMonth(), hd.getDate()).getTime();
     if (hdStr === todayStr3) totalSecDay += h[i].duration;
-    if (hdDay >= weekStart) totalSecWeek += h[i].duration;
+    if (hdDayTs >= weekStartTs) totalSecWeek += h[i].duration;
     if (hdMonth === monthKey) totalSecMonth += h[i].duration;
   }
   function fmtTime(sec) {
@@ -1283,7 +1304,7 @@ function renderPer(h) {
     ptHtml+
     '<div class="ptabs" id="ptabs">'+tabs+'</div>'+
     '<div class="pgrid">'+
-    '<div class="phd"><span>期間</span><span>最高点</span><span>平均点</span><span style="color:#b47fff;">3DA</span><span>回数</span><span>180</span></div>'+
+    '<div class="phd"><span>期間</span><span>最高点</span><span>平均点</span><span style="color:#b47fff;">3ダーツ平均</span><span>回数</span><span>180</span></div>'+
     rows+'</div></div>';
   document.getElementById('ptabs').addEventListener('click',function(e){
     var t=e.target.getAttribute('data-t');
@@ -1351,9 +1372,9 @@ function renderHist() {
     '<div class="sc3"><div class="sv">'+h.length+'</div><div class="sl">通算ゲーム数</div></div>'+
     '<div class="sc3"><div class="sv">'+best+'</div><div class="sl">自己ベスト</div>'+bestDate+'</div>'+
     '<div class="sc3">'+todayBestHtml+'</div>'+
-    '<div class="sc3" style="position:relative;">'+(arrow30s?'<div style="position:absolute;top:6px;right:8px;font-size:13px;line-height:1;">'+arrow30s+'</div>':'')+'<div class="sv" style="color:var(--acc2);">'+avg30s+'</div><div class="sl">直近30G平均</div></div>'+
-    '<div class="sc3" style="position:relative;">'+(avg30sp!==null&&avg30s>avg30sp?'<div style="position:absolute;top:6px;right:8px;font-size:13px;line-height:1;color:#ff6b35;font-weight:900;">▲</div>':avg30sp!==null&&avg30s<avg30sp?'<div style="position:absolute;top:6px;right:8px;font-size:13px;line-height:1;color:#4fc3f7;font-weight:900;">▼</div>':'')+'<div class="sv" style="color:#b47fff;font-size:30px;letter-spacing:0;">'+(avg30s?(avg30s/8).toFixed(2):'—')+'</div><div class="sl">3-Dart Avg</div><div style="font-size:8px;color:var(--mut);opacity:0.7;margin-top:1px;letter-spacing:0.5px;">直近30G</div></div>'+
-    '<div class="sc3"><div class="sv" style="color:var(--grn);">'+total180+'</div><div class="sl">通算180回数</div></div>';
+    '<div class="sc3" style="position:relative;">'+(arrow30s?'<div style="position:absolute;top:6px;right:8px;font-size:13px;line-height:1;">'+arrow30s+'</div>':'')+'<div class="sv" style="color:var(--acc2);">'+avg30s+'</div><div class="sl">直近30G 平均</div></div>'+
+    '<div class="sc3" style="position:relative;">'+(avg30sp!==null&&avg30s>avg30sp?'<div style="position:absolute;top:6px;right:8px;font-size:13px;line-height:1;color:#ff6b35;font-weight:900;">▲</div>':avg30sp!==null&&avg30s<avg30sp?'<div style="position:absolute;top:6px;right:8px;font-size:13px;line-height:1;color:#4fc3f7;font-weight:900;">▼</div>':'')+'<div class="sv" style="color:#b47fff;font-size:30px;letter-spacing:0;">'+(avg30s?(avg30s/8).toFixed(2):'—')+'</div><div class="sl">3ダーツ平均</div><div style="font-size:8px;color:var(--mut);opacity:0.7;margin-top:1px;letter-spacing:0.5px;">直近30G</div></div>'+
+    '<div class="sc3"><div class="sv" style="color:var(--grn);">'+total180+'</div><div class="sl">通算 180</div></div>';
   // 直近30G平均（1本化）
   var sl30=h.slice(0,30), s30=0;
   for(var j=0;j<sl30.length;j++) s30+=sl30[j].score;
@@ -1444,7 +1465,7 @@ function renderHist() {
     }
     return '<div class="hi">'+
       '<div class="hsc'+(isBest?' best':'')+'">'+x.score+'</div>'+
-      '<div class="hinf"><div class="hdate">'+ds+'　'+rank(x.score)+'ランク'+(x.duration?' ⏱'+Math.floor(x.duration/60)+'分'+(x.duration%60>0?x.duration%60+'秒':''):'')+'</div><div class="hpills">'+pills+'<span class="hpill" style="color:#b47fff;background:rgba(180,127,255,0.12);">3DA:'+tda3+'</span></div>'+mini+'</div>'+
+      '<div class="hinf"><div class="hdate">'+ds+'　'+rank(x.score)+'ランク'+(x.duration?' ⏱'+Math.floor(x.duration/60)+'分'+(x.duration%60>0?x.duration%60+'秒':''):'')+'</div><div class="hpills">'+pills+'<span class="hpill" style="color:#b47fff;background:rgba(180,127,255,0.12);">3ダーツ平均:'+tda3+'</span></div>'+mini+'</div>'+
       (isBest?'<div class="hbdg">BEST</div>':'')+
       '<button class="hdel" onclick="delOne('+idx+')">🗑</button>'+
       '</div>';
